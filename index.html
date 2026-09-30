@@ -298,35 +298,33 @@ const VEKILLER = [
   {ad:"cors.lol",   yap:u=>"https://api.cors.lol/?url="+encodeURIComponent(u)}
 ];
 
+const KAYNAK_SURESI = 5000;   // kaynak basina sert sinir
+
 async function besleme(k){
-  const hatalar=[];
+  const basla = Date.now();
+  const hatalar = [];
   for(const v of VEKILLER){
-    for(let deneme=0; deneme<2; deneme++){
-      try{
-        const dur=new AbortController();
-        const sayac=setTimeout(()=>dur.abort(),9000);
-        let c;
-        try{ c=await fetch(v.yap(k.url),{redirect:"follow",signal:dur.signal}); }
-        finally{ clearTimeout(sayac); }
-        if(!c.ok) throw new Error("HTTP "+c.status);
-        const ham=xmlAyikla(await c.text());
-        return ham.map(i=>({
-          id:kimlik(i.link||i.title), kaynak:k.ad,
-          baslik:temiz(i.title), ozet:temiz(i.desc).slice(0,260),
-          link:i.link, tarih:i.date
-        }));
-      }catch(e){
-        if(deneme===0 && /408|429|50\d|Failed to fetch|abort/i.test(e.message)){
-          await new Promise(r=>setTimeout(r,1800)); continue;
-        }
-        hatalar.push(v.ad+" → "+e.message);
-        break;
-      }
+    const kalan = KAYNAK_SURESI - (Date.now()-basla);
+    if(kalan < 700){ hatalar.push("süre doldu"); break; }
+    const dur = new AbortController();
+    const sayac = setTimeout(()=>dur.abort(), kalan);
+    try{
+      const c = await fetch(v.yap(k.url), {redirect:"follow", signal:dur.signal});
+      if(!c.ok) throw new Error("HTTP "+c.status);
+      const ham = xmlAyikla(await c.text());
+      return ham.map(i=>({
+        id:kimlik(i.link||i.title), kaynak:k.ad,
+        baslik:temiz(i.title), ozet:temiz(i.desc).slice(0,260),
+        link:i.link, tarih:i.date
+      }));
+    }catch(e){
+      hatalar.push(v.ad+" → "+(/abort/i.test(e.message) ? "süre doldu" : e.message));
+    }finally{
+      clearTimeout(sayac);
     }
   }
   throw new Error(hatalar.join(" | "));
 }
-const bekle = ms => new Promise(r=>setTimeout(r,ms));
 
 async function cek(){
   if(S.yukleniyor) return;
@@ -353,7 +351,7 @@ async function cek(){
     hepsi.sort((a,b)=> new Date(b.tarih||0)-new Date(a.tarih||0));
     S.yazilar=hepsi;
     if(S.ekran==="feed"){ cizSerit(); cizAkis(); gosterge(); }
-    await new Promise(r=>setTimeout(r,150));
+    await new Promise(r=>setTimeout(r,80));
   }
 
   S.yukleniyor=false;

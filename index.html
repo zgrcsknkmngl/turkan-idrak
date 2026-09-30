@@ -50,6 +50,8 @@
   .chip{flex:none;padding:5px 12px;border:1px solid var(--rule);border-radius:999px;
     font-size:13px;color:var(--dim);white-space:nowrap}
   .chip[aria-pressed="true"]{border-color:var(--ember);color:var(--vellum);background:rgba(224,52,58,.16)}
+  .chip .say{font-size:10.5px;opacity:.65;margin-left:5px;font-variant-numeric:tabular-nums}
+  .chip.bos{opacity:.4}
 
   main{padding:0 18px}
   .entry{padding:19px 0;border-bottom:1px solid var(--rule)}
@@ -229,22 +231,26 @@
 /* RAND adresleri rand.org/news/rss.html sayfasından doğrulandı.
    Diğerleri doğrulanmadı — açılmayanı Kaynaklar ekranından düzelt. */
 const VARSAYILAN = [
-  {ad:"RAND Araştırma",  url:"https://www.rand.org/pubs/new.xml"},
-  {ad:"RAND Yorum",      url:"https://www.rand.org/pubs/commentary.xml"},
-  {ad:"Brookings",       url:"https://www.brookings.edu/feed/"},
-  {ad:"Carnegie",        url:"https://carnegieendowment.org/rss/publications.xml"},
-  {ad:"CSIS",            url:"https://www.csis.org/analysis/feed"},
-  {ad:"Crisis Group",    url:"https://www.crisisgroup.org/rss.xml"},
-  {ad:"Chatham House",   url:"https://www.chathamhouse.org/rss/all"},
-  {ad:"SIPRI",           url:"https://www.sipri.org/rss.xml"},
-  {ad:"CFR",             url:"https://www.cfr.org/rss.xml"},
-  {ad:"Wilson Center",   url:"https://www.wilsoncenter.org/rss/articles"}
+  {ad:"RAND Araştırma", url:"https://www.rand.org/pubs/new.xml",                  acik:true},
+  {ad:"RAND Yorum",     url:"https://www.rand.org/pubs/commentary.xml",           acik:true},
+  {ad:"Crisis Group",   url:"https://www.crisisgroup.org/rss.xml",                acik:true},
+  {ad:"Chatham House",  url:"https://www.chathamhouse.org/path/whatsnew.xml",     acik:true},
+  {ad:"Chatham Yorum",  url:"https://www.chathamhouse.org/path/83/feed.xml",      acik:true},
+  {ad:"Brookings",      url:"https://www.brookings.edu/feed/",                    acik:true},
+  {ad:"Foreign Affairs",url:"https://www.foreignaffairs.com/rss.xml",              acik:true},
+  {ad:"AEI",            url:"https://www.aei.org/feed/",                           acik:true},
+  {ad:"Carnegie",       url:"https://carnegieendowment.org/rss/publications.xml", acik:false},
+  {ad:"CSIS",           url:"https://www.csis.org/analysis/feed",                 acik:false},
+  {ad:"SIPRI",          url:"https://www.sipri.org/rss.xml",                      acik:false},
+  {ad:"CFR",            url:"https://www.cfr.org/rss.xml",                        acik:false},
+  {ad:"Wilson Center",  url:"https://www.wilsoncenter.org/rss/articles",          acik:false},
+  {ad:"Cato Enstitüsü", url:"https://www.cato.org/rss/blog",                       acik:false}
 ];
 
 const YEREL = location.protocol === "file:" || location.protocol === "content:";
 
 const S = {
-  kaynaklar: yukle("ti.kaynaklar", VARSAYILAN.map(k => ({...k, acik:true}))),
+  kaynaklar: yukle("ti.kaynaklar5", VARSAYILAN),
   kayitli:   yukle("ti.kayitli", []),
   ceviri:    yukle("ti.ceviri", {}),
   yazilar:[], hata:[], suzgec:"hepsi", ekran:"feed", yukleniyor:false
@@ -290,28 +296,34 @@ function xmlAyikla(metin){
 }
 
 const VEKILLER = [
-  {ad:"allorigins",  yap:u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u)},
-  {ad:"cors.eu.org", yap:u=>"https://cors.eu.org/"+u},
-  {ad:"cors.lol",    yap:u=>"https://api.cors.lol/?url="+encodeURIComponent(u)}
+  {ad:"allorigins", yap:u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u)},
+  {ad:"cors.lol",   yap:u=>"https://api.cors.lol/?url="+encodeURIComponent(u)}
 ];
 
 async function besleme(k){
   const hatalar=[];
   for(const v of VEKILLER){
-    try{
-      const c=await fetch(v.yap(k.url),{redirect:"follow"});
-      if(!c.ok) throw new Error("HTTP "+c.status);
-      const ham=xmlAyikla(await c.text());
-      return ham.map(i=>({
-        id:kimlik(i.link||i.title), kaynak:k.ad,
-        baslik:temiz(i.title), ozet:temiz(i.desc).slice(0,260),
-        link:i.link, tarih:i.date
-      }));
-    }catch(e){ hatalar.push(v.ad+" → "+e.message); }
+    for(let deneme=0; deneme<2; deneme++){
+      try{
+        const c=await fetch(v.yap(k.url),{redirect:"follow"});
+        if(!c.ok) throw new Error("HTTP "+c.status);
+        const ham=xmlAyikla(await c.text());
+        return ham.map(i=>({
+          id:kimlik(i.link||i.title), kaynak:k.ad,
+          baslik:temiz(i.title), ozet:temiz(i.desc).slice(0,260),
+          link:i.link, tarih:i.date
+        }));
+      }catch(e){
+        if(deneme===0 && /408|429|50\d|Failed to fetch/.test(e.message)){
+          await new Promise(r=>setTimeout(r,1800)); continue;
+        }
+        hatalar.push(v.ad+" → "+e.message);
+        break;
+      }
+    }
   }
   throw new Error(hatalar.join(" | "));
 }
-
 const bekle = ms => new Promise(r=>setTimeout(r,ms));
 
 async function cek(){
@@ -323,6 +335,7 @@ async function cek(){
   let hepsi=[];
   for(let i=0;i<acik.length;i++){
     if(S.ekran==="feed"){
+      cizSerit();
       $("#feed").innerHTML=`<div class="state">
         <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
         <p>${kac(acik[i].ad)} taranıyor… (${i+1}/${acik.length})</p></div>`;
@@ -390,7 +403,8 @@ function kart(y){
 }
 
 function ciz(){
-  $("#rail").classList.toggle("hide", S.ekran!=="feed" || !S.yazilar.length);
+  $("#rail").classList.toggle("hide", S.ekran!=="feed");
+  if(S.ekran==="feed") cizSerit();
   $("#feed").classList.toggle("hide", S.ekran!=="feed");
   $("#saved").classList.toggle("hide", S.ekran!=="saved");
   $("#sources").classList.toggle("hide", S.ekran!=="sources");
@@ -400,29 +414,38 @@ function ciz(){
   if(S.ekran==="sources") cizKaynaklar();
 }
 
+function cizSerit(){
+  const acik = S.kaynaklar.filter(k=>k.acik);
+  const say = a => S.yazilar.filter(y=>y.kaynak===a).length;
+  $("#rail").innerHTML =
+    `<button class="chip" data-suz="hepsi" aria-pressed="${S.suzgec==="hepsi"}">Tümü<span class="say">${S.yazilar.length}</span></button>` +
+    acik.map(k=>{
+      const n = say(k.ad);
+      return `<button class="chip ${n?"":"bos"}" data-suz="${kac(k.ad)}" aria-pressed="${S.suzgec===k.ad}">${kac(k.ad)}<span class="say">${n}</span></button>`;
+    }).join("");
+}
+
 function cizAkis(){
   if(S.yukleniyor) return;
-  const adlar = [...new Set(S.yazilar.map(y=>y.kaynak))];
-  $("#rail").innerHTML = ["hepsi",...adlar].map(a=>
-    `<button class="chip" data-suz="${kac(a)}" aria-pressed="${S.suzgec===a}">${a==="hepsi"?"Tümü":kac(a)}</button>`).join("");
   const liste = S.suzgec==="hepsi" ? S.yazilar : S.yazilar.filter(y=>y.kaynak===S.suzgec);
   $("#count").textContent = S.yazilar.length ? S.yazilar.length+" yazı" : "";
 
   if(!liste.length){
+    const tekKaynak = S.suzgec!=="hepsi";
     $("#feed").innerHTML = `<div class="state">
       <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
-      <h3>${YEREL ? "Dosya telefonda yerel açıldı" : "Hiçbir kaynak açılmadı"}</h3>
-      <p>${YEREL
-        ? "Tarayıcı, indirilmiş bir dosyanın dışarıdan veri çekmesini güvenlik gereği engelliyor. Uygulamanın çalışması için sayfanın bir adreste yayında olması gerekiyor — kurulum adımlarını birlikte yapacağız."
-        : "Besleme adresleri değişmiş olabilir. Kaynaklar ekranından adresleri düzeltip yeniden dene."}</p>
+      <h3>${tekKaynak ? kac(S.suzgec)+" açılmadı" : (YEREL ? "Dosya telefonda yerel açıldı" : "Hiçbir kaynak açılmadı")}</h3>
+      <p>${tekKaynak
+        ? "Bu kaynağın besleme adresi yanıt vermedi. Nedenini Kaynaklar ekranında görebilirsin."
+        : (YEREL
+          ? "Tarayıcı, indirilmiş bir dosyanın dışarıdan veri çekmesini güvenlik gereği engelliyor. Uygulamanın çalışması için sayfanın bir adreste yayında olması gerekiyor."
+          : "Besleme adresleri değişmiş olabilir. Kaynaklar ekranından adresleri düzeltip yeniden dene.")}</p>
       <button class="go" data-yeni="1">Yeniden dene</button>
       <button class="go" data-git="sources">Kaynaklar</button>
-      ${S.hata.length ? `<p class="warn" style="text-align:left;margin-top:24px;font-size:12px">${S.hata.map(h=>"<strong>"+kac(h.ad)+"</strong><br>"+kac(h.mesaj)).join("<br><br>")}</p>` : ""}</div>`;
+      </div>`;
     return;
   }
-  $("#feed").innerHTML =
-    (S.hata.length ? `<p class="warn">${S.hata.map(h=>kac(h.ad)+" — "+kac(h.mesaj)).join("<br>")}</p>` : "")
-    + liste.map(kart).join("");
+  $("#feed").innerHTML = liste.map(kart).join("");
 }
 
 function cizKayitli(){
@@ -446,7 +469,8 @@ function cizKaynaklar(){
       <div style="min-width:0"><div class="nm">${kac(k.ad)}</div><div class="url">${kac(k.url)}</div></div>
       <button class="tog" data-ac="${i}" aria-pressed="${!!k.acik}" aria-label="${kac(k.ad)}"></button>
       <button class="del" data-sil="${i}" aria-label="${kac(k.ad)} sil">×</button></div>`).join("")}
-    <p class="note">RAND adresleri doğrulandı. Diğerleri değişmiş olabilir — akışta “açılamayan kaynak”
+    ${S.hata.length ? `<p class="warn" style="font-size:12px;line-height:1.6">${S.hata.map(h=>"<strong>"+kac(h.ad)+"</strong> — "+kac(h.mesaj)).join("<br><br>")}</p>` : ""}
+    <p class="note">RAND, Chatham House, Foreign Affairs ve AEI adresleri doğrulandı. Kapalı duranların adresleri doğrulanmadı — açarsan büyük ihtimalle düşerler. Diğerleri değişmiş olabilir — akışta “açılamayan kaynak”
     yazısı görürsen o kurumun sitesindeki RSS sayfasından güncel adresi alıp buraya yapıştır.</p>`;
 }
 
@@ -461,15 +485,15 @@ document.addEventListener("click", e=>{
   if(t.dataset.git){ S.ekran=t.dataset.git; ciz(); return; }
   if(t.dataset.ac !== undefined){
     const k=S.kaynaklar[+t.dataset.ac]; k.acik=!k.acik;
-    yaz("ti.kaynaklar",S.kaynaklar); ciz(); cek(); return;
+    yaz("ti.kaynaklar5",S.kaynaklar); ciz(); cek(); return;
   }
   if(t.dataset.sil !== undefined){
-    S.kaynaklar.splice(+t.dataset.sil,1); yaz("ti.kaynaklar",S.kaynaklar); ciz(); cek(); return;
+    S.kaynaklar.splice(+t.dataset.sil,1); yaz("ti.kaynaklar5",S.kaynaklar); ciz(); cek(); return;
   }
   if(t.id === "ekle"){
     const ad=$("#ad").value.trim(), url=$("#url").value.trim();
     if(!ad||!url) return;
-    S.kaynaklar.push({ad,url,acik:true}); yaz("ti.kaynaklar",S.kaynaklar); ciz(); cek();
+    S.kaynaklar.push({ad,url,acik:true}); yaz("ti.kaynaklar5",S.kaynaklar); ciz(); cek();
   }
 });
 ["feed","saved","sources"].forEach(e=>

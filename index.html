@@ -272,74 +272,67 @@ function nezaman(t){
   return d.toLocaleDateString("tr-TR",{day:"numeric",month:"long"});
 }
 
-/* ---------- Besleme: üç ayrı vekil denenir ---------- */
-async function viaRss2json(url){
-  const r = await fetch("https://api.rss2json.com/v1/api.json?count=20&rss_url="+encodeURIComponent(url));
-  if(!r.ok) throw new Error("rss2json "+r.status);
-  const j = await r.json();
-  if(j.status !== "ok") throw new Error(j.message||"rss2json reddetti");
-  return (j.items||[]).map(i=>({title:i.title, desc:i.description||i.content, link:i.link, date:i.pubDate}));
-}
+/* ---------- Besleme: sırayla birkaç vekil denenir ---------- */
 function xmlAyikla(metin){
+  if(!/^\s*</.test(metin)) throw new Error("XML değil — adres yanlış olabilir");
   const d = new DOMParser().parseFromString(metin,"text/xml");
   if(d.querySelector("parsererror")) throw new Error("XML çözülemedi");
-  const al = (n,t)=>{const e=n.getElementsByTagName(t)[0];return e?e.textContent:"";};
-  let l = [...d.getElementsByTagName("item")];
-  if(!l.length) l = [...d.getElementsByTagName("entry")];
-  if(!l.length) throw new Error("besleme boş");
+  const al=(n,t)=>{const e=n.getElementsByTagName(t)[0];return e?e.textContent:"";};
+  let l=[...d.getElementsByTagName("item")];
+  if(!l.length) l=[...d.getElementsByTagName("entry")];
+  if(!l.length) throw new Error("beslemede yazı yok");
   return l.slice(0,20).map(n=>{
-    let link = al(n,"link");
-    if(!link){ const a=n.getElementsByTagName("link")[0]; link = a?a.getAttribute("href"):""; }
-    return {title:al(n,"title"), desc:al(n,"description")||al(n,"summary")||al(n,"content"),
-            link, date:al(n,"pubDate")||al(n,"published")||al(n,"updated")};
+    let link=al(n,"link");
+    if(!link){const a=n.getElementsByTagName("link")[0];link=a?a.getAttribute("href"):"";}
+    return {title:al(n,"title"),desc:al(n,"description")||al(n,"summary")||al(n,"content"),
+            link,date:al(n,"pubDate")||al(n,"published")||al(n,"updated")};
   });
 }
-async function viaAllOrigins(url){
-  const r = await fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(url));
-  if(!r.ok) throw new Error("allorigins "+r.status);
-  return xmlAyikla(await r.text());
-}
-async function viaCorsProxy(url){
-  const r = await fetch("https://corsproxy.io/?url="+encodeURIComponent(url));
-  if(!r.ok) throw new Error("corsproxy "+r.status);
-  return xmlAyikla(await r.text());
-}
+
+const VEKILLER = [
+  {ad:"allorigins",  yap:u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u)},
+  {ad:"cors.eu.org", yap:u=>"https://cors.eu.org/"+u},
+  {ad:"cors.lol",    yap:u=>"https://api.cors.lol/?url="+encodeURIComponent(u)}
+];
 
 async function besleme(k){
-  let son;
-  for(const f of [viaRss2json, viaAllOrigins, viaCorsProxy]){
+  const hatalar=[];
+  for(const v of VEKILLER){
     try{
-      const ham = await f(k.url);
-      if(ham.length) return ham.map(i=>({
+      const c=await fetch(v.yap(k.url),{redirect:"follow"});
+      if(!c.ok) throw new Error("HTTP "+c.status);
+      const ham=xmlAyikla(await c.text());
+      return ham.map(i=>({
         id:kimlik(i.link||i.title), kaynak:k.ad,
         baslik:temiz(i.title), ozet:temiz(i.desc).slice(0,260),
         link:i.link, tarih:i.date
       }));
-    }catch(e){ son = e; }
+    }catch(e){ hatalar.push(v.ad+" → "+e.message); }
   }
-  throw son || new Error("ulaşılamadı");
+  throw new Error(hatalar.join(" | "));
 }
+
+const bekle = ms => new Promise(r=>setTimeout(r,ms));
 
 async function cek(){
   if(S.yukleniyor) return;
-  const acik = S.kaynaklar.filter(k=>k.acik);
-  S.yukleniyor = true; S.hata = [];
-  if(!acik.length){ S.yazilar=[]; S.yukleniyor=false; ciz(); return; }
+  const acik=S.kaynaklar.filter(k=>k.acik);
+  S.yukleniyor=true; S.hata=[]; S.yazilar=[];
+  if(!acik.length){ S.yukleniyor=false; ciz(); return; }
 
-  if(S.ekran === "feed"){
-    $("#feed").innerHTML = `<div class="state">
-      <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
-      <p>${acik.length} kaynak taranıyor…</p></div>`;
+  let hepsi=[];
+  for(let i=0;i<acik.length;i++){
+    if(S.ekran==="feed"){
+      $("#feed").innerHTML=`<div class="state">
+        <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+        <p>${kac(acik[i].ad)} taranıyor… (${i+1}/${acik.length})</p></div>`;
+    }
+    try{ hepsi=hepsi.concat(await besleme(acik[i])); }
+    catch(e){ S.hata.push({ad:acik[i].ad, mesaj:e.message}); }
+    await bekle(400);
   }
-
-  const r = await Promise.allSettled(acik.map(besleme));
-  let hepsi = [];
-  r.forEach((x,i)=>{
-    if(x.status === "fulfilled") hepsi = hepsi.concat(x.value);
-    else S.hata.push(acik[i].ad);
-  });
-  hepsi.sort((a,b)=> new Date(b.tarih||0) - new Date(a.tarih||0));
-  S.yazilar = hepsi; S.yukleniyor = false;
+  hepsi.sort((a,b)=> new Date(b.tarih||0)-new Date(a.tarih||0));
+  S.yazilar=hepsi; S.yukleniyor=false;
   ciz();
 }
 
@@ -423,11 +416,12 @@ function cizAkis(){
         ? "Tarayıcı, indirilmiş bir dosyanın dışarıdan veri çekmesini güvenlik gereği engelliyor. Uygulamanın çalışması için sayfanın bir adreste yayında olması gerekiyor — kurulum adımlarını birlikte yapacağız."
         : "Besleme adresleri değişmiş olabilir. Kaynaklar ekranından adresleri düzeltip yeniden dene."}</p>
       <button class="go" data-yeni="1">Yeniden dene</button>
-      <button class="go" data-git="sources">Kaynaklar</button></div>`;
+      <button class="go" data-git="sources">Kaynaklar</button>
+      ${S.hata.length ? `<p class="warn" style="text-align:left;margin-top:24px;font-size:12px">${S.hata.map(h=>"<strong>"+kac(h.ad)+"</strong><br>"+kac(h.mesaj)).join("<br><br>")}</p>` : ""}</div>`;
     return;
   }
   $("#feed").innerHTML =
-    (S.hata.length ? `<p class="warn">Açılamayan kaynak: ${S.hata.map(kac).join(", ")} — adreslerini Kaynaklar ekranından düzeltebilirsin.</p>` : "")
+    (S.hata.length ? `<p class="warn">${S.hata.map(h=>kac(h.ad)+" — "+kac(h.mesaj)).join("<br>")}</p>` : "")
     + liste.map(kart).join("");
 }
 

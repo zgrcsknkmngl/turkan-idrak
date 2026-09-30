@@ -75,15 +75,21 @@
   .state .go{border:1px solid var(--rule);padding:9px 18px;border-radius:999px;font-size:14px;color:var(--vellum);margin:6px 4px 0}
   .warn{color:#E49183;font-size:13px;line-height:1.55;padding:12px 0;border-bottom:1px solid var(--rule);margin-bottom:4px}
 
-  .srow{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--rule)}
-  .srow .nm{font-family:var(--serif);font-size:16.5px}
-  .srow .url{font-size:11.5px;color:var(--dim);word-break:break-all;margin-top:2px;line-height:1.4}
-  .srow .tog{margin-left:auto;flex:none;width:44px;height:26px;border-radius:999px;background:var(--rule);position:relative}
-  .srow .tog::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--dim)}
+  .ac{display:block;width:100%;text-align:center;padding:12px;margin:16px 0 4px;
+      border:1px solid var(--rule);border-radius:9px;font-size:14px;color:var(--dim)}
+  .ac[aria-expanded="true"]{color:var(--vellum)}
+  .srow{display:flex;align-items:center;gap:14px;padding:16px 2px;border-bottom:1px solid var(--rule)}
+  .sinfo{min-width:0;flex:1}
+  .durum{font-size:11.5px;color:var(--dim);margin-top:3px;display:flex;gap:9px;align-items:baseline}
+  .durum.kirik{color:#E08878}
+  .durum .alan{color:#5D6F88;margin-left:auto;font-size:11px}
+  .srow .nm{font-family:var(--serif);font-size:17px;line-height:1.25}
+  .srow .tog{flex:none;width:42px;height:25px;border-radius:999px;background:var(--rule);position:relative}
+  .srow .tog::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:var(--dim)}
   .srow .tog[aria-pressed="true"]{background:rgba(224,52,58,.35)}
-  .srow .tog[aria-pressed="true"]::after{left:21px;background:var(--ember)}
-  .srow .del{flex:none;color:var(--dim);font-size:21px;line-height:1;padding:4px}
-  .addbox{padding:18px 0;border-bottom:1px solid var(--rule)}
+  .srow .tog[aria-pressed="true"]::after{left:20px;background:var(--ember)}
+  .srow .del{flex:none;color:#4A5B71;font-size:20px;line-height:1;padding:4px 2px}
+  .addbox{padding:14px 0 18px;border-bottom:1px solid var(--rule)}
   .addbox input{width:100%;background:var(--raised);border:1px solid var(--rule);color:var(--vellum);
     padding:11px 13px;border-radius:7px;font-size:15px;margin-bottom:9px;font-family:var(--sans)}
   .addbox input::placeholder{color:#5D6F88}
@@ -202,7 +208,7 @@
 <header class="masthead">
   <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
   <div class="wordmark">Türkan <em>İdrak</em></div>
-  <div class="count" id="count"></div>
+  <div class="count" id="count"></div><div class="count" id="tazele" style="margin-left:9px"></div>
 </header>
 
 <div class="rail hide" id="rail"></div>
@@ -231,29 +237,21 @@
 /* RAND adresleri rand.org/news/rss.html sayfasından doğrulandı.
    Diğerleri doğrulanmadı — açılmayanı Kaynaklar ekranından düzelt. */
 const VARSAYILAN = [
-  {ad:"RAND Araştırma", url:"https://www.rand.org/pubs/new.xml",                  acik:true},
-  {ad:"RAND Yorum",     url:"https://www.rand.org/pubs/commentary.xml",           acik:true},
-  {ad:"Crisis Group",   url:"https://www.crisisgroup.org/rss.xml",                acik:true},
-  {ad:"Chatham House",  url:"https://www.chathamhouse.org/path/whatsnew.xml",     acik:true},
-  {ad:"Chatham Yorum",  url:"https://www.chathamhouse.org/path/83/feed.xml",      acik:true},
-  {ad:"Brookings",      url:"https://www.brookings.edu/feed/",                    acik:true},
-  {ad:"Foreign Affairs",url:"https://www.foreignaffairs.com/rss.xml",              acik:true},
-  {ad:"AEI",            url:"https://www.aei.org/feed/",                           acik:true},
-  {ad:"Carnegie",       url:"https://carnegieendowment.org/rss/publications.xml", acik:false},
-  {ad:"CSIS",           url:"https://www.csis.org/analysis/feed",                 acik:false},
-  {ad:"SIPRI",          url:"https://www.sipri.org/rss.xml",                      acik:false},
-  {ad:"CFR",            url:"https://www.cfr.org/rss.xml",                        acik:false},
-  {ad:"Wilson Center",  url:"https://www.wilsoncenter.org/rss/articles",          acik:false},
-  {ad:"Cato Enstitüsü", url:"https://www.cato.org/rss/blog",                       acik:false}
+  {ad:"RAND",            url:"https://www.rand.org/pubs/new.xml",              acik:true},
+  {ad:"Crisis Group",    url:"https://www.crisisgroup.org/rss.xml",            acik:true},
+  {ad:"Chatham House",   url:"https://www.chathamhouse.org/path/whatsnew.xml", acik:true},
+  {ad:"Brookings",       url:"https://www.brookings.edu/feed/",                acik:true},
+  {ad:"Foreign Affairs", url:"https://www.foreignaffairs.com/rss.xml",         acik:true},
+  {ad:"AEI",             url:"https://www.aei.org/feed/",                      acik:true}
 ];
 
 const YEREL = location.protocol === "file:" || location.protocol === "content:";
 
 const S = {
-  kaynaklar: yukle("ti.kaynaklar5", VARSAYILAN),
+  kaynaklar: yukle("ti.kaynaklar6", VARSAYILAN),
   kayitli:   yukle("ti.kayitli", []),
   ceviri:    yukle("ti.ceviri", {}),
-  yazilar:[], hata:[], suzgec:"hepsi", ekran:"feed", yukleniyor:false
+  yazilar:yukle("ti.onbellek",[]), hata:[], suzgec:"hepsi", ekran:"feed", yukleniyor:false
 };
 
 function yukle(k,v){ try{const x=localStorage.getItem(k);return x?JSON.parse(x):v}catch(e){return v} }
@@ -305,7 +303,11 @@ async function besleme(k){
   for(const v of VEKILLER){
     for(let deneme=0; deneme<2; deneme++){
       try{
-        const c=await fetch(v.yap(k.url),{redirect:"follow"});
+        const dur=new AbortController();
+        const sayac=setTimeout(()=>dur.abort(),9000);
+        let c;
+        try{ c=await fetch(v.yap(k.url),{redirect:"follow",signal:dur.signal}); }
+        finally{ clearTimeout(sayac); }
         if(!c.ok) throw new Error("HTTP "+c.status);
         const ham=xmlAyikla(await c.text());
         return ham.map(i=>({
@@ -314,7 +316,7 @@ async function besleme(k){
           link:i.link, tarih:i.date
         }));
       }catch(e){
-        if(deneme===0 && /408|429|50\d|Failed to fetch/.test(e.message)){
+        if(deneme===0 && /408|429|50\d|Failed to fetch|abort/i.test(e.message)){
           await new Promise(r=>setTimeout(r,1800)); continue;
         }
         hatalar.push(v.ad+" → "+e.message);
@@ -329,23 +331,33 @@ const bekle = ms => new Promise(r=>setTimeout(r,ms));
 async function cek(){
   if(S.yukleniyor) return;
   const acik=S.kaynaklar.filter(k=>k.acik);
-  S.yukleniyor=true; S.hata=[]; S.yazilar=[];
-  if(!acik.length){ S.yukleniyor=false; ciz(); return; }
+  S.yukleniyor=true; S.hata=[];
+  if(!acik.length){ S.yazilar=[]; S.yukleniyor=false; ciz(); return; }
 
-  let hepsi=[];
-  for(let i=0;i<acik.length;i++){
-    if(S.ekran==="feed"){
-      cizSerit();
-      $("#feed").innerHTML=`<div class="state">
-        <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
-        <p>${kac(acik[i].ad)} taranıyor… (${i+1}/${acik.length})</p></div>`;
-    }
-    try{ hepsi=hepsi.concat(await besleme(acik[i])); }
-    catch(e){ S.hata.push({ad:acik[i].ad, mesaj:e.message}); }
-    await bekle(400);
+  const vardi = S.yazilar.length>0;
+  let hepsi=[], bitti=0;
+
+  if(!vardi && S.ekran==="feed"){
+    cizSerit();
+    $("#feed").innerHTML=`<div class="state">
+      <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+      <p>${acik.length} kaynak taranıyor…</p></div>`;
   }
-  hepsi.sort((a,b)=> new Date(b.tarih||0)-new Date(a.tarih||0));
-  S.yazilar=hepsi; S.yukleniyor=false;
+  const gosterge=()=>{ const g=$("#tazele"); if(g) g.textContent = bitti<acik.length ? bitti+"/"+acik.length : ""; };
+  gosterge();
+
+  for(const k of acik){
+    try{ hepsi=hepsi.concat(await besleme(k)); }
+    catch(e){ S.hata.push({ad:k.ad, mesaj:e.message}); }
+    bitti++;
+    hepsi.sort((a,b)=> new Date(b.tarih||0)-new Date(a.tarih||0));
+    S.yazilar=hepsi;
+    if(S.ekran==="feed"){ cizSerit(); cizAkis(); gosterge(); }
+    await new Promise(r=>setTimeout(r,150));
+  }
+
+  S.yukleniyor=false;
+  yaz("ti.onbellek", S.yazilar.slice(0,120));
   ciz();
 }
 
@@ -458,42 +470,55 @@ function cizKayitli(){
 }
 
 function cizKaynaklar(){
-  $("#count").textContent = "";
+  $("#count").textContent="";
+  const hataVar = ad => S.hata.some(h=>h.ad===ad);
+  const say = ad => S.yazilar.filter(y=>y.kaynak===ad).length;
+  const alan = u => { try{ return new URL(u).hostname.replace(/^www\./,""); }catch(e){ return u; } };
+
   $("#sources").innerHTML = `
-    <div class="addbox">
-      <input id="ad" placeholder="Kaynak adı — örn. Foreign Affairs">
-      <input id="url" placeholder="RSS adresi — https://…/feed" inputmode="url">
-      <button class="save" id="ekle">Kaynağı ekle</button>
+    <button class="ac" id="ekleAc" aria-expanded="${!!S.ekleAcik}">
+      ${S.ekleAcik ? "Vazgeç" : "Yeni kaynak ekle"}</button>
+    <div class="addbox ${S.ekleAcik?"":"hide"}">
+      <input id="ad" placeholder="Kaynak adı">
+      <input id="url" placeholder="RSS adresi" inputmode="url">
+      <button class="save" id="ekle">Ekle</button>
     </div>
-    ${S.kaynaklar.map((k,i)=>`<div class="srow">
-      <div style="min-width:0"><div class="nm">${kac(k.ad)}</div><div class="url">${kac(k.url)}</div></div>
-      <button class="tog" data-ac="${i}" aria-pressed="${!!k.acik}" aria-label="${kac(k.ad)}"></button>
-      <button class="del" data-sil="${i}" aria-label="${kac(k.ad)} sil">×</button></div>`).join("")}
-    ${S.hata.length ? `<p class="warn" style="font-size:12px;line-height:1.6">${S.hata.map(h=>"<strong>"+kac(h.ad)+"</strong> — "+kac(h.mesaj)).join("<br><br>")}</p>` : ""}
-    <p class="note">RAND, Chatham House, Foreign Affairs ve AEI adresleri doğrulandı. Kapalı duranların adresleri doğrulanmadı — açarsan büyük ihtimalle düşerler. Diğerleri değişmiş olabilir — akışta “açılamayan kaynak”
-    yazısı görürsen o kurumun sitesindeki RSS sayfasından güncel adresi alıp buraya yapıştır.</p>`;
+    ${S.kaynaklar.map((k,i)=>{
+      const n=say(k.ad), bozuk=k.acik&&hataVar(k.ad);
+      return `<div class="srow">
+        <div class="sinfo">
+          <div class="nm">${kac(k.ad)}</div>
+          <div class="durum${bozuk?" kirik":""}">${
+            !k.acik ? "kapalı" : bozuk ? "ulaşılamadı" : (n?n+" yazı":"—")
+          }<span class="alan">${kac(alan(k.url))}</span></div>
+        </div>
+        <button class="tog" data-ac="${i}" aria-pressed="${!!k.acik}" aria-label="${kac(k.ad)}"></button>
+        <button class="del" data-sil="${i}" aria-label="${kac(k.ad)} sil">×</button>
+      </div>`;
+    }).join("")}`;
 }
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-kay],[data-cev],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],#ekle");
+  const t = e.target.closest("[data-kay],[data-cev],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],#ekle,#ekleAc");
   if(!t) return;
   if(t.dataset.kay) return kaydet(t.dataset.kay);
   if(t.dataset.cev) return yaziyiCevir(t.dataset.cev);
   if(t.dataset.yeni) return cek();
+  if(t.id==="ekleAc"){ S.ekleAcik=!S.ekleAcik; ciz(); return; }
   if(t.dataset.suz){ S.suzgec=t.dataset.suz; ciz(); scrollTo({top:0}); return; }
   if(t.dataset.git){ S.ekran=t.dataset.git; ciz(); return; }
   if(t.dataset.ac !== undefined){
     const k=S.kaynaklar[+t.dataset.ac]; k.acik=!k.acik;
-    yaz("ti.kaynaklar5",S.kaynaklar); ciz(); cek(); return;
+    yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek(); return;
   }
   if(t.dataset.sil !== undefined){
-    S.kaynaklar.splice(+t.dataset.sil,1); yaz("ti.kaynaklar5",S.kaynaklar); ciz(); cek(); return;
+    S.kaynaklar.splice(+t.dataset.sil,1); yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek(); return;
   }
   if(t.id === "ekle"){
     const ad=$("#ad").value.trim(), url=$("#url").value.trim();
     if(!ad||!url) return;
-    S.kaynaklar.push({ad,url,acik:true}); yaz("ti.kaynaklar5",S.kaynaklar); ciz(); cek();
+    S.kaynaklar.push({ad,url,acik:true}); yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek();
   }
 });
 ["feed","saved","sources"].forEach(e=>

@@ -1,29 +1,24 @@
-name: Kaynakları tara
+name: Kaynaklari tara
 
 on:
   schedule:
-    - cron: '7 * * * *'      # her saat başı 7 geçe
-  workflow_dispatch:          # elle de çalıştırılabilir
+    - cron: '7 * * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
-
-concurrency:
-  group: tarama
-  cancel-in-progress: false
 
 jobs:
   tara:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Kaynakları tara
+      - name: Kaynaklari tara
         run: node tara.js
-
-      - name: Değişiklikleri kaydet
-        run: | git config user.name "Türkan İdrak" git config user.email "41898282+github-actions[bot]@users.noreply.github.com" git add akis.json if git diff --staged --quiet; then echo "Yeni yazı yok, kayıt gerekmedi." else git commit -m "Akış güncellendi — $(date -u '+%d.%m.%Y %H:%M UTC')" git push fi
+      - name: Git ayarla
+        run: git config user.name "Turkan Idrak" && git config user.email "actions@users.noreply.github.com"
+      - name: Kaydet ve gonder
+        run: git add akis.json && (git diff --staged --quiet && echo "degisiklik yok" || (git commit -m "Akis guncellendi" && git push))

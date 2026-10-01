@@ -55,6 +55,14 @@
 
   main{padding:0 18px}
   .entry{padding:19px 0;border-bottom:1px solid var(--rule)}
+  .entry.okundu h2{color:#9BA9B9}
+  .entry.okundu .sum{color:#7E8CA0}
+  .cubuk{display:flex;gap:9px;align-items:center;padding:12px 0 2px;flex-wrap:wrap}
+  .mini{border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--dim)}
+  .mini[disabled]{opacity:.5}
+  .uyari{font-size:12px;color:#E08878}
+  .daha{padding:22px 0 10px;text-align:center}
+  .daha .son{font-size:12px;color:#5D6F88}
   .entry:last-child{border-bottom:none}
   .meta{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
   .src{font-size:11.5px;font-weight:600;letter-spacing:.06em;color:var(--ember)}
@@ -251,16 +259,33 @@ const S = {
   kaynaklar: yukle("ti.kaynaklar6", VARSAYILAN),
   kayitli:   yukle("ti.kayitli", []),
   ceviri:    yukle("ti.ceviri", {}),
-  yazilar:yukle("ti.onbellek",[]), hata:[], suzgec:"hepsi", ekran:"feed", yukleniyor:false
+  bellek:yukle("ti.bellek",{}),
+  okunan:yukle("ti.okunan",[]),
+  goster:40,
+  yazilar:[], hata:[], suzgec:"hepsi", ekran:"feed", yukleniyor:false
 };
 
 function yukle(k,v){ try{const x=localStorage.getItem(k);return x?JSON.parse(x):v}catch(e){return v} }
-function yaz(k,v){ try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} }
+function yaz(k,v){
+  try{ localStorage.setItem(k,JSON.stringify(v)); return true; }
+  catch(e){
+    try{ localStorage.removeItem("ti.bellek"); localStorage.setItem(k,JSON.stringify(v)); return true; }
+    catch(e2){ S.dolu=true; return false; }
+  }
+}
 
 const $ = s => document.querySelector(s);
 const kac = s => (s||"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const temiz = s => (s||"").replace(/<[^>]*>/g," ").replace(/&nbsp;/gi," ")
   .replace(/&amp;/gi,"&").replace(/&#\d+;|&[a-z]+;/gi," ").replace(/\s+/g," ").trim();
+function bellektenTopla(){
+  const acikAdlar = S.kaynaklar.filter(k=>k.acik).map(k=>k.ad);
+  const hepsi = acikAdlar.flatMap(ad => (S.bellek[ad]||{}).yazilar || []);
+  const zaman = y => { const d=new Date(String(y.tarih||"").replace(" ","T")); return isNaN(d)?0:d.getTime(); };
+  hepsi.sort((a,b)=> zaman(b)-zaman(a));
+  S.yazilar = hepsi;
+}
+
 const kimlik = u => "a"+Math.abs([...(u||"")].reduce((h,c)=>((h<<5)-h+c.charCodeAt(0))|0,0)).toString(36);
 
 function nezaman(t){
@@ -298,7 +323,7 @@ const VEKILLER = [
   {ad:"cors.lol",   yap:u=>"https://api.cors.lol/?url="+encodeURIComponent(u)}
 ];
 
-const KAYNAK_SURESI = 5000;   // kaynak basina sert sinir
+const KAYNAK_SURESI = 7000;   // kaynak basina sert sinir
 
 async function besleme(k){
   const basla = Date.now();
@@ -314,7 +339,8 @@ async function besleme(k){
       const ham = xmlAyikla(await c.text());
       return ham.map(i=>({
         id:kimlik(i.link||i.title), kaynak:k.ad,
-        baslik:temiz(i.title), ozet:temiz(i.desc).slice(0,260),
+        baslik:temiz(i.title),
+        ozet:(x=>x.length>260 ? x.slice(0,260)+"…" : x)(temiz(i.desc)),
         link:i.link, tarih:i.date
       }));
     }catch(e){
@@ -332,8 +358,9 @@ async function cek(){
   S.yukleniyor=true; S.hata=[];
   if(!acik.length){ S.yazilar=[]; S.yukleniyor=false; ciz(); return; }
 
+  bellektenTopla();
   const vardi = S.yazilar.length>0;
-  let hepsi=[], bitti=0;
+  let bitti=0;
 
   if(!vardi && S.ekran==="feed"){
     cizSerit();
@@ -345,17 +372,25 @@ async function cek(){
   gosterge();
 
   for(const k of acik){
-    try{ hepsi=hepsi.concat(await besleme(k)); }
-    catch(e){ S.hata.push({ad:k.ad, mesaj:e.message}); }
+    try{
+      const yeni = await besleme(k);
+      const eski = (S.bellek[k.ad]||{}).yazilar || [];
+      const gelenler = new Set(yeni.map(x=>x.id));
+      // yeni gelenler basa, eskiler altta; tekrarlar ayiklanir
+      const birlesik = yeni.concat(eski.filter(x=>!gelenler.has(x.id)));
+      S.bellek[k.ad] = {yazilar:birlesik.slice(0,800), zaman:Date.now()};
+    }catch(e){
+      S.hata.push({ad:k.ad, mesaj:e.message});
+      // eski kayit varsa duruyor, silinmiyor
+    }
     bitti++;
-    hepsi.sort((a,b)=> new Date(b.tarih||0)-new Date(a.tarih||0));
-    S.yazilar=hepsi;
+    bellektenTopla();
     if(S.ekran==="feed"){ cizSerit(); cizAkis(); gosterge(); }
     await new Promise(r=>setTimeout(r,80));
   }
 
   S.yukleniyor=false;
-  yaz("ti.onbellek", S.yazilar.slice(0,120));
+  yaz("ti.bellek", S.bellek);
   ciz();
 }
 
@@ -374,10 +409,32 @@ async function yaziyiCevir(id){
   if(d){ d.classList.add("busy"); d.lastElementChild.textContent = "çevriliyor…"; }
   try{
     const [b,o] = await Promise.all([cevir(y.baslik), cevir(y.ozet)]);
-    S.ceviri[id] = {baslik:b, ozet:o}; yaz("ti.ceviri", S.ceviri); ciz();
+    S.ceviri[id] = {baslik:b, ozet:o};
+    const an=Object.keys(S.ceviri); if(an.length>400) an.slice(0,an.length-400).forEach(x=>delete S.ceviri[x]);
+    yaz("ti.ceviri", S.ceviri); ciz();
   }catch(e){
     if(d){ d.classList.remove("busy"); d.lastElementChild.textContent = "çeviri kapalı"; }
   }
+}
+
+async function hepsiniCevir(){
+  if(S.topluCeviri) return;
+  const liste = (S.suzgec==="hepsi" ? S.yazilar : S.yazilar.filter(y=>y.kaynak===S.suzgec))
+                  .filter(y=>!S.ceviri[y.id]);
+  if(!liste.length) return;
+  S.topluCeviri=true; ciz();
+  for(let i=0;i<liste.length;i++){
+    const y=liste[i];
+    try{
+      const [b,o]=await Promise.all([cevir(y.baslik), cevir(y.ozet)]);
+      S.ceviri[y.id]={baslik:b,ozet:o};
+    }catch(e){ S.topluCeviri=false; yaz("ti.ceviri",S.ceviri); ciz(); return; }
+    S.topluKalan=liste.length-i-1;
+    if(i%4===3) ciz();
+    await new Promise(r=>setTimeout(r,120));
+  }
+  S.topluCeviri=false; S.topluKalan=0;
+  yaz("ti.ceviri", S.ceviri); ciz();
 }
 
 /* ---------- Kaydetme ---------- */
@@ -385,9 +442,16 @@ function kaydet(id){
   const i = S.kayitli.findIndex(x=>x.id===id);
   if(i > -1) S.kayitli.splice(i,1);
   else { const y = S.yazilar.find(x=>x.id===id); if(y) S.kayitli.unshift(y); }
+  if(S.kayitli.length>300) S.kayitli.length=300;
   yaz("ti.kayitli", S.kayitli); ciz();
 }
 const kayitliMi = id => S.kayitli.some(x=>x.id===id);
+function okunduIsaretle(id){
+  if(S.okunan.includes(id)) return;
+  S.okunan.push(id);
+  if(S.okunan.length>600) S.okunan.splice(0,S.okunan.length-600);
+  yaz("ti.okunan", S.okunan);
+}
 
 /* ---------- Çizim ---------- */
 const I = {
@@ -400,15 +464,15 @@ const I = {
 function kart(y){
   const c = S.ceviri[y.id];
   const k = kayitliMi(y.id);
-  return `<article class="entry">
+  return `<article class="entry${S.okunan.includes(y.id)?" okundu":""}">
     <div class="meta"><span class="src">${kac(y.kaynak)}</span><span class="when">${nezaman(y.tarih)}</span></div>
     <h2>${kac(c ? c.baslik : y.baslik)}</h2>
     ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
-    ${(c?c.ozet:y.ozet) ? `<p class="sum">${kac(c?c.ozet:y.ozet)}…</p>` : ""}
+    ${(c?c.ozet:y.ozet) ? `<p class="sum">${kac(c?c.ozet:y.ozet)}</p>` : ""}
     <div class="acts">
       <button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${k?"kayıtlı":"kaydet"}</span></button>
       ${c ? "" : `<button class="act" data-cev="${y.id}">${I.dil}<span>çevir</span></button>`}
-      <a class="act" href="${kac(y.link)}" target="_blank" rel="noopener">${I.dis}<span>kaynak</span></a>
+      <a class="act" href="${kac(y.link)}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dis}<span>kaynak</span></a>
     </div></article>`;
 }
 
@@ -455,7 +519,19 @@ function cizAkis(){
       </div>`;
     return;
   }
-  $("#feed").innerHTML = liste.map(kart).join("");
+  const cevrilmemis = liste.filter(y=>!S.ceviri[y.id]).length;
+  const cubuk = `<div class="cubuk">
+      <button class="mini" data-yeni="1"${S.yukleniyor?" disabled":""}>${S.yukleniyor?"yenileniyor…":"yenile"}</button>
+      ${cevrilmemis ? `<button class="mini" data-toplu="1"${S.topluCeviri?" disabled":""}>${
+          S.topluCeviri ? "çevriliyor… "+(S.topluKalan||0) : "hepsini çevir ("+cevrilmemis+")"}</button>` : ""}
+      ${S.dolu ? `<span class="uyari">depo doldu</span>` : ""}
+    </div>`;
+  const parca = liste.slice(0, S.goster);
+  const kalan = liste.length - parca.length;
+  const dahaFazla = kalan
+    ? `<div class="daha"><button class="mini" data-daha="1">daha eski yazılar (${kalan})</button></div>`
+    : (liste.length>40 ? `<div class="daha"><span class="son">arşivin sonu — ${liste.length} yazı</span></div>` : "");
+  $("#feed").innerHTML = cubuk + parca.map(kart).join("") + dahaFazla;
 }
 
 function cizKayitli(){
@@ -472,6 +548,7 @@ function cizKaynaklar(){
   const hataVar = ad => S.hata.some(h=>h.ad===ad);
   const say = ad => S.yazilar.filter(y=>y.kaynak===ad).length;
   const alan = u => { try{ return new URL(u).hostname.replace(/^www\./,""); }catch(e){ return u; } };
+  const arsiv = ad => ((S.bellek[ad]||{}).yazilar||[]).length;
 
   $("#sources").innerHTML = `
     <button class="ac" id="ekleAc" aria-expanded="${!!S.ekleAcik}">
@@ -487,7 +564,7 @@ function cizKaynaklar(){
         <div class="sinfo">
           <div class="nm">${kac(k.ad)}</div>
           <div class="durum${bozuk?" kirik":""}">${
-            !k.acik ? "kapalı" : bozuk ? "ulaşılamadı" : (n?n+" yazı":"—")
+            !k.acik ? "kapalı" : bozuk ? (arsiv(k.ad)? "ulaşılamadı · "+arsiv(k.ad)+" yazı duruyor" : "ulaşılamadı") : (n?n+" yazı":"—")
           }<span class="alan">${kac(alan(k.url))}</span></div>
         </div>
         <button class="tog" data-ac="${i}" aria-pressed="${!!k.acik}" aria-label="${kac(k.ad)}"></button>
@@ -498,19 +575,25 @@ function cizKaynaklar(){
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-kay],[data-cev],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],#ekle,#ekleAc");
+  const t = e.target.closest("[data-kay],[data-cev],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],#ekle,#ekleAc");
   if(!t) return;
+  if(t.dataset.oku){ okunduIsaretle(t.dataset.oku); t.closest(".entry").classList.add("okundu"); return; }
   if(t.dataset.kay) return kaydet(t.dataset.kay);
   if(t.dataset.cev) return yaziyiCevir(t.dataset.cev);
   if(t.dataset.yeni) return cek();
+  if(t.dataset.toplu) return hepsiniCevir();
+  if(t.dataset.daha){ S.goster+=40; cizAkis(); return; }
   if(t.id==="ekleAc"){ S.ekleAcik=!S.ekleAcik; ciz(); return; }
-  if(t.dataset.suz){ S.suzgec=t.dataset.suz; ciz(); scrollTo({top:0}); return; }
+  if(t.dataset.suz){ S.suzgec=t.dataset.suz; S.goster=40; ciz(); scrollTo({top:0}); return; }
   if(t.dataset.git){ S.ekran=t.dataset.git; ciz(); return; }
   if(t.dataset.ac !== undefined){
     const k=S.kaynaklar[+t.dataset.ac]; k.acik=!k.acik;
     yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek(); return;
   }
   if(t.dataset.sil !== undefined){
+    const k=S.kaynaklar[+t.dataset.sil];
+    if(!confirm(k.ad+" kaynağı silinsin mi?")) return;
+    delete S.bellek[k.ad];
     S.kaynaklar.splice(+t.dataset.sil,1); yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek(); return;
   }
   if(t.id === "ekle"){
@@ -520,8 +603,19 @@ document.addEventListener("click", e=>{
   }
 });
 ["feed","saved","sources"].forEach(e=>
-  $("#nav-"+e).addEventListener("click",()=>{ S.ekran=e; ciz(); scrollTo({top:0}); }));
+  $("#nav-"+e).addEventListener("click",()=>{ S.ekran=e; S.goster=40; ciz(); scrollTo({top:0}); }));
 
+/* asagi cekip birakinca yenile */
+let cekBas=0, cekAktif=false;
+addEventListener("touchstart",e=>{ cekBas = scrollY<=0 ? e.touches[0].clientY : 0; cekAktif=false; },{passive:true});
+addEventListener("touchmove",e=>{
+  if(!cekBas || S.yukleniyor || S.ekran!=="feed") return;
+  if(e.touches[0].clientY-cekBas > 90) cekAktif=true;
+},{passive:true});
+addEventListener("touchend",()=>{ if(cekAktif){ cekAktif=false; cekBas=0; cek(); } });
+
+bellektenTopla();
+ciz();
 cek();
 </script>
 </body>

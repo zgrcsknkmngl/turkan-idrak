@@ -244,14 +244,7 @@
 
 /* RAND adresleri rand.org/news/rss.html sayfasından doğrulandı.
    Diğerleri doğrulanmadı — açılmayanı Kaynaklar ekranından düzelt. */
-const VARSAYILAN = [
-  {ad:"RAND",            url:"https://www.rand.org/pubs/new.xml",              acik:true},
-  {ad:"Crisis Group",    url:"https://www.crisisgroup.org/rss.xml",            acik:true},
-  {ad:"Chatham House",   url:"https://www.chathamhouse.org/path/whatsnew.xml", acik:true},
-  {ad:"Brookings",       url:"https://www.brookings.edu/feed/",                acik:true},
-  {ad:"Foreign Affairs", url:"https://www.foreignaffairs.com/rss.xml",         acik:true},
-  {ad:"AEI",             url:"https://www.aei.org/feed/",                      acik:true}
-];
+const VARSAYILAN = [];   // kaynaklar akis.json ile gelir
 
 const YEREL = location.protocol === "file:" || location.protocol === "content:";
 
@@ -301,96 +294,46 @@ function nezaman(t){
   return d.toLocaleDateString("tr-TR",{day:"numeric",month:"long"});
 }
 
-/* ---------- Besleme: sırayla birkaç vekil denenir ---------- */
-function xmlAyikla(metin){
-  if(!/^\s*</.test(metin)) throw new Error("XML değil — adres yanlış olabilir");
-  const d = new DOMParser().parseFromString(metin,"text/xml");
-  if(d.querySelector("parsererror")) throw new Error("XML çözülemedi");
-  const al=(n,t)=>{const e=n.getElementsByTagName(t)[0];return e?e.textContent:"";};
-  let l=[...d.getElementsByTagName("item")];
-  if(!l.length) l=[...d.getElementsByTagName("entry")];
-  if(!l.length) throw new Error("beslemede yazı yok");
-  return l.slice(0,20).map(n=>{
-    let link=al(n,"link");
-    if(!link){const a=n.getElementsByTagName("link")[0];link=a?a.getAttribute("href"):"";}
-    return {title:al(n,"title"),desc:al(n,"description")||al(n,"summary")||al(n,"content"),
-            link,date:al(n,"pubDate")||al(n,"published")||al(n,"updated")};
-  });
-}
-
-const VEKILLER = [
-  {ad:"allorigins", yap:u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u)},
-  {ad:"cors.lol",   yap:u=>"https://api.cors.lol/?url="+encodeURIComponent(u)}
-];
-
-const KAYNAK_SURESI = 7000;   // kaynak basina sert sinir
-
-async function besleme(k){
-  const basla = Date.now();
-  const hatalar = [];
-  for(const v of VEKILLER){
-    const kalan = KAYNAK_SURESI - (Date.now()-basla);
-    if(kalan < 700){ hatalar.push("süre doldu"); break; }
-    const dur = new AbortController();
-    const sayac = setTimeout(()=>dur.abort(), kalan);
-    try{
-      const c = await fetch(v.yap(k.url), {redirect:"follow", signal:dur.signal});
-      if(!c.ok) throw new Error("HTTP "+c.status);
-      const ham = xmlAyikla(await c.text());
-      return ham.map(i=>({
-        id:kimlik(i.link||i.title), kaynak:k.ad,
-        baslik:temiz(i.title),
-        ozet:(x=>x.length>260 ? x.slice(0,260)+"…" : x)(temiz(i.desc)),
-        link:i.link, tarih:i.date
-      }));
-    }catch(e){
-      hatalar.push(v.ad+" → "+(/abort/i.test(e.message) ? "süre doldu" : e.message));
-    }finally{
-      clearTimeout(sayac);
-    }
-  }
-  throw new Error(hatalar.join(" | "));
+/* ---------- Akış: kendi sunucumuzun ürettiği dosyadan ---------- */
+async function akisiCek(){
+  const c = await fetch("akis.json?t="+Date.now(), {cache:"no-store"});
+  if(!c.ok) throw new Error("akis.json okunamadı (HTTP "+c.status+")");
+  return c.json();
 }
 
 async function cek(){
   if(S.yukleniyor) return;
-  const acik=S.kaynaklar.filter(k=>k.acik);
   S.yukleniyor=true; S.hata=[];
-  if(!acik.length){ S.yazilar=[]; S.yukleniyor=false; ciz(); return; }
 
   bellektenTopla();
   const vardi = S.yazilar.length>0;
-  let bitti=0;
-
   if(!vardi && S.ekran==="feed"){
     cizSerit();
     $("#feed").innerHTML=`<div class="state">
       <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
-      <p>${acik.length} kaynak taranıyor…</p></div>`;
+      <p>akış alınıyor…</p></div>`;
   }
-  const gosterge=()=>{ const g=$("#tazele"); if(g) g.textContent = bitti<acik.length ? bitti+"/"+acik.length : ""; };
-  gosterge();
+  const g=$("#tazele"); if(g) g.textContent="…";
 
-  for(const k of acik){
-    try{
-      const yeni = await besleme(k);
-      const eski = (S.bellek[k.ad]||{}).yazilar || [];
-      const gelenler = new Set(yeni.map(x=>x.id));
-      // yeni gelenler basa, eskiler altta; tekrarlar ayiklanir
-      const birlesik = yeni.concat(eski.filter(x=>!gelenler.has(x.id)));
-      S.bellek[k.ad] = {yazilar:birlesik.slice(0,800), zaman:Date.now()};
-    }catch(e){
-      S.hata.push({ad:k.ad, mesaj:e.message});
-      // eski kayit varsa duruyor, silinmiyor
+  try{
+    const veri = await akisiCek();
+    S.guncellendi = veri.guncellendi;
+
+    // sunucudan gelen kaynaklari listeye yerlestir
+    for(const [ad, kayit] of Object.entries(veri.kaynaklar||{})){
+      if(!S.kaynaklar.some(k=>k.ad===ad)) S.kaynaklar.push({ad, url:"", acik:true, sunucu:true});
+      S.bellek[ad] = {yazilar:kayit.yazilar||[], zaman:Date.parse(kayit.tarandi)||Date.now()};
+      if(kayit.durum && kayit.durum!=="tamam") S.hata.push({ad, mesaj:kayit.durum});
     }
-    bitti++;
-    bellektenTopla();
-    if(S.ekran==="feed"){ cizSerit(); cizAkis(); gosterge(); }
-    await new Promise(r=>setTimeout(r,80));
+    yaz("ti.kaynaklar6", S.kaynaklar);
+    yaz("ti.bellek", S.bellek);
+  }catch(e){
+    S.hata.push({ad:"Akış", mesaj:e.message});
   }
 
+  bellektenTopla();
   S.yukleniyor=false;
-  yaz("ti.bellek", S.bellek);
+  if(g) g.textContent="";
   ciz();
 }
 
@@ -516,6 +459,8 @@ function cizAkis(){
           : "Besleme adresleri değişmiş olabilir. Kaynaklar ekranından adresleri düzeltip yeniden dene.")}</p>
       <button class="go" data-yeni="1">Yeniden dene</button>
       <button class="go" data-git="sources">Kaynaklar</button>
+      ${S.hata.length ? `<p class="warn" style="text-align:left;margin-top:26px;font-size:12px;line-height:1.6">${
+        S.hata.map(h=>"<strong>"+kac(h.ad)+"</strong> — "+kac(h.mesaj)).join("<br>")}</p>` : ""}
       </div>`;
     return;
   }
@@ -551,13 +496,9 @@ function cizKaynaklar(){
   const arsiv = ad => ((S.bellek[ad]||{}).yazilar||[]).length;
 
   $("#sources").innerHTML = `
-    <button class="ac" id="ekleAc" aria-expanded="${!!S.ekleAcik}">
-      ${S.ekleAcik ? "Vazgeç" : "Yeni kaynak ekle"}</button>
-    <div class="addbox ${S.ekleAcik?"":"hide"}">
-      <input id="ad" placeholder="Kaynak adı">
-      <input id="url" placeholder="RSS adresi" inputmode="url">
-      <button class="save" id="ekle">Ekle</button>
-    </div>
+    <p class="note" style="padding-top:14px">${S.guncellendi
+      ? "Akış sunucuda son olarak "+new Date(S.guncellendi).toLocaleString("tr-TR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})+" tarandı."
+      : "Akış henüz alınmadı."}</p>
     ${S.kaynaklar.map((k,i)=>{
       const n=say(k.ad), bozuk=k.acik&&hataVar(k.ad);
       return `<div class="srow">
@@ -565,10 +506,10 @@ function cizKaynaklar(){
           <div class="nm">${kac(k.ad)}</div>
           <div class="durum${bozuk?" kirik":""}">${
             !k.acik ? "kapalı" : bozuk ? (arsiv(k.ad)? "ulaşılamadı · "+arsiv(k.ad)+" yazı duruyor" : "ulaşılamadı") : (n?n+" yazı":"—")
-          }<span class="alan">${kac(alan(k.url))}</span></div>
+          }${k.url?`<span class="alan">${kac(alan(k.url))}</span>`:""}</div>
         </div>
         <button class="tog" data-ac="${i}" aria-pressed="${!!k.acik}" aria-label="${kac(k.ad)}"></button>
-        <button class="del" data-sil="${i}" aria-label="${kac(k.ad)} sil">×</button>
+        ${k.sunucu ? "" : `<button class="del" data-sil="${i}" aria-label="${kac(k.ad)} sil">×</button>`}
       </div>`;
     }).join("")}`;
 }
@@ -588,7 +529,7 @@ document.addEventListener("click", e=>{
   if(t.dataset.git){ S.ekran=t.dataset.git; ciz(); return; }
   if(t.dataset.ac !== undefined){
     const k=S.kaynaklar[+t.dataset.ac]; k.acik=!k.acik;
-    yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek(); return;
+    yaz("ti.kaynaklar6",S.kaynaklar); bellektenTopla(); ciz(); return;
   }
   if(t.dataset.sil !== undefined){
     const k=S.kaynaklar[+t.dataset.sil];

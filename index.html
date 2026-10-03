@@ -325,11 +325,11 @@ async function cek(){
     // sunucudan gelen kaynaklari listeye yerlestir
     for(const [ad, kayit] of Object.entries(veri.kaynaklar||{})){
       if(!S.kaynaklar.some(k=>k.ad===ad)) S.kaynaklar.push({ad, url:"", acik:true, sunucu:true});
-      S.bellek[ad] = {yazilar:kayit.yazilar||[], zaman:Date.parse(kayit.tarandi)||Date.now()};
+      S.bellek[ad] = {yazilar:(kayit.yazilar||[]).slice(0,40), zaman:Date.parse(kayit.tarandi)||Date.now()};
       if(kayit.durum && kayit.durum!=="tamam") S.hata.push({ad, mesaj:kayit.durum});
     }
     yaz("ti.kaynaklar6", S.kaynaklar);
-    yaz("ti.bellek", S.bellek);
+    yaz("ti.bellek", S.bellek);   // cevrimdisi icin kucuk kopya
   }catch(e){
     S.hata.push({ad:"Akış", mesaj:e.message});
   }

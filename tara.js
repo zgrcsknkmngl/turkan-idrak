@@ -51,7 +51,7 @@ const KAYNAKLAR = [
   { ad: "Dünya Ekonomik Forumu", url: "https://www.weforum.org/agenda/feed/" }
 ];
 
-const ARSIV_SINIRI = 800;   // kaynak başına saklanan yazı
+const ARSIV_SINIRI = 200;   // kaynak başına saklanan yazı
 
 /* ---------- yardımcılar ---------- */
 
@@ -95,7 +95,7 @@ function ayikla(xml, kaynakAd) {
   if (!bloklar.length) bloklar = xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
   if (!bloklar.length) throw new Error("beslemede yazı yok");
 
-  return bloklar.slice(0, 40).map(b => {
+  return bloklar.slice(0, 25).map(b => {
     const baslik = temiz(etiket(b, "title"));
     const link = baglanti(b);
     const ozetHam = temiz(
@@ -105,7 +105,7 @@ function ayikla(xml, kaynakAd) {
       id: kimlik(link || baslik),
       kaynak: kaynakAd,
       baslik,
-      ozet: ozetHam.length > 260 ? ozetHam.slice(0, 260) + "…" : ozetHam,
+      ozet: ozetHam.length > 190 ? ozetHam.slice(0, 190) + "…" : ozetHam,
       link,
       tarih: temiz(etiket(b, "pubDate") || etiket(b, "published") || etiket(b, "updated"))
     };
@@ -147,7 +147,7 @@ async function cek(kaynak) {
 
   const sonuc = { guncellendi: new Date().toISOString(), kaynaklar: {} };
 
-  for (const k of KAYNAKLAR) {
+  async function tek(k){
     const eskiKayit = onceki.kaynaklar[k.ad] || { yazilar: [] };
     try {
       const yeni = await cek(k);
@@ -165,8 +165,12 @@ async function cek(kaynak) {
         tarandi: eskiKayit.tarandi || null,
         durum: "hata: " + e.message
       };
-      console.log(`✗ ${k.ad} — ${e.message} (${eskiKayit.yazilar.length} eski yazı korundu)`);
+      console.log(`✗ ${k.ad} — ${e.message} (${eskiKayit.yazilar.length} eski yazi korundu)`);
     }
+  }
+
+  for (let i = 0; i < KAYNAKLAR.length; i += 5) {
+    await Promise.all(KAYNAKLAR.slice(i, i + 5).map(tek));
   }
 
   fs.writeFileSync("akis.json", JSON.stringify(sonuc));

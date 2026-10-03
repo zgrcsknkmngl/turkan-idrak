@@ -1,0 +1,16 @@
+{
+  "name": "Türkan İdrak",
+  "short_name": "İdrak",
+  "description": "Düşünce kuruluşu yayınları, tek yerde ve Türkçe",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1420",
+  "theme_color": "#0B1420",
+  "lang": "tr",
+  "icons": [
+    { "src": "anka.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "anka.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

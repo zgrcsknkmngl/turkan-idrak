@@ -80,8 +80,18 @@ async function cek(kaynak) {
     signal: dur,
     redirect: "follow",
     headers: {
-      "user-agent": "Mozilla/5.0 (compatible; TurkanIdrak/1.0; +https://github.com/)",
-      "accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "accept": "application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, text/html;q=0.8, */*;q=0.7",
+      "accept-language": "en-US,en;q=0.9,tr;q=0.8",
+      "accept-encoding": "gzip, deflate, br",
+      "cache-control": "no-cache",
+      "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24"',
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": '"Windows"',
+      "sec-fetch-dest": "document",
+      "sec-fetch-mode": "navigate",
+      "sec-fetch-site": "none",
+      "upgrade-insecure-requests": "1"
     }
   });
   if (!c.ok) throw new Error("HTTP " + c.status);

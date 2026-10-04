@@ -16,8 +16,8 @@ const KAYNAKLAR = [
   // --- Avrupa ---
   { ad: "Chatham House",   url: "https://www.chathamhouse.org/path/whatsnew.xml" },
   { ad: "Crisis Group",    url: "https://www.crisisgroup.org/rss.xml" },
-  { ad: "ECFR",            url: "https://ecfr.eu/feed" },
-  { ad: "Bruegel",         url: "https://www.bruegel.org/rss?type=all" },
+  { ad: "ECFR",            url: "https://news.google.com/rss/search?q=site:ecfr.eu&hl=en-US&gl=US&ceid=US:en" },
+  { ad: "Bruegel",         url: "https://news.google.com/rss/search?q=site:bruegel.org&hl=en-US&gl=US&ceid=US:en" },
   { ad: "SWP Berlin",      url: "https://news.google.com/rss/search?q=site:swp-berlin.org&hl=en-US&gl=US&ceid=US:en" },
   { ad: "Elcano",          url: "https://news.google.com/rss/search?q=site:realinstitutoelcano.org&hl=en-US&gl=US&ceid=US:en" },
 
@@ -38,11 +38,11 @@ const KAYNAKLAR = [
   // --- Ortadoğu ---
   { ad: "Carnegie Ortadoğu", url: "https://news.google.com/rss/search?q=site:carnegieendowment.org&hl=en-US&gl=US&ceid=US:en" },
   { ad: "El Cezire Etüd",  url: "https://studies.aljazeera.net/en/rss.xml" },
-  { ad: "Tahran Times",    url: "https://www.tehrantimes.com/rss" },
+  { ad: "Tahran Times",    url: "https://news.google.com/rss/search?q=site:tehrantimes.com&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Latin Amerika ---
   { ad: "Telesur",         url: "https://news.google.com/rss/search?q=site:telesurenglish.net&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "Prensa Latina",   url: "https://www.plenglish.com/feed/" },
+  { ad: "Prensa Latina",   url: "https://news.google.com/rss/search?q=site:plenglish.com&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Afrika ---
   { ad: "ISS Afrika",      url: "https://news.google.com/rss/search?q=site:issafrica.org&hl=en-US&gl=US&ceid=US:en" },
@@ -101,11 +101,17 @@ function ayikla(xml, kaynakAd) {
     const ozetHam = temiz(
       etiket(b, "description") || etiket(b, "summary") || etiket(b, "content")
     );
+    let yazar = temiz(etiket(b, "dc:creator") || etiket(b, "author") || etiket(b, "creator"));
+    const ad = yazar.match(/<name[^>]*>([\s\S]*?)<\/name>/i);   // Atom
+    if (ad) yazar = temiz(ad[1]);
+    yazar = yazar.replace(/\s*\([^)]*\)\s*$/, "").replace(/^[^@\s]+@[^\s]+\s*/, "").trim();
+    if (yazar.length > 70) yazar = "";
     return {
       id: kimlik(link || baslik),
       kaynak: kaynakAd,
       baslik,
       ozet: ozetHam.length > 190 ? ozetHam.slice(0, 190) + "…" : ozetHam,
+      yazar,
       link,
       tarih: temiz(etiket(b, "pubDate") || etiket(b, "published") || etiket(b, "updated"))
     };

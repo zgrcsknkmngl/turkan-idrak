@@ -100,6 +100,8 @@
   .entry:last-child{border-bottom:none}
   .meta{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
   .src{font-size:11.5px;font-weight:600;letter-spacing:.06em;color:var(--ember)}
+  .yazar{font-size:11.5px;color:#94A3B4;font-style:italic;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;max-width:46%}
   .when{font-size:11.5px;color:var(--dim);margin-left:auto;font-variant-numeric:tabular-nums}
   .entry h2{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.32;margin:0 0 7px}
   .orig{font-size:13px;color:var(--dim);font-style:italic;margin:0 0 8px}
@@ -312,12 +314,28 @@ const $ = s => document.querySelector(s);
 const kac = s => (s||"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const temiz = s => (s||"").replace(/<[^>]*>/g," ").replace(/&nbsp;/gi," ")
   .replace(/&amp;/gi,"&").replace(/&#\d+;|&[a-z]+;/gi," ").replace(/\s+/g," ").trim();
+function serpistir(liste){
+  const sonuc=[], bekleyen=[];
+  let son=null, ardisik=0;
+  const ekle = y => {
+    if(y.kaynak===son) ardisik++; else { son=y.kaynak; ardisik=1; }
+    sonuc.push(y);
+  };
+  for(const y of liste){
+    if(y.kaynak===son && ardisik>=2){ bekleyen.push(y); continue; }
+    ekle(y);
+    const i = bekleyen.findIndex(b=>b.kaynak!==son);
+    if(i>-1) ekle(bekleyen.splice(i,1)[0]);
+  }
+  return sonuc.concat(bekleyen);
+}
+
 function bellektenTopla(){
   const acikAdlar = S.kaynaklar.filter(k=>k.acik).map(k=>k.ad);
   const hepsi = acikAdlar.flatMap(ad => (S.bellek[ad]||{}).yazilar || []);
   const zaman = y => { const d=new Date(String(y.tarih||"").replace(" ","T")); return isNaN(d)?0:d.getTime(); };
   hepsi.sort((a,b)=> zaman(b)-zaman(a));
-  S.yazilar = hepsi;
+  S.yazilar = serpistir(hepsi);
 }
 
 const sade = x => (x||"").toLocaleLowerCase("tr")
@@ -452,6 +470,19 @@ function kaydet(id){
   yaz("ti.kayitli", S.kayitli); ciz();
 }
 const kayitliMi = id => S.kayitli.some(x=>x.id===id);
+
+async function paylas(id, dugme){
+  const y = [...S.yazilar, ...S.kayitli].find(x=>x.id===id);
+  if(!y) return;
+  const c = S.ceviri[id];
+  const baslik = c ? c.baslik : y.baslik;
+  const metin = baslik + "\n" + y.kaynak + "\n" + y.link;
+  try{
+    if(navigator.share){ await navigator.share({title:baslik, text:baslik+" — "+y.kaynak, url:y.link}); return; }
+    await navigator.clipboard.writeText(metin);
+    if(dugme){ const e=dugme.lastElementChild; e.textContent="kopyalandı"; setTimeout(()=>e.textContent="paylaş",1600); }
+  }catch(e){ /* kullanici vazgecti */ }
+}
 function okunduIsaretle(id){
   if(S.okunan.includes(id)) return;
   S.okunan.push(id);
@@ -464,14 +495,17 @@ const I = {
   yer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v17l-6-4.2L6 21z"/></svg>',
   yerD:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h12v17l-6-4.2L6 21z"/></svg>',
   dil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 3 2.6 15 0 18M12 3c-2.6 3-2.6 15 0 18"/></svg>',
-  dis:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg>'
+  dis:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg>',
+  pay:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.8l7.2-4.2M8.4 13.2l7.2 4.2"/></svg>'
 };
 
 function kart(y){
   const c = S.ceviri[y.id];
   const k = kayitliMi(y.id);
   return `<article class="entry${S.okunan.includes(y.id)?" okundu":""}">
-    <div class="meta"><span class="src">${kac(y.kaynak)}</span><span class="when">${nezaman(y.tarih)}</span></div>
+    <div class="meta"><span class="src">${kac(y.kaynak)}</span>${
+      y.yazar ? `<span class="yazar">${kac(y.yazar)}</span>` : ""
+    }<span class="when">${nezaman(y.tarih)}</span></div>
     <h2>${kac(c ? c.baslik : y.baslik)}</h2>
     ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
     ${(c?c.ozet:y.ozet) ? `<p class="sum">${kac(c?c.ozet:y.ozet)}</p>` : ""}
@@ -479,6 +513,7 @@ function kart(y){
       <button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${k?"kayıtlı":"kaydet"}</span></button>
       ${c ? "" : `<button class="act" data-cev="${y.id}">${I.dil}<span>çevir</span></button>`}
       <a class="act" href="${kac(y.link)}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dis}<span>kaynak</span></a>
+      <button class="act" data-pay="${y.id}">${I.pay}<span>paylaş</span></button>
     </div></article>`;
 }
 
@@ -507,7 +542,7 @@ function cizEtiketler(){
 }
 
 function cizSerit(){
-  const acik = S.kaynaklar.filter(k=>k.acik);
+  const acik = S.kaynaklar.filter(k=>k.acik).slice().sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
   const say = a => S.yazilar.filter(y=>y.kaynak===a).length;
   $("#rail").innerHTML =
     `<button class="chip" data-suz="hepsi" aria-pressed="${S.suzgec==="hepsi"}">Tümü<span class="say">${S.yazilar.length}</span></button>` +
@@ -616,9 +651,10 @@ function cizKaynaklar(){
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-kay],[data-cev],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],#ekle,#ekleAc");
+  const t = e.target.closest("[data-kay],[data-cev],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],#ekle,#ekleAc");
   if(!t) return;
   if(t.dataset.oku){ okunduIsaretle(t.dataset.oku); t.closest(".entry").classList.add("okundu"); return; }
+  if(t.dataset.pay) return paylas(t.dataset.pay, t);
   if(t.dataset.kay) return kaydet(t.dataset.kay);
   if(t.dataset.cev) return yaziyiCevir(t.dataset.cev);
   if(t.dataset.yeni) return cek();

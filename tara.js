@@ -9,46 +9,46 @@ const KAYNAKLAR = [
   { ad: "RAND",            url: "https://www.rand.org/pubs/new.xml" },
   { ad: "Foreign Affairs", url: "https://www.foreignaffairs.com/rss.xml" },
   { ad: "Foreign Policy",  url: "https://foreignpolicy.com/feed/" },
-  { ad: "New America",     url: "https://www.newamerica.org/feed/" },
   { ad: "Brookings",       url: "https://news.google.com/rss/search?q=site:brookings.edu&hl=en-US&gl=US&ceid=US:en" },
   { ad: "AEI",             url: "https://news.google.com/rss/search?q=site:aei.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad: "New America",     url: "https://news.google.com/rss/search?q=site:newamerica.org&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Avrupa ---
   { ad: "Chatham House",   url: "https://www.chathamhouse.org/path/whatsnew.xml" },
   { ad: "Crisis Group",    url: "https://www.crisisgroup.org/rss.xml" },
-  { ad: "ECFR",            url: "https://ecfr.eu/feed/" },
-  { ad: "Bruegel",         url: "https://www.bruegel.org/rss.xml" },
-  { ad: "SWP Berlin",      url: "https://www.swp-berlin.org/rss/publications.xml" },
-  { ad: "Elcano",          url: "https://www.realinstitutoelcano.org/en/feed/" },
+  { ad: "ECFR",            url: "https://ecfr.eu/feed" },
+  { ad: "Bruegel",         url: "https://www.bruegel.org/rss?type=all" },
+  { ad: "SWP Berlin",      url: "https://news.google.com/rss/search?q=site:swp-berlin.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad: "Elcano",          url: "https://news.google.com/rss/search?q=site:realinstitutoelcano.org&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Türkiye ---
-  { ad: "SETA",            url: "https://www.setav.org/feed/" },
-  { ad: "ORSAM",           url: "https://www.orsam.org.tr/tr/rss/" },
+  { ad: "SETA",            url: "https://news.google.com/rss/search?q=site:setav.org&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad: "ORSAM",           url: "https://news.google.com/rss/search?q=site:orsam.org.tr&hl=tr&gl=TR&ceid=TR:tr" },
   { ad: "TRT World Rapor", url: "https://researchcentre.trtworld.com/feed/" },
 
   // --- Rusya ve Avrasya ---
-  { ad: "RIAC",            url: "https://russiancouncil.ru/en/rss/analytics-and-comments/" },
-  { ad: "Valdai",          url: "https://valdaiclub.com/export/rss/" },
+  { ad: "RIAC",            url: "https://news.google.com/rss/search?q=site:russiancouncil.ru&hl=en-US&gl=US&ceid=US:en" },
+  { ad: "Valdai",          url: "https://news.google.com/rss/search?q=site:valdaiclub.com&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Çin ve Asya ---
-  { ad: "ORF Hindistan",   url: "https://www.orfonline.org/feed" },
   { ad: "CGTN",            url: "https://www.cgtn.com/subscribe/rss/section/world.xml" },
-  { ad: "East Asia Forum", url: "https://eastasiaforum.org/feed/" },
+  { ad: "ORF Hindistan",   url: "https://news.google.com/rss/search?q=site:orfonline.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad: "East Asia Forum", url: "https://news.google.com/rss/search?q=site:eastasiaforum.org&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Ortadoğu ---
-  { ad: "Carnegie Ortadoğu", url: "https://carnegieendowment.org/rss/mec.xml" },
+  { ad: "Carnegie Ortadoğu", url: "https://news.google.com/rss/search?q=site:carnegieendowment.org&hl=en-US&gl=US&ceid=US:en" },
   { ad: "El Cezire Etüd",  url: "https://studies.aljazeera.net/en/rss.xml" },
   { ad: "Tahran Times",    url: "https://www.tehrantimes.com/rss" },
 
   // --- Latin Amerika ---
-  { ad: "Telesur",         url: "https://www.telesurenglish.net/rss/RssAll.xml" },
+  { ad: "Telesur",         url: "https://news.google.com/rss/search?q=site:telesurenglish.net&hl=en-US&gl=US&ceid=US:en" },
   { ad: "Prensa Latina",   url: "https://www.plenglish.com/feed/" },
 
   // --- Afrika ---
-  { ad: "ISS Afrika",      url: "https://issafrica.org/rss/iss-today.xml" },
+  { ad: "ISS Afrika",      url: "https://news.google.com/rss/search?q=site:issafrica.org&hl=en-US&gl=US&ceid=US:en" },
 
   // --- Küresel kurumlar ---
-  { ad: "Dünya Ekonomik Forumu", url: "https://www.weforum.org/agenda/feed/" }
+  { ad: "Dünya Ekonomik Forumu", url: "https://news.google.com/rss/search?q=site:weforum.org&hl=en-US&gl=US&ceid=US:en" }
 ];
 
 const ARSIV_SINIRI = 200;   // kaynak başına saklanan yazı

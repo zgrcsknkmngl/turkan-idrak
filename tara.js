@@ -5,53 +5,59 @@
 const fs = require("fs");
 
 const KAYNAKLAR = [
-  // --- Kuzey Amerika ---
-  { ad: "RAND",            url: "https://www.rand.org/pubs/new.xml" },
-  { ad: "Foreign Affairs", url: "https://www.foreignaffairs.com/rss.xml" },
-  { ad: "Foreign Policy",  url: "https://foreignpolicy.com/feed/" },
-  { ad: "Brookings",       url: "https://news.google.com/rss/search?q=site:brookings.edu&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "AEI",             url: "https://news.google.com/rss/search?q=site:aei.org&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "New America",     url: "https://news.google.com/rss/search?q=site:newamerica.org&hl=en-US&gl=US&ceid=US:en" },
+  /* ========== DÜŞÜNCE KURULUŞLARI ========== */
+  { ad:"RAND",              tur:"kurum", url:"https://www.rand.org/pubs/new.xml" },
+  { ad:"Chatham House",     tur:"kurum", url:"https://www.chathamhouse.org/path/whatsnew.xml" },
+  { ad:"Crisis Group",      tur:"kurum", url:"https://www.crisisgroup.org/rss.xml" },
+  { ad:"Brookings",         tur:"kurum", url:"https://news.google.com/rss/search?q=site:brookings.edu&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"AEI",               tur:"kurum", url:"https://news.google.com/rss/search?q=site:aei.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"New America",       tur:"kurum", url:"https://news.google.com/rss/search?q=site:newamerica.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"ECFR",              tur:"kurum", url:"https://news.google.com/rss/search?q=site:ecfr.eu&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Bruegel",           tur:"kurum", url:"https://news.google.com/rss/search?q=site:bruegel.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"SWP Berlin",        tur:"kurum", url:"https://news.google.com/rss/search?q=site:swp-berlin.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Elcano",            tur:"kurum", url:"https://news.google.com/rss/search?q=site:realinstitutoelcano.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"SETA",              tur:"kurum", url:"https://news.google.com/rss/search?q=site:setav.org&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"ORSAM",             tur:"kurum", url:"https://news.google.com/rss/search?q=site:orsam.org.tr&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"TRT World Rapor",   tur:"kurum", url:"https://researchcentre.trtworld.com/feed/" },
+  { ad:"RIAC",              tur:"kurum", url:"https://news.google.com/rss/search?q=site:russiancouncil.ru&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Valdai",            tur:"kurum", url:"https://news.google.com/rss/search?q=site:valdaiclub.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"ORF Hindistan",     tur:"kurum", url:"https://news.google.com/rss/search?q=site:orfonline.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"East Asia Forum",   tur:"kurum", url:"https://news.google.com/rss/search?q=site:eastasiaforum.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Carnegie Ortadoğu", tur:"kurum", url:"https://news.google.com/rss/search?q=site:carnegieendowment.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"El Cezire Etüd",    tur:"kurum", url:"https://studies.aljazeera.net/en/rss.xml" },
+  { ad:"ISS Afrika",        tur:"kurum", url:"https://news.google.com/rss/search?q=site:issafrica.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Dünya Ekonomik Forumu", tur:"kurum", url:"https://news.google.com/rss/search?q=site:weforum.org&hl=en-US&gl=US&ceid=US:en" },
 
-  // --- Avrupa ---
-  { ad: "Chatham House",   url: "https://www.chathamhouse.org/path/whatsnew.xml" },
-  { ad: "Crisis Group",    url: "https://www.crisisgroup.org/rss.xml" },
-  { ad: "ECFR",            url: "https://news.google.com/rss/search?q=site:ecfr.eu&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "Bruegel",         url: "https://news.google.com/rss/search?q=site:bruegel.org&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "SWP Berlin",      url: "https://news.google.com/rss/search?q=site:swp-berlin.org&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "Elcano",          url: "https://news.google.com/rss/search?q=site:realinstitutoelcano.org&hl=en-US&gl=US&ceid=US:en" },
+  /* ========== DERGİLER ========== */
+  { ad:"Foreign Affairs",   tur:"dergi", url:"https://www.foreignaffairs.com/rss.xml" },
+  { ad:"Foreign Policy",    tur:"dergi", url:"https://foreignpolicy.com/feed/" },
+  { ad:"The Economist",     tur:"dergi", url:"https://news.google.com/rss/search?q=site:economist.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Le Monde Diplomatique", tur:"dergi", url:"https://news.google.com/rss/search?q=site:mondediplo.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Der Spiegel",       tur:"dergi", url:"https://www.spiegel.de/international/index.rss" },
+  { ad:"The Atlantic",      tur:"dergi", url:"https://www.theatlantic.com/feed/all/" },
+  { ad:"New Statesman",     tur:"dergi", url:"https://news.google.com/rss/search?q=site:newstatesman.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Jacobin",           tur:"dergi", url:"https://jacobin.com/feed" },
+  { ad:"The Diplomat",      tur:"dergi", url:"https://thediplomat.com/feed/" },
+  { ad:"Nikkei Asia",       tur:"dergi", url:"https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Caixin",            tur:"dergi", url:"https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Rest of World",     tur:"dergi", url:"https://restofworld.org/feed/latest" },
+  { ad:"Americas Quarterly", tur:"dergi", url:"https://news.google.com/rss/search?q=site:americasquarterly.org&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Africa Report", tur:"dergi", url:"https://news.google.com/rss/search?q=site:theafricareport.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"+972 Magazine",     tur:"dergi", url:"https://www.972mag.com/feed/" },
+  { ad:"Mada Masr",         tur:"dergi", url:"https://news.google.com/rss/search?q=site:madamasr.com&hl=en-US&gl=US&ceid=US:en" },
 
-  // --- Türkiye ---
-  { ad: "SETA",            url: "https://news.google.com/rss/search?q=site:setav.org&hl=tr&gl=TR&ceid=TR:tr" },
-  { ad: "ORSAM",           url: "https://news.google.com/rss/search?q=site:orsam.org.tr&hl=tr&gl=TR&ceid=TR:tr" },
-  { ad: "TRT World Rapor", url: "https://researchcentre.trtworld.com/feed/" },
-
-  // --- Rusya ve Avrasya ---
-  { ad: "RIAC",            url: "https://news.google.com/rss/search?q=site:russiancouncil.ru&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "Valdai",          url: "https://news.google.com/rss/search?q=site:valdaiclub.com&hl=en-US&gl=US&ceid=US:en" },
-
-  // --- Çin ve Asya ---
-  { ad: "CGTN",            url: "https://www.cgtn.com/subscribe/rss/section/world.xml" },
-  { ad: "ORF Hindistan",   url: "https://news.google.com/rss/search?q=site:orfonline.org&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "East Asia Forum", url: "https://news.google.com/rss/search?q=site:eastasiaforum.org&hl=en-US&gl=US&ceid=US:en" },
-
-  // --- Ortadoğu ---
-  { ad: "Carnegie Ortadoğu", url: "https://news.google.com/rss/search?q=site:carnegieendowment.org&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "El Cezire Etüd",  url: "https://studies.aljazeera.net/en/rss.xml" },
-  { ad: "Tahran Times",    url: "https://news.google.com/rss/search?q=site:tehrantimes.com&hl=en-US&gl=US&ceid=US:en" },
-
-  // --- Latin Amerika ---
-  { ad: "Telesur",         url: "https://news.google.com/rss/search?q=site:telesurenglish.net&hl=en-US&gl=US&ceid=US:en" },
-  { ad: "Prensa Latina",   url: "https://news.google.com/rss/search?q=site:plenglish.com&hl=en-US&gl=US&ceid=US:en" },
-
-  // --- Afrika ---
-  { ad: "ISS Afrika",      url: "https://news.google.com/rss/search?q=site:issafrica.org&hl=en-US&gl=US&ceid=US:en" },
-
-  // --- Küresel kurumlar ---
-  { ad: "Dünya Ekonomik Forumu", url: "https://news.google.com/rss/search?q=site:weforum.org&hl=en-US&gl=US&ceid=US:en" }
+  /* ========== HABER AJANSLARI (araştırma ve yorum) ========== */
+  { ad:"Reuters Araştırma", tur:"ajans", url:"https://news.google.com/rss/search?q=site:reuters.com/investigates&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"AP Araştırma",      tur:"ajans", url:"https://news.google.com/rss/search?q=site:apnews.com/hub/ap-investigations&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"AFP",               tur:"ajans", url:"https://news.google.com/rss/search?q=site:afp.com&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"El Cezire Dosya",   tur:"ajans", url:"https://www.aljazeera.com/xml/rss/all.xml" },
+  { ad:"BBC Derinlemesine", tur:"ajans", url:"https://news.google.com/rss/search?q=site:bbc.com/news/articles&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"AA Analiz",         tur:"ajans", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
+  { ad:"IPS Küresel Güney", tur:"ajans", url:"https://www.ipsnews.net/feed/" },
+  { ad:"TASS",              tur:"ajans", url:"https://news.google.com/rss/search?q=site:tass.com&hl=en-US&gl=US&ceid=US:en" }
 ];
 
-const ARSIV_SINIRI = 200;   // kaynak başına saklanan yazı
+const ARSIV_SINIRI = 120;   // kaynak başına saklanan yazı
 
 /* ---------- yardımcılar ---------- */
 
@@ -90,6 +96,31 @@ function kimlik(u) {
   return "a" + Math.abs(h).toString(36);
 }
 
+function gorselBul(b) {
+  const aday = [
+    /<media:content[^>]+url=["']([^"']+)["']/i,
+    /<media:thumbnail[^>]+url=["']([^"']+)["']/i,
+    /<enclosure[^>]+url=["']([^"']+)["'][^>]*type=["']image/i,
+    /<enclosure[^>]+type=["']image[^>]*url=["']([^"']+)["']/i,
+    /<image[^>]*>\s*<url>([^<]+)<\/url>/i
+  ];
+  for (const r of aday) {
+    const m = b.match(r);
+    if (m && m[1]) { const u = temizUrl(m[1]); if (u) return u; }
+  }
+  const icerik = coz(etiket(b, "content:encoded") || etiket(b, "description") || etiket(b, "summary"));
+  const img = icerik.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return img ? temizUrl(img[1]) : "";
+}
+
+function temizUrl(u) {
+  u = coz(u).trim();
+  if (!/^https:\/\//i.test(u)) return "";                  // karisik icerik olmasin
+  if (/1x1|pixel|tracking|spacer|blank\.(gif|png)/i.test(u)) return "";
+  if (!/\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(u) && !/image|img|photo|media/i.test(u)) return "";
+  return u.length > 400 ? "" : u;
+}
+
 function ayikla(xml, kaynakAd) {
   let bloklar = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
   if (!bloklar.length) bloklar = xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
@@ -101,17 +132,25 @@ function ayikla(xml, kaynakAd) {
     const ozetHam = temiz(
       etiket(b, "description") || etiket(b, "summary") || etiket(b, "content")
     );
-    let yazar = temiz(etiket(b, "dc:creator") || etiket(b, "author") || etiket(b, "creator"));
+    let yazar = temiz(etiket(b, "dc:creator") || etiket(b, "author") || etiket(b, "creator")
+                   || etiket(b, "itunes:author") || etiket(b, "media:credit"));
     const ad = yazar.match(/<name[^>]*>([\s\S]*?)<\/name>/i);   // Atom
     if (ad) yazar = temiz(ad[1]);
     yazar = yazar.replace(/\s*\([^)]*\)\s*$/, "").replace(/^[^@\s]+@[^\s]+\s*/, "").trim();
     if (yazar.length > 70) yazar = "";
+    // Google Haberler basliga " - Yayin Adi" ekler; kaynak zaten gosterildigi icin temizle
+    const kaynakEt = temiz(etiket(b, "source"));
+    let bas = baslik;
+    if (kaynakEt && bas.endsWith(" - " + kaynakEt)) bas = bas.slice(0, -(kaynakEt.length + 3)).trim();
+    else bas = bas.replace(/\s+-\s+[^-]{2,40}$/, (m) => (/\d/.test(m) ? m : "")).trim() || baslik;
+
     return {
-      id: kimlik(link || baslik),
+      id: kimlik(link || bas),
       kaynak: kaynakAd,
-      baslik,
+      baslik: bas,
       ozet: ozetHam.length > 190 ? ozetHam.slice(0, 190) + "…" : ozetHam,
       yazar,
+      gorsel: gorselBul(b),
       link,
       tarih: temiz(etiket(b, "pubDate") || etiket(b, "published") || etiket(b, "updated"))
     };
@@ -162,14 +201,16 @@ async function cek(kaynak) {
       sonuc.kaynaklar[k.ad] = {
         yazilar: birlesik.slice(0, ARSIV_SINIRI),
         tarandi: new Date().toISOString(),
-        durum: "tamam"
+        durum: "tamam",
+        tur: k.tur
       };
       console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}`);
     } catch (e) {
       sonuc.kaynaklar[k.ad] = {
         yazilar: eskiKayit.yazilar,
         tarandi: eskiKayit.tarandi || null,
-        durum: "hata: " + e.message
+        durum: "hata: " + e.message,
+        tur: k.tur
       };
       console.log(`✗ ${k.ad} — ${e.message} (${eskiKayit.yazilar.length} eski yazi korundu)`);
     }

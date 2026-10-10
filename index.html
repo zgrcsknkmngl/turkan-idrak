@@ -118,6 +118,9 @@
   .yazi{flex:1;min-width:0}
   .kapak{width:86px;height:86px;object-fit:cover;border-radius:7px;flex:none;
     background:var(--raised);border:1px solid var(--rule);margin-top:2px}
+  .kapak.yer{display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:34px;line-height:1;color:#31527A;
+    background:linear-gradient(158deg,#162535 0%,#101C29 100%)}
   .entry h2{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.32;margin:0 0 7px}
   .orig{font-size:13px;color:var(--dim);font-style:italic;margin:0 0 8px}
   .sum{font-family:var(--serif);font-size:15px;line-height:1.55;color:#BCC8D6;margin:0 0 12px}
@@ -451,9 +454,17 @@ const turBul = ad => (S.kaynaklar.find(k=>k.ad===ad)||{}).tur || "kurum";
 function bellektenTopla(){
   const acikAdlar = S.kaynaklar.filter(k=>k.acik).map(k=>k.ad);
   const hepsi = acikAdlar.flatMap(ad => (S.bellek[ad]||{}).yazilar || []);
-  const zaman = y => { const d=new Date(String(y.tarih||"").replace(" ","T")); return isNaN(d)?0:d.getTime(); };
+  const zaman = y => { const d=tarihOku(y.tarih); return d?d.getTime():0; };
   hepsi.sort((a,b)=> zaman(b)-zaman(a));
   S.yazilar = serpistir(hepsi);
+}
+
+function tarihOku(x){
+  if(!x) return null;
+  let d=new Date(x);
+  if(!isNaN(d)) return d;
+  d=new Date(String(x).trim().replace(" ","T"));
+  return isNaN(d)?null:d;
 }
 
 const sade = x => (x||"").toLocaleLowerCase("tr")
@@ -482,7 +493,7 @@ const kimlik = u => "a"+Math.abs([...(u||"")].reduce((h,c)=>((h<<5)-h+c.charCode
 
 function nezaman(t){
   if(!t) return "";
-  const d = new Date(String(t).replace(" ","T")); if(isNaN(d)) return "";
+  const d = tarihOku(t); if(!d) return "";
   const dk = Math.floor((Date.now()-d)/60000);
   if(dk < 1)  return "az önce";
   if(dk < 60) return dk+" dk önce";
@@ -632,8 +643,10 @@ function kart(y){
         ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
         ${(c?c.ozet:y.ozet) ? `<p class="sum">${kac(c?c.ozet:y.ozet)}</p>` : ""}
       </div>
-      ${y.gorsel ? `<img class="kapak" src="${kac(y.gorsel)}" alt="" loading="lazy"
-         referrerpolicy="no-referrer" onerror="this.remove()">` : ""}
+      ${y.gorsel
+        ? `<img class="kapak" src="${kac(y.gorsel)}" alt="" loading="lazy" referrerpolicy="no-referrer"
+             onerror="this.outerHTML='<div class=\'kapak yer\'>${kac(y.kaynak.trim()[0]||"İ")}</div>'">`
+        : `<div class="kapak yer">${kac(y.kaynak.trim()[0]||"İ")}</div>`}
     </div>
     <div class="acts">
       <button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${k?"kayıtlı":"kaydet"}</span></button>

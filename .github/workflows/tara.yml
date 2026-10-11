@@ -8,17 +8,30 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: tara
+  cancel-in-progress: false
+
 jobs:
   tara:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - name: Kaynaklari tara
         run: node tara.js
       - name: Git ayarla
         run: git config user.name "Turkan Idrak" && git config user.email "actions@users.noreply.github.com"
       - name: Kaydet ve gonder
-        run: git add akis.json && (git diff --staged --quiet && echo "degisiklik yok" || (git commit -m "Akis guncellendi" && git push))
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "degisiklik yok"
+          else
+            git commit -q -m "Akis guncellendi"
+            git pull -q --rebase || true
+            git push
+          fi

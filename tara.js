@@ -153,10 +153,24 @@ const VARLIKLAR = {
 };
 
 function coz(x) {
-  return (x || "")
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
-    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
-    .replace(/&[a-z]+;|&#\d+;/gi, m => VARLIKLAR[m.toLowerCase()] || " ");
+  let s = String(x || "").replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1");
+  for (let i = 0; i < 2; i++) {          // "&amp;nbsp;" gibi iki kat kodlananlar icin iki tur
+    const y = s.replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
+               .replace(/&[a-z]+;|&#\d+;/gi, m => VARLIKLAR[m.toLowerCase()] || " ");
+    if (y === s) break;
+    s = y;
+  }
+  return s;
+}
+
+/* Google Haberler yoluyla gelen yazilarda "ozet", basligin tekrari ve kaynak
+   adindan ibaret. Ozet basligi tekrar ediyorsa bos sayilir. */
+function ozetDuzelt(ozet, baslik) {
+  const o = String(ozet || "").replace(/&nbsp;|\u00a0/gi, " ").replace(/\s+/g, " ").trim();
+  const sade = x => String(x || "").toLocaleLowerCase("tr").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const b = sade(baslik), so = sade(o);
+  if (b && so.startsWith(b) && so.slice(b.length).trim().length < 80) return "";
+  return o;
 }
 
 function temiz(x) {
@@ -244,7 +258,7 @@ function ayikla(xml, kaynakAd) {
       id: kimlik(link || bas),
       kaynak: kaynakAd,
       baslik: bas,
-      ozet: ozetHam.length > 190 ? ozetHam.slice(0, 190) + "…" : ozetHam,
+      ozet: (o => o.length > 190 ? o.slice(0, 190) + "…" : o)(ozetDuzelt(ozetHam, bas)),
       yazar,
       gorsel: gorselBul(b),
       link,
@@ -507,7 +521,7 @@ function siteDosyalari(oncekiTaban) {
 
   // Yazilar orijinal dilinde kalir; onceki bir surumden kalan ceviri alanlari varsa temizle
   for (const k of Object.values(sonuc.kaynaklar))
-    for (const y of k.yazilar) { delete y.baslikTr; delete y.ozetTr; delete y.dil; }
+    for (const y of k.yazilar) { delete y.baslikTr; delete y.ozetTr; delete y.dil; y.ozet = ozetDuzelt(y.ozet, y.baslik); }
 
   fs.writeFileSync("akis.json", JSON.stringify(sonuc));
   const toplam = Object.values(sonuc.kaynaklar).reduce((n, k) => n + k.yazilar.length, 0);

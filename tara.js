@@ -1,8 +1,12 @@
-/* Türkan İdrak — kaynak tarayıcı
-   GitHub'ın sunucusunda saatte bir çalışır, akis.json üretir.
+/* Türkan İdrak Tefekkür — kaynak tarayıcı
+   GitHub'ın sunucusunda saatte bir çalışır. Ürettikleri:
+     akis.json          bütün yazılar (orijinal dilleriyle; çeviriyi okur kendi cihazında ister)
+     y/<kod>/index.html her yazının paylaşım sayfası (önizleme kartı + İdrak'a yönlendirme)
+     sitemap.xml, robots.txt, .nojekyll, tefekkur.json (yoksa)
    Hiçbir dış bağımlılığı yok, kurulum gerektirmez. */
 
 const fs = require("fs");
+const crypto = require("crypto");
 
 const KAYNAKLAR = [
   /* ===================== DÜŞÜNCE KURULUŞLARI =====================
@@ -13,7 +17,8 @@ const KAYNAKLAR = [
   { ad:"RAND", ulke:"ABD",               tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://www.rand.org/pubs/new.xml" },                        // ✓
   { ad:"FPRI", ulke:"ABD",               tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:fpri.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                               // ✓
   { ad:"War on the Rocks", ulke:"ABD",   tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://warontherocks.com/feed/" },                          // ✓
-  { ad:"National Interest", ulke:"ABD",  tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://nationalinterest.org/feed" },                        // ✓
+  { ad:"National Interest", ulke:"ABD",  tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://nationalinterest.org/feed",
+    yedek:"https://news.google.com/rss/search?q=site:nationalinterest.org+when:120d&hl=en-US&gl=US&ceid=US:en" },   // ✓ kendi beslemesi zaman zaman 403 veriyor; o zaman yedek yol
   { ad:"Long War Journal", ulke:"ABD",   tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://www.longwarjournal.org/feed" },                      // ✓
   { ad:"Cipher Brief", ulke:"ABD",       tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://www.thecipherbrief.com/feeds/feed.rss" },            // ✓
   { ad:"Foreign Policy In Focus", ulke:"ABD", tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://fpif.org/feed/" },                              // ✓
@@ -27,7 +32,8 @@ const KAYNAKLAR = [
   { ad:"Crisis Group", ulke:"Belçika",       tur:"kurum", ulke:"Belçika", kimlik:"bağımsız", url:"https://www.crisisgroup.org/rss" },                          // ✓
   { ad:"ECFR", ulke:"Avrupa",               tur:"kurum", ulke:"Avrupa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:ecfr.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },                                    // ✓
   { ad:"Foreign Policy Centre", ulke:"İngiltere", tur:"kurum", ulke:"İngiltere", kimlik:"bağımsız", url:"https://fpc.org.uk/feed/" },                              // ✓
-  { ad:"Berlin Policy Journal", ulke:"Almanya", tur:"kurum", ulke:"Almanya", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:berlinpolicyjournal.com+when:120d&hl=en-US&gl=US&ceid=US:en" },                 // ✓
+  // Berlin Policy Journal 2020'de kapandı; DGAP yerine Internationale Politik Quarterly'yi çıkarıyor
+  { ad:"IPQ Berlin", ulke:"Almanya", tur:"dergi", ulke:"Almanya", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:ip-quarterly.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // G
   { ad:"Bruegel", ulke:"Belçika",            tur:"kurum", ulke:"Belçika", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:bruegel.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                                      // G
   { ad:"SWP Berlin", ulke:"Almanya", nitelik:"devlet fonlu",         tur:"kurum", ulke:"Almanya", kimlik:"devlet destekli", url:"https://news.google.com/rss/search?q=site:swp-berlin.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                                   // G
   { ad:"Elcano", ulke:"İspanya",             tur:"kurum", ulke:"İspanya", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:realinstitutoelcano.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                          // G
@@ -104,6 +110,28 @@ const KAYNAKLAR = [
 ];
 
 const ARSIV_SINIRI = 70;
+const TARAYICI = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
+
+/* ---------- site adresi ----------
+   Özel alan adı bağlanınca GitHub depoya CNAME dosyası koyar. O andan
+   itibaren bütün paylaşım bağlantıları kendiliğinden yeni adrese geçer. */
+const PAGES_ADRESI = "https://zgrcsknkmngl.github.io/turkan-idrak/";
+function tabanAdres() {
+  try {
+    const c = fs.readFileSync("CNAME", "utf8").trim().replace(/^https?:\/\//, "").replace(/\/+$/, "");
+    if (c) return "https://" + c + "/";
+  } catch (e) { /* CNAME yok: GitHub adresi */ }
+  return PAGES_ADRESI;
+}
+const TABAN = tabanAdres();
+const AD = "Türkan İdrak Tefekkür";
+
+/* Paylaşım kodu: yazının bağlantısından türetilen 12 haneli sabit kod.
+   Aynı yazı her taramada aynı kodu alır; paylaşılan bağlantı hiç değişmez. */
+function payKodu(y) {
+  return crypto.createHash("sha1").update(String(y.link || y.baslik || y.id)).digest("hex").slice(0, 12);
+}
+const zaman = y => { const d = tarihOku(y.tarih); return d ? d.getTime() : 0; };
 const EN_ESKI_GUN  = 900;   // ~2,5 yildan eski yazi alinmaz
 
 /* RSS tarihleri "Mon, 15 Mar 2010 10:00:00 +0000" (RFC 822) ya da
@@ -285,6 +313,131 @@ async function cek(kaynak) {
   return ayikla(await c.text(), kaynak.ad);
 }
 
+/* Kaynağın kendi adresi düşerse (403 vb.) yedek adresi dene */
+async function cekYedekli(k) {
+  try {
+    return { yazilar: await cek(k), yol: "asıl" };
+  } catch (e) {
+    if (!k.yedek) throw e;
+    try {
+      return { yazilar: await cek({ ...k, url: k.yedek }), yol: "yedek" };
+    } catch (e2) {
+      throw new Error(e.message + " · yedek yol: " + e2.message);
+    }
+  }
+}
+
+/* ---------- paylaşım sayfaları ----------
+   Bluesky, WhatsApp, X, Telegram gibi uygulamalar bir bağlantının önizleme
+   kartını çıkarırken sayfadaki uygulamayı çalıştırmaz, sadece sayfanın
+   başındaki etiketleri okur. Bu yüzden her yazının kendine ait küçük bir
+   sayfası var: etiketler kartı bizim adımızla doldurur, sayfaya gelen insan
+   ise anında İdrak'a, o yazının üstüne yönlenir. Sayfalar silinmez; yazı
+   akıştan düşse de paylaşılmış bağlantı çalışmaya devam eder. */
+function kacis(x) {
+  return String(x || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function kisalt(x, n) {
+  x = String(x || "").replace(/\s+/g, " ").trim();
+  if (x.length <= n) return x;
+  return x.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
+}
+
+function paylasimSayfasi(y, bilgi) {
+  const baslik = y.baslik;
+  const ozet = y.ozet || "";
+  const adres = TABAN + "y/" + y.pay + "/";
+  const kimlikSatiri = [bilgi.ulke, bilgi.nitelik || bilgi.kimlik].filter(Boolean).join(" · ");
+  const aciklama = kisalt(y.kaynak + " · " + AD + (ozet ? " — " + ozet : ""), 200);
+  // Yazi akistan dustugunde de uygulamanin gosterebilmesi icin kisa kopya
+  const kopya = { id: y.id, pay: y.pay, kaynak: y.kaynak, baslik: y.baslik, ozet: ozet, yazar: y.yazar || "",
+                  gorsel: y.gorsel || "", link: y.link, tarih: y.tarih || "", kb: bilgi };
+  const veri = JSON.stringify(kopya).replace(/</g, "\\u003c");
+  return `<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${kacis(baslik)} · ${kacis(y.kaynak)} · ${AD}</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="${adres}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="${AD}">
+<meta property="og:title" content="${kacis(baslik)}">
+<meta property="og:description" content="${kacis(aciklama)}">
+<meta property="og:url" content="${adres}">
+<meta property="og:image" content="${TABAN}paylas.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0B1420">
+<style>body{margin:0;background:#0B1420;color:#E9E1D0;font:17px/1.5 Georgia,serif}main{max-width:640px;margin:0 auto;padding:44px 22px}p{margin:0 0 12px}.k{font:600 12px sans-serif;letter-spacing:.06em;color:#E0343A}h1{font-weight:500;font-size:24px;line-height:1.3;margin:0 0 20px}a{color:#3F91E4}</style>
+</head><body><main>
+<p class="k">${kacis(y.kaynak)}${kimlikSatiri ? " · " + kacis(kimlikSatiri) : ""}</p>
+<h1>${kacis(baslik)}</h1>
+<p><a href="../../?y=${y.pay}">${AD} ↗</a> &nbsp; <a href="${kacis(y.link)}" rel="noopener">${kacis(y.kaynak)} ↗</a></p>
+</main>
+<script type="application/json" id="veri">${veri}</script>
+<script>try{sessionStorage.setItem("ti.paylasilan",document.getElementById("veri").textContent)}catch(e){}location.replace("../../?y=${y.pay}")</script>
+</body></html>
+`;
+}
+
+function paylasimSayfalariniYaz(sonuc) {
+  let yeni = 0, guncel = 0;
+  for (const k of Object.values(sonuc.kaynaklar)) {
+    const bilgi = { ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "", tur: k.tur || "" };
+    for (const y of k.yazilar) {
+      if (!y.pay || !y.link) continue;
+      const klasor = "y/" + y.pay;
+      const dosya = klasor + "/index.html";
+      const icerik = paylasimSayfasi(y, bilgi);
+      let eski = null;
+      try { eski = fs.readFileSync(dosya, "utf8"); } catch (e) { /* yeni */ }
+      if (eski === icerik) continue;
+      fs.mkdirSync(klasor, { recursive: true });
+      fs.writeFileSync(dosya, icerik);
+      if (eski === null) yeni++; else guncel++;
+    }
+  }
+  console.log(`paylaşım sayfaları: ${yeni} yeni, ${guncel} güncellendi`);
+}
+
+/* ---------- site dosyaları ---------- */
+function degistiyseYaz(dosya, icerik) {
+  let eski = null;
+  try { eski = fs.readFileSync(dosya, "utf8"); } catch (e) { /* yok */ }
+  if (eski !== icerik) { fs.writeFileSync(dosya, icerik); return true; }
+  return false;
+}
+
+function siteDosyalari(oncekiTaban) {
+  // GitHub Pages dosyaları olduğu gibi yayımlasın (.well-known klasörü için de şart)
+  if (!fs.existsSync(".nojekyll")) fs.writeFileSync(".nojekyll", "");
+  if (!fs.existsSync("tefekkur.json")) fs.writeFileSync("tefekkur.json", "[]\n");
+
+  // Adres değiştiyse sayfalardaki tam adresleri yeni adrese çevir
+  for (const dosya of ["index.html", "hakkinda.html", "gizlilik.html"]) {
+    let m;
+    try { m = fs.readFileSync(dosya, "utf8"); } catch (e) { continue; }
+    let y = m;
+    for (const eski of new Set([oncekiTaban, PAGES_ADRESI])) {
+      if (eski && eski !== TABAN) y = y.split(eski).join(TABAN);
+    }
+    if (y !== m) { fs.writeFileSync(dosya, y); console.log(`${dosya}: adresler ${TABAN} olarak güncellendi`); }
+  }
+
+  // Site haritası: ana sayfa, Hakkında, Gizlilik ve Tefekkür yazıları
+  let tef = [];
+  try { tef = JSON.parse(fs.readFileSync("tefekkur.json", "utf8")); } catch (e) { tef = []; }
+  const bugun = new Date().toISOString().slice(0, 10);
+  const adresler = [[TABAN, bugun], [TABAN + "hakkinda.html", ""], [TABAN + "gizlilik.html", ""]]
+    .concat((Array.isArray(tef) ? tef : []).filter(t => t && t.yol)
+      .map(t => [TABAN + String(t.yol).replace(/^\/+/, ""), String(t.tarih || "").slice(0, 10)]));
+  degistiyseYaz("sitemap.xml",
+    '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + adresler.map(([u, l]) => `  <url><loc>${kacis(u)}</loc>${l ? `<lastmod>${l}</lastmod>` : ""}</url>`).join("\n")
+    + "\n</urlset>\n");
+  degistiyseYaz("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${TABAN}sitemap.xml\n`);
+}
+
 /* ---------- ana akış ---------- */
 
 (async () => {
@@ -294,12 +447,21 @@ async function cek(kaynak) {
     if (!onceki.kaynaklar) onceki = { kaynaklar: {} };
   } catch (e) { /* ilk çalışma */ }
 
-  const sonuc = { guncellendi: new Date().toISOString(), kaynaklar: {} };
+  const sonuc = { guncellendi: new Date().toISOString(), taban: TABAN, kaynaklar: {} };
 
   async function tek(k){
     const eskiKayit = onceki.kaynaklar[k.ad] || { yazilar: [] };
+    const kimlikBilgisi = { tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "" };
     try {
-      const yeni = await cek(k);
+      const { yazilar: yeni, yol } = await cekYedekli(k);
+
+      // onceki taramada bulunan gorseli tasi
+      const eskiler = new Map(eskiKayit.yazilar.map(y => [y.id, y]));
+      for (const y of yeni) {
+        const e = eskiler.get(y.id);
+        if (!e) continue;
+        if (!y.gorsel && e.gorsel) y.gorsel = e.gorsel;
+      }
 
       // beslemede gorsel yoksa makalenin kendi sayfasindan dene
       const eksik = yeni.filter(y => !y.gorsel && y.link).slice(0, 12);
@@ -311,22 +473,30 @@ async function cek(kaynak) {
         }
       }
 
+      // ayni yazi hem kendi adresinden hem yedek yoldan gelmisse tek kalsin
       const gelenler = new Set(yeni.map(y => y.id));
-      const birlesik = yeni.concat(eskiKayit.yazilar.filter(y => !gelenler.has(y.id)));
-      sonuc.kaynaklar[k.ad] = {
+      const basliklar = new Set(yeni.map(y => y.baslik.toLocaleLowerCase("tr")));
+      const birlesik = yeni.concat(eskiKayit.yazilar.filter(y =>
+        !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr"))));
+      for (const y of birlesik) if (!y.pay) y.pay = payKodu(y);
+      const gorulen = new Set();
+      const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
+      birlesik.length = 0; birlesik.push(...tekil);
+
+      sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: birlesik.slice(0, ARSIV_SINIRI),
         tarandi: new Date().toISOString(),
-        durum: "tamam",
-        tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", ulke: k.ulke, kimlik: k.kimlik
-      };
-      console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}`);
+        durum: "tamam"
+      }, yol === "yedek" ? { yol: "yedek" } : {}, kimlikBilgisi);
+      console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}${yol === "yedek" ? " (yedek yoldan)" : ""}`);
     } catch (e) {
-      sonuc.kaynaklar[k.ad] = {
-        yazilar: eskiKayit.yazilar,
+      for (const y of eskiKayit.yazilar) if (!y.pay) y.pay = payKodu(y);
+      const gorulen = new Set();
+      sonuc.kaynaklar[k.ad] = Object.assign({
+        yazilar: eskiKayit.yazilar.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true))),
         tarandi: eskiKayit.tarandi || null,
-        durum: "hata: " + e.message,
-        tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", ulke: k.ulke, kimlik: k.kimlik
-      };
+        durum: "hata: " + e.message
+      }, kimlikBilgisi);
       console.log(`✗ ${k.ad} — ${e.message} (${eskiKayit.yazilar.length} eski yazi korundu)`);
     }
   }
@@ -335,7 +505,14 @@ async function cek(kaynak) {
     await Promise.all(KAYNAKLAR.slice(i, i + 8).map(tek));
   }
 
+  // Yazilar orijinal dilinde kalir; onceki bir surumden kalan ceviri alanlari varsa temizle
+  for (const k of Object.values(sonuc.kaynaklar))
+    for (const y of k.yazilar) { delete y.baslikTr; delete y.ozetTr; delete y.dil; }
+
   fs.writeFileSync("akis.json", JSON.stringify(sonuc));
   const toplam = Object.values(sonuc.kaynaklar).reduce((n, k) => n + k.yazilar.length, 0);
   console.log(`\nakis.json yazıldı — ${toplam} yazı`);
+
+  paylasimSayfalariniYaz(sonuc);
+  siteDosyalari(onceki.taban || PAGES_ADRESI);
 })();

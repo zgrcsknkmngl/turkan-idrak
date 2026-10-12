@@ -11,18 +11,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -262,6 +262,15 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   :root[data-tema="acik"] .masthead .wordmark em{color:#0E5FB8}
   :root[data-tema="acik"] .masthead .wordmark .tef{color:#C21F28}
   img.mark{object-fit:contain}
+  .ara-dugme{margin-inline-start:auto} .ara-dugme + .tema-dugme{margin-inline-start:8px}
+  @media (max-width:430px){
+    .masthead .bas{gap:8px}
+    .masthead .wordmark{font-size:clamp(16px,4.7vw,20px)}
+    .masthead img.mark{width:32px;height:41px}
+    .tema-dugme{width:34px;height:34px}
+    .ara-dugme + .tema-dugme{margin-inline-start:6px}
+  }
+  .ara-dugme svg{width:19px;height:19px}
   .hide{display:none!important}
   @media (prefers-reduced-motion:no-preference){
     .entry{animation:rise .3s ease both}
@@ -454,6 +463,7 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   <div class="bas">
     <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
     <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
+    <button class="tema-dugme ara-dugme" id="aramaAc" aria-label="ara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2L20 20"/></svg></button>
     <button class="tema-dugme" id="tema" aria-label="açık temaya geç"></button>
   </div>
   <div class="manzara" aria-hidden="true"></div>
@@ -537,7 +547,7 @@ function varsayilanCeviri(){
 const SOZLUK = {
   tr: {
     nav_idrak:"İdrak", nav_tefekkur:"Tefekkür", nav_kayitli:"Kayıtlı", nav_kaynaklar:"Kaynaklar",
-    ara:"ara — konu, ülke, kurum…", aramayi_temizle_aria:"aramayı temizle",
+    ara:"ara — konu, ülke, kurum…", ara_ac:"ara", aramayi_temizle_aria:"aramayı temizle",
     acik_temaya:"açık temaya geç", koyu_temaya:"koyu temaya geç",
     kaynak_yazi:(n,m)=>`${n} kaynak · ${m} yazı`, kayit_sayisi:n=>`${n} kayıt`, yazi_sayisi:n=>`${n} yazı`,
     kat_hepsi:"Tümü", kat_kurum:"Düşünce Kuruluşları", kat_dergi:"Dergiler", kat_ajans:"Haber Ajansları", tumu:"Tümü",
@@ -577,7 +587,7 @@ const SOZLUK = {
   },
   en: {
     nav_idrak:"İdrak", nav_tefekkur:"Tefekkür", nav_kayitli:"Saved", nav_kaynaklar:"Sources",
-    ara:"search — topic, country, institution…", aramayi_temizle_aria:"clear search",
+    ara:"search — topic, country, institution…", ara_ac:"search", aramayi_temizle_aria:"clear search",
     acik_temaya:"switch to light theme", koyu_temaya:"switch to dark theme",
     kaynak_yazi:(n,m)=>`${n} sources · ${m} articles`, kayit_sayisi:n=>`${n} saved`, yazi_sayisi:n=>`${n} articles`,
     kat_hepsi:"All", kat_kurum:"Think Tanks", kat_dergi:"Magazines", kat_ajans:"News Agencies", tumu:"All",
@@ -963,6 +973,7 @@ function arayuzuCiz(){
   document.querySelectorAll("[data-t]").forEach(e=>{ e.textContent = t(e.dataset.t); });
   $("#q").placeholder = t("ara");
   $("#qsil").setAttribute("aria-label", t("aramayi_temizle_aria"));
+  $("#aramaAc").setAttribute("aria-label", t("ara_ac"));
   temaUygula(document.documentElement.getAttribute("data-tema")==="acik" ? "acik" : "koyu");
   const e = $("#etiketler"); if(e) delete e.dataset.hazir;
 }
@@ -1039,9 +1050,9 @@ function ciz(){
   $("#acilanAlan").innerHTML = (S.ekran==="feed" && S.acilan) ? acilanCiz(S.acilan) : "";
   $("#katlar").classList.toggle("hide", S.ekran!=="feed");
   $("#rail").classList.toggle("hide", S.ekran!=="feed");
-  $("#arama").classList.toggle("hide", S.ekran!=="feed");
-  $("#etiketler").classList.toggle("hide", S.ekran!=="feed");
-  if(S.ekran==="feed"){ cizKategoriler(); cizSerit(); cizEtiketler(); }
+  $("#arama").classList.toggle("hide", S.ekran!=="feed" || !S.aramaAcik);
+  $("#etiketler").classList.add("hide");
+  if(S.ekran==="feed"){ cizKategoriler(); cizSerit(); }
   $("#feed").classList.toggle("hide", S.ekran!=="feed");
   $("#tefekkur").classList.toggle("hide", S.ekran!=="tefekkur");
   $("#saved").classList.toggle("hide", S.ekran!=="saved");
@@ -1197,11 +1208,18 @@ function cizKaynaklar(){
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
-  const h = e.target.closest("[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
+  const h = e.target.closest("#aramaAc,[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
   if(!h) return;
   if(h.dataset.oku){ okunduIsaretle(h.dataset.oku); const en=h.closest(".entry"); if(en) en.classList.add("okundu"); return; }
   if(h.dataset.kapat) return yaziyiKapat();
   if(h.id==="tema") return temaDegistir();
+  if(h.id==="aramaAc"){
+    S.aramaAcik = !S.aramaAcik;
+    if(!S.aramaAcik && S.ara){ S.ara=""; $("#q").value=""; $("#qsil").classList.add("hide"); S.goster=40; }
+    S.ekran = "feed"; ciz();
+    if(S.aramaAcik) setTimeout(()=>$("#q").focus(), 30);
+    return;
+  }
   if(h.dataset.pay) return paylas(h.dataset.pay, h);
   if(h.dataset.kay) return kaydet(h.dataset.kay);
   if(h.dataset.cev) return yaziyiCevir(h.dataset.cev);

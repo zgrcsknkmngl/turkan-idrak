@@ -11,18 +11,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -248,8 +248,8 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   .ayar-not{font-size:12.5px;line-height:1.55;color:var(--dim);margin:6px 0 0}
 
   /* baslik: dunya manzarasi (koyu temada gece, acik temada gunduz) */
-  .masthead{background:#01193D;padding-bottom:0!important;overflow:hidden}
-  :root[data-tema="acik"] .masthead{background:#77BEF5}
+  .masthead{background:#16427B url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAABCAIAAAAU3Xa1AAAAhUlEQVR42n2SyxHEMAhDpUq2rBS3vebtIRALZyccsMxPMmN/jq/+GpLkRrDCSNDgChJ5uhkknJHb13AGWXvPOS4vgSUXLm1uBT2JWy6i4oDOS4+EODsVvOjVKm1GNc1ILGGBFBbqxlBI8izY2vfr6Nuvq3Qeye14uyMT+x9/IIUYnstJ+wGR4Hymj1JJXgAAAABJRU5ErkJggg==) 0 0/100% 100% no-repeat;padding-bottom:0!important;overflow:hidden}
+  :root[data-tema="acik"] .masthead{background:#B4D3EB url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAABCAIAAAAU3Xa1AAAAeUlEQVR42o2RUQ6AMAhD2/vf0CP467/PDxFhm4kk25rCWsa87YemIFYAbpKyJw8tGwBurKhANZvATb+aZidUTGX5SufRfEnfuavRlzYNCyGLwMU3BU89Oz5VlJVXQ4xhzsN7tYo1O9JLnXTn44v/hDuwYyyW5Ddbay4sxm1crtic1QAAAABJRU5ErkJggg==) 0 0/100% 100% no-repeat}
   .manzara{position:relative;margin:12px -18px 0;aspect-ratio:2064/512;pointer-events:none;
     background:url(dunya-gece.jpg) 50% 100%/100% 100% no-repeat;
     background-image:image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"))}
@@ -257,8 +257,10 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
     background-image:image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
   .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
   .siluet,.sayaclar{display:none!important}
-  .masthead .wordmark{color:#F1EBDD}
-  :root[data-tema="acik"] .masthead .wordmark{color:#0F2340}
+  .masthead .wordmark{color:#F4EFE3;text-shadow:0 1px 6px rgba(0,10,30,.35)}
+  .masthead .wordmark em{color:#8CC6FF}
+  .masthead .wordmark .tef{color:#FF6166}
+  :root[data-tema="acik"] .masthead .wordmark{color:#0F2340;text-shadow:none}
   :root[data-tema="acik"] .masthead .wordmark em{color:#0E5FB8}
   :root[data-tema="acik"] .masthead .wordmark .tef{color:#C21F28}
   img.mark{object-fit:contain}
@@ -528,7 +530,7 @@ function yaz(k,v){
 const ARAYUZ_DILLERI = [["tr","Türkçe"],["en","English"]];
 /* çeviri hedefi: her dil kendi adıyla listelenir, herkes kendininkini tanır */
 const CEVIRI_DILLERI = [
-  ["tr","Türkçe"],["en","English"],["ar","العربية"],["fa","فارسی"],["ur","اردو"],
+  ["tr","Türkçe"],["en","English"],["ku","Kurdî (Kurmancî)"],["ar","العربية"],["fa","فارسی"],["ur","اردو"],
   ["az","Azərbaycanca"],["kk","Қазақша"],["uz","Oʻzbekcha"],["ky","Кыргызча"],["tk","Türkmençe"],
   ["ru","Русский"],["uk","Українська"],["de","Deutsch"],["fr","Français"],["es","Español"],
   ["pt","Português"],["it","Italiano"],["nl","Nederlands"],["pl","Polski"],["el","Ελληνικά"],

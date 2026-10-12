@@ -106,6 +106,13 @@ const KAYNAKLAR = [
   { ad:"Mongabay", ulke:"ABD",           tur:"ajans", ulke:"ABD", kimlik:"vakıf", url:"https://news.mongabay.com/feed" },                           // ✓
   { ad:"Gazete Oksijen", ulke:"Türkiye",                tur:"ajans", url:"https://news.google.com/rss/search?q=site:gazeteoksijen.com+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
   { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", url:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  // 12 Ekim 2026: yeni kaynaklar (besleme adresleri yayincilarin guncel adresleriyle dogrulandi)
+  { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"The New York Times", ulke:"ABD", tur:"ajans", url:"https://rss.nytimes.com/services/xml/rss/nyt/World.xml", yedek:"https://news.google.com/rss/search?q=site:nytimes.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Wall Street Journal", ulke:"ABD", tur:"ajans", url:"https://feeds.content.dowjones.io/public/rss/RSSWorldNews", yedek:"https://news.google.com/rss/search?q=site:wsj.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Financial Times", ulke:"İngiltere", tur:"ajans", url:"https://www.ft.com/world?format=rss", yedek:"https://news.google.com/rss/search?q=site:ft.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://www.politico.com/rss/politicopicks.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" }
 ];
 
@@ -361,7 +368,7 @@ function paylasimSayfasi(y, bilgi) {
   const baslik = y.baslik;
   const ozet = y.ozet || "";
   const adres = TABAN + "y/" + y.pay + "/";
-  const kimlikSatiri = [bilgi.ulke, bilgi.nitelik || bilgi.kimlik].filter(Boolean).join(" · ");
+  const kimlikSatiri = bilgi.ulke || "";
   const aciklama = kisalt(y.kaynak + " · " + AD + (ozet ? " — " + ozet : ""), 200);
   // Yazi akistan dustugunde de uygulamanin gosterebilmesi icin kisa kopya
   const kopya = { id: y.id, pay: y.pay, kaynak: y.kaynak, baslik: y.baslik, ozet: ozet, yazar: y.yazar || "",

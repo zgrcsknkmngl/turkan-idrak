@@ -11,18 +11,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -248,14 +248,14 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   .ayar-not{font-size:12.5px;line-height:1.55;color:var(--dim);margin:6px 0 0}
 
   /* baslik: dunya manzarasi (koyu temada gece, acik temada gunduz) */
-  .masthead{background:#01193D;padding-bottom:158px!important;overflow:hidden}
+  .masthead{background:#01193D;padding-bottom:0!important;overflow:hidden}
   :root[data-tema="acik"] .masthead{background:#77BEF5}
-  .manzara{position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none;
-    background:url(dunya-gece.jpg) 52% 100%/cover no-repeat;
+  .manzara{position:relative;margin:12px -18px 0;aspect-ratio:2064/512;pointer-events:none;
+    background:url(dunya-gece.jpg) 50% 100%/100% 100% no-repeat;
     background-image:image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"))}
-  :root[data-tema="acik"] .manzara{background-image:url(dunya-gunduz.jpg);
+  :root[data-tema="acik"] .manzara{background-image:url(dunya-gunduz.jpg);background-size:100% 100%;
     background-image:image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
-  .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
+  .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
   .siluet,.sayaclar{display:none!important}
   .masthead .wordmark{color:#F1EBDD}
   :root[data-tema="acik"] .masthead .wordmark{color:#0F2340}
@@ -451,12 +451,12 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
 </svg>
 
 <header class="masthead">
-  <div class="manzara" aria-hidden="true"></div>
   <div class="bas">
     <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
     <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
     <button class="tema-dugme" id="tema" aria-label="açık temaya geç"></button>
   </div>
+  <div class="manzara" aria-hidden="true"></div>
   <div class="sayaclar">
     <span class="count" id="count"></span><span class="count" id="tazele"></span>
   </div>
@@ -662,8 +662,8 @@ function dilAdi(kod){
 const kaynakAdi = ad => (S.arayuz==="en" && KAYNAK_EN[ad]) || ad;
 function kimlikYaz(b){
   if(!b) return "";
-  const u = b.ulke || "", n = b.nitelik || b.kimlik || "";
-  return (S.arayuz==="en" ? [ULKE_EN[u]||u, NITELIK_EN[n]||n] : [u, n]).filter(Boolean).join(" · ");
+  const u = b.ulke || "";
+  return S.arayuz==="en" ? (ULKE_EN[u]||u) : u;
 }
 
 const $ = s => document.querySelector(s);

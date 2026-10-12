@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zgrcsknkmngl.github.io/turkan-idrak/sitemap.xml
+Sitemap: https://turkanidrak.com/sitemap.xml

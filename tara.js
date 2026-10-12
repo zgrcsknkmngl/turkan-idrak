@@ -378,7 +378,7 @@ function paylasimSayfasi(y, bilgi) {
 <meta property="og:title" content="${kacis(baslik)}">
 <meta property="og:description" content="${kacis(aciklama)}">
 <meta property="og:url" content="${adres}">
-<meta property="og:image" content="${TABAN}paylas.png">
+<meta property="og:image" content="${TABAN}paylas.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0B1420">

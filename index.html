@@ -12,7 +12,7 @@
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
 <meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
-<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.png">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
@@ -247,6 +247,21 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
     padding:7px 10px;font-family:var(--sans);font-size:14px;max-width:62%}
   .ayar-not{font-size:12.5px;line-height:1.55;color:var(--dim);margin:6px 0 0}
 
+  /* baslik: dunya manzarasi (koyu temada gece, acik temada gunduz) */
+  .masthead{background:#01193D;padding-bottom:158px!important;overflow:hidden}
+  :root[data-tema="acik"] .masthead{background:#77BEF5}
+  .manzara{position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none;
+    background:url(dunya-gece.jpg) 52% 100%/cover no-repeat;
+    background-image:image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"))}
+  :root[data-tema="acik"] .manzara{background-image:url(dunya-gunduz.jpg);
+    background-image:image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
+  .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
+  .siluet,.sayaclar{display:none!important}
+  .masthead .wordmark{color:#F1EBDD}
+  :root[data-tema="acik"] .masthead .wordmark{color:#0F2340}
+  :root[data-tema="acik"] .masthead .wordmark em{color:#0E5FB8}
+  :root[data-tema="acik"] .masthead .wordmark .tef{color:#C21F28}
+  img.mark{object-fit:contain}
   .hide{display:none!important}
   @media (prefers-reduced-motion:no-preference){
     .entry{animation:rise .3s ease both}
@@ -436,9 +451,9 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
 </svg>
 
 <header class="masthead">
-  <svg class="siluet" aria-hidden="true"><use href="#istanbul"/></svg>
+  <div class="manzara" aria-hidden="true"></div>
   <div class="bas">
-    <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+    <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
     <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
     <button class="tema-dugme" id="tema" aria-label="açık temaya geç"></button>
   </div>
@@ -740,7 +755,7 @@ async function cek(){
   if(!vardi && S.ekran==="feed"){
     cizSerit();
     $("#feed").innerHTML=`<div class="state">
-      <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+      <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
       <p>${t("akis_aliniyor")}</p></div>`;
   }
   const g=$("#tazele"); if(g) g.textContent="…";
@@ -976,7 +991,7 @@ function cizTefekkur(){
       ? liste.map(x=>`<a class="tef-kart" href="${kac(x.yol||"#")}">
           <div class="yz">${kac(x.yazar||"")}${x.tarih ? " · "+kac(tarihYaz(x.tarih)) : ""}</div>
           <h2>${kac(x.baslik||"")}</h2>${x.ozet ? `<p class="sum">${kac(x.ozet)}</p>` : ""}</a>`).join("")
-      : `<div class="state"><svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+      : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
           <h3>${t("tef_yakinda")}</h3><p>${t("tef_yakinda_aciklama")}</p></div>`;
   $("#tefekkur").innerHTML = giris + govde + altBaglantilar();
 }
@@ -1100,7 +1115,7 @@ function cizAkis(){
     if(S.ara.trim() || S.etiket){
       const e = ETIKETLER.find(x=>x.kod===S.etiket);
       $("#feed").innerHTML = `<div class="state">
-        <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+        <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
         <h3>${t("sonuc_yok")}</h3>
         <p>${e ? kac(t("etiket_eslesmedi", etiketAdi(e))) : kac(t("arama_eslesmedi", S.ara))}</p>
         <button class="go" data-sifirla="1">${t("aramayi_temizle")}</button></div>`;
@@ -1108,7 +1123,7 @@ function cizAkis(){
     }
     const tekKaynak = S.suzgec!=="hepsi";
     $("#feed").innerHTML = `<div class="state">
-      <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+      <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
       <h3>${tekKaynak ? kac(t("kaynak_acilmadi", kaynakAdi(S.suzgec))) : (YEREL ? t("yerel_acildi") : t("hic_acilmadi"))}</h3>
       <p>${tekKaynak ? t("kaynak_acilmadi_aciklama") : (YEREL ? t("yerel_aciklama") : t("hic_aciklama"))}</p>
       <button class="go" data-yeni="1">${t("yeniden_dene")}</button>
@@ -1136,7 +1151,7 @@ function cizAkis(){
 function cizKayitli(){
   $("#count").textContent = S.kayitli.length ? t("kayit_sayisi", sayi(S.kayitli.length)) : "";
   $("#saved").innerHTML = S.kayitli.length ? S.kayitli.map(kart).join("")
-    : `<div class="state"><svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+    : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
        <h3>${t("kayit_yok")}</h3>
        <p>${t("kayit_yok_aciklama")}</p>
        <button class="go" data-git="feed">${t("idrake_don")}</button></div>`;

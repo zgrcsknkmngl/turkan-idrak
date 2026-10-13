@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" translate="no">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Türkan İdrak Tefekkür</title>
 <meta name="description" content="Türkan İdrak Tefekkür — Dünyanın düşünce kuruluşlarından, dergilerinden ve haber ajanslarından yazılar tek akışta; isteyen tek dokunuşla kendi diline çevirir. Tefekkür bölümünde davetli yazarların yalnızca bizim için kaleme aldığı yazılar.">
@@ -11,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -264,6 +265,10 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   :root[data-tema="acik"] .masthead .wordmark em{color:#0E5FB8}
   :root[data-tema="acik"] .masthead .wordmark .tef{color:#C21F28}
   img.mark{object-fit:contain}
+  .mini.secili{border-color:var(--gold);color:var(--vellum);background:color-mix(in srgb,var(--gold) 14%,transparent)}
+  .yz-isaret{color:var(--gold);margin-inline-end:4px;font-size:.85em}
+  .yildiz-dugme{flex:none;width:34px;height:34px;border:none;background:none;color:var(--gold);font-size:20px;line-height:1;cursor:pointer;margin-inline-end:4px}
+  .yildiz-dugme[aria-pressed="false"]{color:var(--dim)}
   .ara-dugme{margin-inline-start:auto} .ara-dugme + .tema-dugme{margin-inline-start:8px}
   @media (max-width:430px){
     .masthead .bas{gap:8px}
@@ -585,7 +590,12 @@ const SOZLUK = {
     hakkinda:"Hakkında", gizlilik:"Gizlilik",
     dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri",
     ceviri_aciklama:"Yazılar orijinal dilinde gelir. “Çevir”e dokununca başlık ve özet seçtiğin dile çevrilir.",
-    az_once:"az önce"
+    az_once:"az önce",
+    gozdeler:"Gözdeler", gozdeye_ekle:"Gözdelere ekle", gozdede:"Gözdelerde",
+    gozde_yok:"Henüz gözde kaynağın yok",
+    gozde_bos:"Gözde kaynaklarında şu an yazı yok",
+    gozde_nasil:"Bir kaynağı seçip ☆ Gözdelere ekle'ye dokun ya da Kaynaklar ekranında yıldızlara dokun. Diğer kaynaklar akışta kalmaya devam eder.",
+    tum_akisa_don:"Bütün akışa dön"
   },
   en: {
     nav_idrak:"İdrak", nav_tefekkur:"Tefekkür", nav_kayitli:"Saved", nav_kaynaklar:"Sources",
@@ -625,7 +635,12 @@ const SOZLUK = {
     hakkinda:"About", gizlilik:"Privacy",
     dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation",
     ceviri_aciklama:"Articles arrive in their original language. Tap “translate” to see the headline and summary in the language you choose.",
-    az_once:"just now"
+    az_once:"just now",
+    gozdeler:"Favorites", gozdeye_ekle:"Add to favorites", gozdede:"In favorites",
+    gozde_yok:"No favorite sources yet",
+    gozde_bos:"No articles from your favorite sources right now",
+    gozde_nasil:"Pick a source and tap ☆ Add to favorites, or tap the stars on the Sources screen. Other sources stay in the feed.",
+    tum_akisa_don:"Back to the full feed"
   }
 };
 
@@ -648,6 +663,8 @@ const S = {
   ceviriDili:yukle("ti.ceviriDili", null) || varsayilanCeviri(),
   kaynaklar: yukle("ti.kaynaklar6", VARSAYILAN),
   kayitli:   yukle("ti.kayitli", []),
+  gozde:     new Set(yukle("ti.gozde", [])),
+  gozdeFiltre: false,
   ceviri:    yukle("ti.ceviri", {}),
   bellek:    yukle("ti.bellek",{}),
   okunan:    yukle("ti.okunan",[]),
@@ -1088,13 +1105,13 @@ function cizKategoriler(){
 function cizSerit(){
   const acik = S.kaynaklar
     .filter(k=>k.acik && (S.kategori==="hepsi" || (k.tur||"kurum")===S.kategori))
-    .slice().sort((a,b)=>kaynakAdi(a.ad).localeCompare(kaynakAdi(b.ad), S.arayuz));
+    .slice().sort((a,b)=>(S.gozde.has(b.ad)-S.gozde.has(a.ad)) || kaynakAdi(a.ad).localeCompare(kaynakAdi(b.ad), S.arayuz));
   const say = a => S.yazilar.filter(y=>y.kaynak===a).length;
   $("#rail").innerHTML =
     `<button class="chip" data-suz="hepsi" aria-pressed="${S.suzgec==="hepsi"}">${t("tumu")}<span class="say">${sayi(S.yazilar.length)}</span></button>` +
     acik.map(k=>{
       const n = say(k.ad);
-      return `<button class="chip ${n?"":"bos"}" data-suz="${kac(k.ad)}" aria-pressed="${S.suzgec===k.ad}">${kac(kaynakAdi(k.ad))}<span class="say">${sayi(n)}</span></button>`;
+      return `<button class="chip ${n?"":"bos"}" data-suz="${kac(k.ad)}" aria-pressed="${S.suzgec===k.ad}">${S.gozde.has(k.ad)?'<span class="yz-isaret">★</span>':""}${kac(kaynakAdi(k.ad))}<span class="say">${sayi(n)}</span></button>`;
     }).join("");
 }
 
@@ -1103,6 +1120,7 @@ function cizAkis(){
   let liste = S.yazilar;
   if(S.kategori!=="hepsi") liste = liste.filter(y=>turBul(y.kaynak)===S.kategori);
   if(S.suzgec!=="hepsi")   liste = liste.filter(y=>y.kaynak===S.suzgec);
+  if(S.gozdeFiltre)        liste = liste.filter(y=>S.gozde.has(y.kaynak));
 
   if(S.etiket){
     const e = ETIKETLER.find(x=>x.kod===S.etiket);
@@ -1125,6 +1143,14 @@ function cizAkis(){
     : "";
 
   if(!liste.length){
+    if(S.gozdeFiltre){
+      $("#feed").innerHTML = `<div class="state">
+        <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+        <h3>${t(S.gozde.size ? "gozde_bos" : "gozde_yok")}</h3>
+        <p>${t("gozde_nasil")}</p>
+        <button class="go" data-gozde-filtre="1">${t("tum_akisa_don")}</button></div>`;
+      return;
+    }
     if(S.ara.trim() || S.etiket){
       const e = ETIKETLER.find(x=>x.kod===S.etiket);
       $("#feed").innerHTML = `<div class="state">
@@ -1151,6 +1177,8 @@ function cizAkis(){
       <button class="mini" data-yeni="1"${S.yukleniyor?" disabled":""}>${t(S.yukleniyor?"yenileniyor":"yenile")}</button>
       ${cevrilmemis ? `<button class="mini" data-toplu="1"${S.topluCeviri?" disabled":""}>${
           S.topluCeviri ? t("cevriliyor_n", S.topluKalan||0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>` : ""}
+      <button class="mini${S.gozdeFiltre?" secili":""}" data-gozde-filtre="1" aria-pressed="${S.gozdeFiltre}">★ ${t("gozdeler")}${S.gozde.size ? " ("+sayi(S.gozde.size)+")" : ""}</button>
+      ${S.suzgec!=="hepsi" ? `<button class="mini${S.gozde.has(S.suzgec)?" secili":""}" data-gozde-ekle="${kac(S.suzgec)}">${S.gozde.has(S.suzgec) ? "★ "+t("gozdede") : "☆ "+t("gozdeye_ekle")}</button>` : ""}
       ${S.dolu ? `<span class="uyari">${t("depo_doldu")}</span>` : ""}
     </div>`;
   const parca = liste.slice(0, S.goster);
@@ -1201,6 +1229,7 @@ function cizKaynaklar(){
             !k.acik ? t("kapali") : bozuk ? (arsiv(k.ad)? t("ulasilamadi_duruyor", sayi(arsiv(k.ad))) : t("ulasilamadi")) : (n?t("yazi_sayisi", sayi(n)):"—")
           }${kim?`<span class="alan">${kac(kim)}</span>`:""}</div>
         </div>
+        <button class="yildiz-dugme" data-gozde-ekle="${kac(k.ad)}" aria-pressed="${S.gozde.has(k.ad)}" aria-label="${kac(t("gozdeye_ekle"))}">${S.gozde.has(k.ad)?"★":"☆"}</button>
         <button class="tog" data-ac="${i}" aria-pressed="${!!k.acik}" aria-label="${kac(kaynakAdi(k.ad))}"></button>
         ${k.sunucu ? "" : `<button class="del" data-sil="${i}" aria-label="${kac(k.ad)}">×</button>`}
       </div>`;
@@ -1210,11 +1239,19 @@ function cizKaynaklar(){
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
-  const h = e.target.closest("#aramaAc,[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
+  const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
   if(!h) return;
   if(h.dataset.oku){ okunduIsaretle(h.dataset.oku); const en=h.closest(".entry"); if(en) en.classList.add("okundu"); return; }
   if(h.dataset.kapat) return yaziyiKapat();
   if(h.id==="tema") return temaDegistir();
+  if(h.dataset.gozdeFiltre){
+    S.gozdeFiltre = !S.gozdeFiltre; S.goster = 40; S.ekran = "feed"; ciz(); scrollTo({top:0}); return;
+  }
+  if(h.dataset.gozdeEkle){
+    const ad = h.dataset.gozdeEkle;
+    if(S.gozde.has(ad)) S.gozde.delete(ad); else S.gozde.add(ad);
+    yaz("ti.gozde", [...S.gozde]); ciz(); return;
+  }
   if(h.id==="aramaAc"){
     S.aramaAcik = !S.aramaAcik;
     if(!S.aramaAcik && S.ara){ S.ara=""; $("#q").value=""; $("#qsil").classList.add("hide"); S.goster=40; }

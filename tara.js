@@ -112,6 +112,9 @@ const KAYNAKLAR = [
   { ad:"The Wall Street Journal", ulke:"ABD", tur:"ajans", url:"https://feeds.content.dowjones.io/public/rss/RSSWorldNews", yedek:"https://news.google.com/rss/search?q=site:wsj.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Financial Times", ulke:"İngiltere", tur:"ajans", url:"https://www.ft.com/world?format=rss", yedek:"https://news.google.com/rss/search?q=site:ft.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://www.politico.com/rss/politicopicks.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Reuters", ulke:"İngiltere", tur:"ajans", url:"https://news.google.com/rss/search?q=site:reuters.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Bloomberg Opinion", ulke:"ABD", tur:"dergi", url:"https://www.bloomberg.com/feeds/bview/news.rss", yedek:"https://news.google.com/rss/search?q=site:bloomberg.com/opinion+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" }
 ];

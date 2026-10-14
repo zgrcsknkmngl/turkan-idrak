@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.turkanidrak.app",
+    "sha256_cert_fingerprints": ["2D:B0:45:17:1A:66:B7:A8:B4:A2:82:01:8F:4C:C0:C5:1D:94:48:2A:93:EA:C1:78:88:E2:74:FA:BF:90:55:90"]
+  }
+}]

@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -303,6 +303,12 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   .masthead .bas-dugmeler{display:flex;align-items:center;gap:8px;margin-inline-start:auto;flex:none}
   .masthead .bas-dugmeler > .tema-dugme{margin:0}
   .ileti-dugme{text-decoration:none}
+  /* Yazının altında site adı; marka bloğu birkaç piksel yukarıda */
+  .masthead{padding-top:9px}
+  .masthead .marka{display:flex;flex-direction:column;gap:5px}
+  .masthead .alan-adi{font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:.06em;line-height:1;
+    color:#C3D3E8;text-shadow:0 1px 5px rgba(0,10,30,.45)}
+  :root[data-tema="acik"] .masthead .alan-adi{color:#2B4566;text-shadow:none}
   @media (max-width:430px){
     .masthead .bas-dugmeler{gap:6px}
     .masthead .bas-dugmeler > .tema-dugme{width:32px;height:32px}
@@ -509,7 +515,10 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
 <header class="masthead">
   <div class="bas">
     <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
-    <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
+    <div class="marka">
+      <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
+      <div class="alan-adi">turkanidrak.com</div>
+    </div>
     <div class="bas-dugmeler">
     <button class="tema-dugme ara-dugme" id="aramaAc" aria-label="ara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2L20 20"/></svg></button>
     <a class="tema-dugme ileti-dugme" id="iletisimAc" href="iletisim.html" aria-label="İletişim" title="İletişim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4.5 7.5l7.5 5.5 7.5-5.5"/></svg></a>

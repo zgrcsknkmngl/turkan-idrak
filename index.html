@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -124,6 +124,27 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
     border-bottom:1px solid var(--rule);scrollbar-width:none;-webkit-overflow-scrolling:touch;
     position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ink)}
   .rail::-webkit-scrollbar{display:none}
+  .ust-serit{position:fixed;left:0;right:0;top:0;z-index:40;height:calc(56px + env(safe-area-inset-top,0px));
+    padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;gap:9px;cursor:pointer;
+    background:#16427B url(dunya-gece.jpg) center 46%/cover no-repeat;
+    background-image:image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"));
+    border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 6px 18px rgba(0,0,0,.28);
+    transform:translateY(-105%);transition:transform .28s ease;will-change:transform}
+  .ust-serit::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(90deg,rgba(6,14,32,.74) 0%,rgba(6,14,32,.3) 48%,rgba(6,14,32,0) 100%)}
+  .ust-serit > *{position:relative}
+  .ust-serit img.mark{width:26px;height:33px;object-fit:contain}
+  .ust-serit .wordmark{font-size:17px;color:#F4EFE3;text-shadow:0 1px 6px rgba(0,8,24,.75)}
+  .ust-serit .wordmark em{color:#8CC6FF} .ust-serit .wordmark .tef{color:#FF6166}
+  :root[data-tema="acik"] .ust-serit{background-color:#B4D3EB;
+    background-image:image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"));
+    border-bottom-color:rgba(15,35,64,.12);box-shadow:0 6px 18px rgba(15,35,64,.14)}
+  :root[data-tema="acik"] .ust-serit::before{background:linear-gradient(90deg,rgba(244,239,227,.8) 0%,rgba(244,239,227,.35) 48%,rgba(244,239,227,0) 100%)}
+  :root[data-tema="acik"] .ust-serit .wordmark{color:#0F2340;text-shadow:0 1px 6px rgba(244,239,227,.9)}
+  :root[data-tema="acik"] .ust-serit .wordmark em{color:#0E5FB8}
+  :root[data-tema="acik"] .ust-serit .wordmark .tef{color:#C21F28}
+  body.serit-acik .ust-serit{transform:none}
+  body.serit-acik .rail{top:calc(env(safe-area-inset-top,0px) + 56px)}
   .chip{flex:none;padding:5px 12px;border:1px solid var(--rule);border-radius:999px;
     font-size:13px;color:var(--dim);white-space:nowrap}
   .chip[aria-pressed="true"]{border-color:var(--ember);color:var(--vellum);background:rgba(224,52,58,.16)}
@@ -466,6 +487,10 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
 </symbol>
 </svg>
 
+<div class="ust-serit" id="ustSerit" role="button" tabindex="-1" aria-label="başa dön">
+  <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+  <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
+</div>
 <header class="masthead">
   <div class="bas">
     <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
@@ -980,6 +1005,15 @@ function temaUygula(tm){
   const d = $("#tema");
   if(d){ d.innerHTML = tm==="acik" ? I.ay : I.gunes; d.setAttribute("aria-label", t(tm==="acik" ? "koyu_temaya" : "acik_temaya")); }
 }
+(function seritKur(){
+  const hedef = document.querySelector(".masthead .manzara");
+  const serit = document.getElementById("ustSerit");
+  if(!hedef || !serit || !("IntersectionObserver" in window)) return;
+  new IntersectionObserver(([e]) => {
+    document.body.classList.toggle("serit-acik", !e.isIntersecting && e.boundingClientRect.top < 0);
+  }, { rootMargin: "-56px 0px 0px 0px", threshold: 0 }).observe(hedef);
+  serit.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+})();
 function temaDegistir(){
   const tm = document.documentElement.getAttribute("data-tema")==="acik" ? "koyu" : "acik";
   try{ localStorage.setItem("ti.tema", tm); }catch(e){}

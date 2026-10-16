@@ -3,6 +3,9 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.turkanidrak.app",
-    "sha256_cert_fingerprints": ["2D:B0:45:17:1A:66:B7:A8:B4:A2:82:01:8F:4C:C0:C5:1D:94:48:2A:93:EA:C1:78:88:E2:74:FA:BF:90:55:90"]
+    "sha256_cert_fingerprints": [
+      "41:10:18:15:C5:2F:64:96:DC:E6:CC:BC:A4:38:E2:29:B2:23:E7:60:C5:77:C8:69:B0:9D:15:19:22:BD:07:ED",
+      "2D:B0:45:17:1A:66:B7:A8:B4:A2:82:01:8F:4C:C0:C5:1D:94:48:2A:93:EA:C1:78:88:E2:74:FA:BF:90:55:90"
+    ]
   }
 }]

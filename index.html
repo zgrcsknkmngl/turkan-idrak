@@ -299,6 +299,21 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
     .ara-dugme + .tema-dugme{margin-inline-start:6px}
   }
   .ara-dugme svg{width:19px;height:19px}
+  /* Başlıkta üç düğme tek grup: ara · iletişim · tema */
+  .masthead .bas-dugmeler{display:flex;align-items:center;gap:8px;margin-inline-start:auto;flex:none}
+  .masthead .bas-dugmeler > .tema-dugme{margin:0}
+  .ileti-dugme{text-decoration:none}
+  @media (max-width:430px){
+    .masthead .bas-dugmeler{gap:6px}
+    .masthead .bas-dugmeler > .tema-dugme{width:32px;height:32px}
+    .masthead .bas-dugmeler > .tema-dugme svg{width:17px;height:17px}
+  }
+  @media (max-width:340px){
+    .masthead .bas{gap:6px}
+    .masthead .bas-dugmeler{gap:4px}
+    .masthead .bas-dugmeler > .tema-dugme{width:28px;height:28px}
+    .masthead .bas-dugmeler > .tema-dugme svg{width:16px;height:16px}
+  }
   .hide{display:none!important}
   @media (prefers-reduced-motion:no-preference){
     .entry{animation:rise .3s ease both}
@@ -495,8 +510,11 @@ if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.c
   <div class="bas">
     <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
     <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
+    <div class="bas-dugmeler">
     <button class="tema-dugme ara-dugme" id="aramaAc" aria-label="ara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2L20 20"/></svg></button>
+    <a class="tema-dugme ileti-dugme" id="iletisimAc" href="iletisim.html" aria-label="İletişim" title="İletişim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4.5 7.5l7.5 5.5 7.5-5.5"/></svg></a>
     <button class="tema-dugme" id="tema" aria-label="açık temaya geç"></button>
+    </div>
   </div>
   <div class="manzara" aria-hidden="true"></div>
   <div class="sayaclar">
@@ -1031,6 +1049,7 @@ function arayuzuCiz(){
   $("#q").placeholder = t("ara");
   $("#qsil").setAttribute("aria-label", t("aramayi_temizle_aria"));
   $("#aramaAc").setAttribute("aria-label", t("ara_ac"));
+  const il=$("#iletisimAc"); if(il){ il.setAttribute("aria-label", t("iletisim")); il.title = t("iletisim"); }
   temaUygula(document.documentElement.getAttribute("data-tema")==="acik" ? "acik" : "koyu");
   const e = $("#etiketler"); if(e) delete e.dataset.hazir;
 }
@@ -1366,6 +1385,18 @@ $("#qsil").addEventListener("click", ()=>{
 
 arayuzuCiz();
 bellektenTopla();
+
+/* Başlık satırı dar ekranlarda taşmasın: sığmazsa yalnız yazı adı yarımşar piksel küçülür */
+function basligiSigdir(){
+  const bas=document.querySelector(".masthead .bas"), wm=bas && bas.querySelector(".wordmark");
+  if(!wm) return;
+  wm.style.fontSize="";
+  let fs=parseFloat(getComputedStyle(wm).fontSize), n=0;
+  while(bas.scrollWidth > bas.clientWidth + 1 && fs > 12 && n++ < 40){ fs -= 0.5; wm.style.fontSize = fs + "px"; }
+}
+basligiSigdir();
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(basligiSigdir);
+addEventListener("resize", basligiSigdir);
 if(ACILIS){ const y = paylasilaniBul(ACILIS); if(y){ S.acilan = y; S.ekran = "feed"; } }
 ciz();
 cek();

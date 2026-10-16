@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -612,7 +612,7 @@ const SOZLUK = {
     tef_giris:"Tefekkür, davet ettiğimiz yazarların yalnızca Türkan İdrak Tefekkür için kaleme aldığı yazılardan oluşur. Üyelik, abonelik ya da ücretli yazarlık yoktur.",
     tef_yakinda:"İlk yazılar yakında", tef_yakinda_aciklama:"Davetli yazarlarımızın yazıları geldikçe burada yayımlanacak.",
     yukleniyor:"yükleniyor…",
-    hakkinda:"Hakkında", gizlilik:"Gizlilik",
+    hakkinda:"Hakkında", iletisim:"İletişim", gizlilik:"Gizlilik",
     dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri",
     ceviri_aciklama:"Yazılar orijinal dilinde gelir. “Çevir”e dokununca başlık ve özet seçtiğin dile çevrilir.",
     az_once:"az önce",
@@ -657,7 +657,7 @@ const SOZLUK = {
     tef_giris:"Tefekkür brings together pieces that our invited writers write exclusively for Türkan İdrak Tefekkür. There are no memberships, subscriptions or paid contributors.",
     tef_yakinda:"First pieces coming soon", tef_yakinda_aciklama:"Pieces from our invited writers will be published here as they arrive.",
     yukleniyor:"loading…",
-    hakkinda:"About", gizlilik:"Privacy",
+    hakkinda:"About", iletisim:"Contact", gizlilik:"Privacy",
     dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation",
     ceviri_aciklama:"Articles arrive in their original language. Tap “translate” to see the headline and summary in the language you choose.",
     az_once:"just now",
@@ -743,11 +743,15 @@ const turBul = ad => (S.kaynaklar.find(k=>k.ad===ad)||{}).tur || "kurum";
 
 function bellektenTopla(){
   const acikAdlar = S.kaynaklar.filter(k=>k.acik).map(k=>k.ad);
-  const hepsi = acikAdlar.flatMap(ad => (S.bellek[ad]||{}).yazilar || []);
+  const hepsi = acikAdlar.flatMap(ad => (S.bellek[ad]||{}).yazilar || []).filter(taze);
   const zaman = y => { const d=tarihOku(y.tarih); return d?d.getTime():0; };
   hepsi.sort((a,b)=> zaman(b)-zaman(a));
   S.yazilar = serpistir(hepsi);
 }
+
+/* Google Play haber politikası: üç aydan eski yazı gösterilmez (tarihi olmayan yazı kalır). */
+const UC_AY = 90*86400000;
+const taze = y => { const d=tarihOku(y.tarih); return !d || Date.now()-d.getTime() <= UC_AY; };
 
 function tarihOku(x){
   if(!x) return null;
@@ -825,7 +829,7 @@ async function cek(){
       const mevcut = S.kaynaklar.find(k=>k.ad===ad);
       if(mevcut) mevcut.tur = kayit.tur || mevcut.tur || "kurum";
       else S.kaynaklar.push({ad, url:"", acik:true, sunucu:true, tur:kayit.tur||"kurum"});
-      S.bellek[ad] = {yazilar:(kayit.yazilar||[]).slice(0,40), zaman:Date.parse(kayit.tarandi)||Date.now()};
+      S.bellek[ad] = {yazilar:(kayit.yazilar||[]).filter(taze).slice(0,40), zaman:Date.parse(kayit.tarandi)||Date.now()};
       if(kayit.durum && kayit.durum!=="tamam") S.hata.push({ad, mesaj:kayit.durum});
     }
     // sunucunun artik taramadigi eski kaynaklar listeden kalksin (kapanan, adi degisen)
@@ -1044,7 +1048,7 @@ async function tefekkuruCek(){
   if(S.ekran==="tefekkur") cizTefekkur();
 }
 const tarihYaz = x => { const d=tarihOku(x); return d ? d.toLocaleDateString(S.arayuz,{day:"numeric",month:"long",year:"numeric"}) : ""; };
-const altBaglantilar = () => `<div class="alt-baglantilar"><a href="hakkinda.html">${t("hakkinda")}</a>·<a href="gizlilik.html">${t("gizlilik")}</a></div>`;
+const altBaglantilar = () => `<div class="alt-baglantilar"><a href="hakkinda.html">${t("hakkinda")}</a>·<a href="iletisim.html">${t("iletisim")}</a>·<a href="gizlilik.html">${t("gizlilik")}</a></div>`;
 function cizTefekkur(){
   const liste = S.tefekkur || [];
   $("#count").textContent = liste.length ? t("yazi_sayisi", sayi(liste.length)) : "";
@@ -1220,16 +1224,16 @@ function cizAkis(){
   const dahaFazla = kalan
     ? `<div class="daha"><button class="mini" data-daha="1">${t("daha_eski", sayi(kalan))}</button></div>`
     : (liste.length>40 ? `<div class="daha"><span class="son">${t("arsiv_sonu", sayi(liste.length))}</span></div>` : "");
-  $("#feed").innerHTML = cubuk + parca.map(kart).join("") + dahaFazla;
+  $("#feed").innerHTML = cubuk + parca.map(kart).join("") + dahaFazla + altBaglantilar();
 }
 
 function cizKayitli(){
   $("#count").textContent = S.kayitli.length ? t("kayit_sayisi", sayi(S.kayitli.length)) : "";
-  $("#saved").innerHTML = S.kayitli.length ? S.kayitli.map(kart).join("")
+  $("#saved").innerHTML = (S.kayitli.length ? S.kayitli.map(kart).join("")
     : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
        <h3>${t("kayit_yok")}</h3>
        <p>${t("kayit_yok_aciklama")}</p>
-       <button class="go" data-git="feed">${t("idrake_don")}</button></div>`;
+       <button class="go" data-git="feed">${t("idrake_don")}</button></div>`) + altBaglantilar();
 }
 
 function cizKaynaklar(){

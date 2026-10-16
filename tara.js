@@ -153,7 +153,8 @@ function payKodu(y) {
   return crypto.createHash("sha1").update(String(y.link || y.baslik || y.id)).digest("hex").slice(0, 12);
 }
 const zaman = y => { const d = tarihOku(y.tarih); return d ? d.getTime() : 0; };
-const EN_ESKI_GUN  = 900;   // ~2,5 yildan eski yazi alinmaz
+const EN_ESKI_GUN  = 90;    // Google Play haber politikasi: uc aydan eski yazi alinmaz, arsivde de tutulmaz
+const tazeMi = y => { const d = tarihOku(y.tarih); return !d || (Date.now() - d.getTime()) / 86400000 <= EN_ESKI_GUN; };
 
 /* RSS tarihleri "Mon, 15 Mar 2010 10:00:00 +0000" (RFC 822) ya da
    "2026-10-11T08:00:00Z" (ISO) olabilir; ikisini de dogru oku. */
@@ -539,6 +540,15 @@ function siteDosyalari(oncekiTaban) {
   for (let i = 0; i < KAYNAKLAR.length; i += 8) {
     await Promise.all(KAYNAKLAR.slice(i, i + 8).map(tek));
   }
+
+  // Uc aydan eski yazilar arsivden de cikar (tarihi olmayanlar kalir)
+  let cikan = 0;
+  for (const k of Object.values(sonuc.kaynaklar)) {
+    const once = k.yazilar.length;
+    k.yazilar = k.yazilar.filter(tazeMi);
+    cikan += once - k.yazilar.length;
+  }
+  console.log(`\nUc aydan eski ${cikan} yazi arsivden cikarildi`);
 
   // Yazilar orijinal dilinde kalir; onceki bir surumden kalan ceviri alanlari varsa temizle
   for (const k of Object.values(sonuc.kaynaklar))

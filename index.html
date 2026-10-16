@@ -331,7 +331,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   /* ---------- Açılış: iki anka, batıdan ve doğudan, Ayasofya'nın üstünde buluşup göğe ---------- */
   #acilis{display:none}
   .acilis-var #acilis{display:block;position:fixed;inset:0;z-index:2000;overflow:hidden;cursor:pointer;
-    --ust:min(calc(66% - 12.4vw), calc(95% - 24.8vw)); --alt:calc(var(--ust) + 24.8vw); --kus:min(22vw,140px);
+    --ust:min(calc(66% - 12.4vw), calc(95% - 24.8vw)); --alt:calc(var(--ust) + 24.8vw); --kus:min(24vw,150px);
     background:linear-gradient(180deg,#040B19 0%,#0B2550 calc(var(--ust) * .55),#16417A var(--ust),#313A4C var(--alt),#121826 100%)}
   :root[data-tema="acik"] .acilis-var #acilis, :root[data-tema="acik"].acilis-var #acilis{
     background:linear-gradient(180deg,#5F9BCB 0%,#8DBDE3 calc(var(--ust) * .55),#B4D3EB var(--ust),#7A7979 var(--alt),#59606A 100%)}
@@ -350,15 +350,18 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   #acilis .ac-kus{position:absolute;left:0;top:0;width:var(--kus);margin:calc(var(--kus) * -.63) 0 0 calc(var(--kus) * -.5);
     opacity:0;will-change:transform,opacity}
   #acilis .ac-kus img{display:block;width:100%;height:auto;transform-origin:50% 45%;
-    animation:ac-cirp .34s ease-in-out infinite;filter:drop-shadow(0 0 9px rgba(255,200,96,.75))}
-  #acilis #kusDogu img{animation-delay:-.17s}
+    animation:ac-cirp 1.3s cubic-bezier(.45,0,.55,1) infinite;filter:drop-shadow(0 0 9px rgba(255,200,96,.75))}
   :root[data-tema="acik"] #acilis .ac-kus img{filter:drop-shadow(0 0 7px rgba(255,255,255,.9))}
-  @keyframes ac-cirp{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.66) translateY(3%)}}
+  @keyframes ac-cirp{0%{transform:scaleX(1) translateY(0)}12%{transform:scaleX(.78) translateY(2.5%)}26%,100%{transform:scaleX(1) translateY(0)}}
   #acilis .ac-halka{position:absolute;left:0;top:0;width:28px;height:7px;margin:-3.5px 0 0 -14px;border-radius:50%;
-    border:1.5px solid rgba(255,255,255,.8);opacity:0}
+    border:1.5px solid rgba(255,255,255,.7);opacity:0}
+  #acilis .ac-toz{position:absolute;left:0;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;opacity:0;
+    background:radial-gradient(circle,#FFF3C4 0%,#FFD27A 45%,rgba(255,210,122,0) 75%)}
+  :root[data-tema="acik"] #acilis .ac-toz{background:radial-gradient(circle,#fff 0%,#FFE7A8 45%,rgba(255,231,168,0) 75%)}
   #acilis .ac-isik{position:absolute;left:0;top:0;width:calc(var(--kus) * 1.6);height:calc(var(--kus) * 1.6);
     margin:calc(var(--kus) * -.8) 0 0 calc(var(--kus) * -.8);border-radius:50%;opacity:0;
     background:radial-gradient(circle,rgba(255,240,190,.95) 0%,rgba(255,200,96,.45) 34%,rgba(255,200,96,0) 70%)}
+  #acilis .ac-perde{position:absolute;inset:0;background:#0B1420;pointer-events:none}
   #acilis .ac-yildiz{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.2;
     animation:ac-pirilti 1.4s ease-in-out infinite alternate}
   @keyframes ac-pirilti{from{opacity:.15}to{opacity:.9}}
@@ -382,6 +385,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   <div class="ac-kus" id="kusDogu"><img alt=""></div>
   <div class="ac-isik"></div>
   <div class="ac-marka"><div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div><div class="alan-adi">turkanidrak.com</div></div>
+  <div class="ac-perde"></div>
 </div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1480,7 +1484,7 @@ $("#qsil").addEventListener("click", ()=>{
 arayuzuCiz();
 bellektenTopla();
 
-/* ---------- Açılış: iki anka denizden çıkar, Ayasofya'nın üstünde buluşur, göğe yükselir (~3,6 sn) ---------- */
+/* ---------- Açılış: iki anka denizden çıkar, Ayasofya'nın üstünde buluşur, göğe yükselir (4,8 sn: Fetih suresi, 48) ---------- */
 function acilisOynat(){
   const kok = document.documentElement, ac = document.getElementById("acilis");
   if(!ac) return;
@@ -1498,6 +1502,8 @@ function acilisOynat(){
   Promise.race([hazir, new Promise(r=>setTimeout(r,450))]).then(() => { if(!bitti) baslat(); });
 
   function baslat(){
+    const z = t => Math.round(t * 4800 / 3700);   // bütün zamanlar sahne 4,8 sn sürecek biçimde ölçeklenir
+    ac.querySelector(".ac-perde").animate([{opacity:1},{opacity:0}], {duration:z(320), easing:"ease-out", fill:"forwards"});
     const W = innerWidth, H = innerHeight;
     const bant = ac.querySelector(".ac-bant").getBoundingClientRect();
     const kusB = document.getElementById("kusBati"), kusD = document.getElementById("kusDogu");
@@ -1513,44 +1519,63 @@ function acilisOynat(){
       s.style.animationDelay = (Math.random()*1.4).toFixed(2)+"s";
       ac.insertBefore(s, ac.firstChild);
     }
-    const TOPLAM = 2950;
-    const tr = (x,y,s,r) => `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(3)}) rotate(${r}deg)`;
+    const TOPLAM = z(3300);                    // kuşlar ~4,3 sn'de göğe karışır; sahne 4,8'de kapanır
+    const tr = (x,y,s,r) => `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(3)}) rotate(${r.toFixed(2)}deg)`;
     const yumusak = t => .5 - Math.cos(Math.PI*t)/2;
-    function ucus(el, basX, yon, gecikme){
-      const cik = {x: basX, y: su - bant.height * .32};
-      const hedef = {x: kubbe.x + yon * ara, y: kubbe.y};
-      const kontrol = {x: basX + (hedef.x - basX) * .35, y: Math.min(bant.top - bant.height * .55, cik.y - bant.height)};
-      const egim = -yon * 14;
-      const kare = [
-        {offset:0, transform:tr(basX, su, .22, 0), opacity:0, easing:"ease-out"},
-        {offset:450/TOPLAM, transform:tr(cik.x, cik.y, .4, 0), opacity:1}
-      ];
-      const n = 16;
-      for(let i=1;i<=n;i++){
-        const t = yumusak(i/n), u = 1 - t;
-        const px = u*u*cik.x + 2*u*t*kontrol.x + t*t*hedef.x;
-        const py = u*u*cik.y + 2*u*t*kontrol.y + t*t*hedef.y;
-        kare.push({offset:(450 + 1300*i/n)/TOPLAM, transform:tr(px, py, .4 + .22*i/n, i<n ? egim : 0), opacity:1});
-      }
-      kare.push({offset:1900/TOPLAM, transform:tr(hedef.x, hedef.y - 5, .62, 0), opacity:1, easing:"ease-in"});
-      kare.push({offset:2600/TOPLAM, transform:tr(hedef.x + yon*ara*.4, hedef.y - (hedef.y + H*.18)*.62, .86, 0), opacity:1});
-      kare.push({offset:1, transform:tr(hedef.x + yon*ara*.6, -H*.18, 1, 0), opacity:0});
-      el.animate(kare, {duration:TOPLAM, delay:gecikme, fill:"forwards"});
-      const h = document.createElement("div"); h.className = "ac-halka"; ac.appendChild(h);
-      h.animate([{transform:`translate(${basX}px,${su}px) scale(.3)`, opacity:.9},
-                 {transform:`translate(${basX}px,${su}px) scale(4.5)`, opacity:0}],
-                {duration:950, delay:gecikme, easing:"ease-out", fill:"forwards"});
+    const bez = (a,k,b,t) => { const u=1-t; return {x:u*u*a.x+2*u*t*k.x+t*t*b.x, y:u*u*a.y+2*u*t*k.y+t*t*b.y}; };
+    function toz(x, y, zaman){
+      const d = document.createElement("i"); d.className = "ac-toz"; ac.appendChild(d);
+      d.animate([{transform:`translate(${x}px,${y}px) scale(.7)`, opacity:0},
+                 {transform:`translate(${x}px,${y+4}px) scale(1)`, opacity:.9, offset:.2},
+                 {transform:`translate(${x}px,${y+16}px) scale(.3)`, opacity:0}],
+                {duration:z(950), delay:zaman, easing:"ease-out", fill:"forwards"});
     }
-    ucus(kusB, bant.left + bant.width * .045, -1, 0);      // en batı: Özgürlük Heykeli'nin önündeki deniz
-    ucus(kusD, bant.left + bant.width * .955, 1, 110);     // en doğu: Gök Tapınağı'nın önündeki deniz
+    function ucus(el, basX, yon){
+      const cik    = {x: basX, y: su - bant.height * .32};
+      const hedef  = {x: kubbe.x + yon * ara, y: kubbe.y};
+      const kontrol= {x: basX + (hedef.x - basX) * .38, y: Math.min(bant.top - bant.height * .6, cik.y - bant.height * 1.1)};
+      const asil   = {x: hedef.x, y: hedef.y - 8};
+      const doruk  = {x: kubbe.x + yon * W * .38, y: H * .08};
+      const vKont  = {x: hedef.x + yon * W * .04, y: hedef.y - H * .32};
+      const kare = [
+        {offset:0,          transform:tr(basX, su, .22, 0), opacity:0},
+        {offset:z(150)/TOPLAM, transform:tr(basX, su, .22, 0), opacity:0, easing:"ease-out"},
+        {offset:z(700)/TOPLAM, transform:tr(cik.x, cik.y, .42, 0), opacity:1}
+      ];
+      const n = 18;                                  // geniş kavis: Ayasofya'nın üstüne süzülüş
+      for(let i=1;i<=n;i++){
+        const p = bez(cik, kontrol, hedef, yumusak(i/n));
+        const r = -yon * 7 * Math.sin(Math.PI * i/n);
+        const zaman = z(700 + 1350*i/n);
+        kare.push({offset:zaman/TOPLAM, transform:tr(p.x, p.y, .42 + .24*i/n, r), opacity:1});
+        if(i % 3 === 0) toz(p.x, p.y + kw*.25, zaman);
+      }
+      kare.push({offset:z(2300)/TOPLAM, transform:tr(asil.x, asil.y, .68, 0), opacity:1});
+      const m = 10;                                  // buluşmadan sonra iki yana açılarak göğe
+      for(let i=1;i<=m;i++){
+        const p = bez(asil, vKont, doruk, yumusak(i/m));
+        const r = yon * 6 * Math.sin(Math.PI * i/m);
+        const zaman = z(2300 + 700*i/m);
+        kare.push({offset:zaman/TOPLAM, transform:tr(p.x, p.y, .68 + .2*i/m, r), opacity:1});
+        if(i % 2 === 0) toz(p.x, p.y + kw*.3, zaman);
+      }
+      kare.push({offset:1, transform:tr(kubbe.x + yon * W * .44, H * .02, .9, 0), opacity:0});
+      el.animate(kare, {duration:TOPLAM, fill:"forwards"});
+      const h = document.createElement("div"); h.className = "ac-halka"; ac.appendChild(h);
+      h.animate([{transform:`translate(${basX}px,${su}px) scale(.3)`, opacity:.8},
+                 {transform:`translate(${basX}px,${su}px) scale(4.2)`, opacity:0}],
+                {duration:z(1100), delay:z(150), easing:"ease-out", fill:"forwards"});
+    }
+    ucus(kusB, bant.left + bant.width * .045, -1);   // en batı: Özgürlük Heykeli'nin önündeki deniz
+    ucus(kusD, bant.left + bant.width * .955,  1);   // en doğu: Gök Tapınağı'nın önündeki deniz
     ac.querySelector(".ac-isik").animate([
       {transform:`translate(${kubbe.x}px,${kubbe.y}px) scale(.3)`, opacity:0},
       {transform:`translate(${kubbe.x}px,${kubbe.y}px) scale(1.15)`, opacity:.95, offset:.35},
       {transform:`translate(${kubbe.x}px,${kubbe.y}px) scale(2.1)`, opacity:0}],
-      {duration:750, delay:1800, easing:"ease-out", fill:"forwards"});
+      {duration:z(900), delay:z(1950), easing:"ease-out", fill:"forwards"});
     ac.querySelector(".ac-marka").animate([{opacity:0, transform:"translateY(12px)"},{opacity:1, transform:"none"}],
-      {duration:480, delay:2480, easing:"ease-out", fill:"forwards"});
-    ac.animate([{opacity:1},{opacity:0}], {duration:450, delay:3250, easing:"ease-in", fill:"forwards"})
+      {duration:z(450), delay:z(2720), easing:"ease-out", fill:"forwards"});
+    ac.animate([{opacity:1},{opacity:0}], {duration:z(450), delay:z(3250), easing:"ease-in", fill:"forwards"})
       .finished.then(() => { if(!bitti){ bitti = true; bitir(); } });
   }
 }

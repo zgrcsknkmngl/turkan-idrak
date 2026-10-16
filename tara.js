@@ -115,6 +115,17 @@ const KAYNAKLAR = [
   { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Reuters", ulke:"İngiltere", tur:"ajans", url:"https://news.google.com/rss/search?q=site:reuters.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Bloomberg Opinion", ulke:"ABD", tur:"dergi", url:"https://www.bloomberg.com/feeds/bview/news.rss", yedek:"https://news.google.com/rss/search?q=site:bloomberg.com/opinion+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Tehran Times", ulke:"İran", nitelik:"devlet bağlantılı", tur:"ajans", url:"https://news.google.com/rss/search?q=site:tehrantimes.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Prensa Latina", ulke:"Küba", nitelik:"devlet", tur:"ajans", url:"https://news.google.com/rss/search?q=site:plenglish.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Brazilian Report", ulke:"Brezilya", tur:"ajans", url:"https://brazilian.report/feed/", yedek:"https://news.google.com/rss/search?q=site:brazilian.report+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Mexico News Daily", ulke:"Meksika", tur:"ajans", url:"https://mexiconewsdaily.com/feed/", yedek:"https://news.google.com/rss/search?q=site:mexiconewsdaily.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Premium Times", ulke:"Nijerya", tur:"ajans", url:"https://www.premiumtimesng.com/feed", yedek:"https://news.google.com/rss/search?q=site:premiumtimesng.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Ahram Online", ulke:"Mısır", nitelik:"devlet", tur:"ajans", url:"https://news.google.com/rss/search?q=site:english.ahram.org.eg+when:7d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The East African", ulke:"Kenya", tur:"ajans", url:"https://news.google.com/rss/search?q=site:theeastafrican.co.ke+when:7d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Dawn", ulke:"Pakistan", tur:"ajans", url:"https://www.dawn.com/feeds/home", yedek:"https://news.google.com/rss/search?q=site:dawn.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Jakarta Post", ulke:"Endonezya", tur:"ajans", url:"https://news.google.com/rss/search?q=site:thejakartapost.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Yonhap", ulke:"Güney Kore", nitelik:"kamu", tur:"ajans", url:"https://en.yna.co.kr/RSS/news.xml", yedek:"https://news.google.com/rss/search?q=site:en.yna.co.kr+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Kyiv Independent", ulke:"Ukrayna", tur:"ajans", url:"https://kyivindependent.com/news-archive/rss/", yedek:"https://news.google.com/rss/search?q=site:kyivindependent.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" }
 ];

@@ -137,8 +137,6 @@ const KAYNAKLAR = [
   { ad:"Transparency International", ulke:"Almanya", tur:"rapor", url:"https://news.google.com/rss/search?q=site:transparency.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Human Rights Watch", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:hrw.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Af Örgütü", ulke:"İngiltere", tur:"rapor", kimlik:"bağımsız", url:"https://www.amnesty.org/en/feed/", yedek:"https://news.google.com/rss/search?q=site:amnesty.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"İHD", ulke:"Türkiye", tur:"rapor", kimlik:"bağımsız", url:"https://www.ihd.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:ihd.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
-  { ad:"TİHV", ulke:"Türkiye", tur:"rapor", kimlik:"bağımsız", url:"https://tihv.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:tihv.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
   { ad:"BM Haber", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.un.org/feed/subscribe/en/news/all/rss.xml", yedek:"https://news.google.com/rss/search?q=site:news.un.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"BM İnsan Hakları", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:ohchr.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"UNDP", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:undp.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -395,7 +393,7 @@ async function cek(kaynak, deneme = 0) {
 /* Google Haberler'den gelen yazıların bağlantısı news.google.com'a gider; okur o sayfayı kendi diline çeviremez.
    Her taramada sınırlı sayıda bağlantı yayıncının kendi adresine çevrilir (Google'ın kendi sayfasının kullandığı yol).
    Olmazsa bağlantı olduğu gibi kalır; hiçbir şey bozulmaz. */
-const GN_COZ_SINIRI = 40;
+const GN_COZ_SINIRI = 100;
 let gnCozulen = 0;
 const gnMi = u => /(^|\/\/|\.)news\.google\.com\//i.test(String(u || ""));
 async function gnCoz(url) {
@@ -584,14 +582,6 @@ function siteDosyalari(oncekiTaban) {
         if (e.pay && !y.pay) y.pay = e.pay;
       }
 
-      // Google Haberler baglantilarini yayincinin adresine cevir (yeni yazilar once)
-      for (const y of yeni) {
-        if (gnCozulen >= GN_COZ_SINIRI) break;
-        if (!gnMi(y.link)) continue;
-        const a = await gnCoz(y.link);
-        if (a) { if (!y.pay) y.pay = payKodu(y); y.link = a; }
-      }
-
       // beslemede gorsel yoksa makalenin kendi sayfasindan dene (Google Haberler sayfasini bosuna yorma)
       const eksik = yeni.filter(y => !y.gorsel && y.link && !gnMi(y.link)).slice(0, 12);
       if (eksik.length) {
@@ -611,14 +601,6 @@ function siteDosyalari(oncekiTaban) {
       const gorulen = new Set();
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
       birlesik.length = 0; birlesik.push(...tekil);
-
-      // butce kaldiysa arsivdeki cozulmemis baglantilar da (en yenileri once)
-      for (const y of birlesik.slice(0, ARSIV_SINIRI)) {
-        if (gnCozulen >= GN_COZ_SINIRI) break;
-        if (!gnMi(y.link)) continue;
-        const a = await gnCoz(y.link);
-        if (a) { if (!y.pay) y.pay = payKodu(y); y.link = a; }
-      }
 
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: birlesik.slice(0, ARSIV_SINIRI),
@@ -650,7 +632,19 @@ function siteDosyalari(oncekiTaban) {
     cikan += once - k.yazilar.length;
   }
   console.log(`\nUc aydan eski ${cikan} yazi arsivden cikarildi`);
-  console.log(`Google Haberler baglantisi cozulmeye calisildi: ${gnCozulen}`);
+
+  // Google Haberler baglantilarini yayincinin adresine cevir: butun kaynaklardan, en yeni yazilar once.
+  // Okurun ilk gordugu yazilar once cozulur; eskiler sonraki taramalarda sirayla gelir.
+  const bekleyen = [];
+  for (const k of Object.values(sonuc.kaynaklar)) for (const y of (k.yazilar || [])) if (gnMi(y.link)) bekleyen.push(y);
+  bekleyen.sort((a, b) => zaman(b) - zaman(a));
+  let cozuldu = 0;
+  for (const y of bekleyen) {
+    if (gnCozulen >= GN_COZ_SINIRI) break;
+    const a = await gnCoz(y.link);
+    if (a) { if (!y.pay) y.pay = payKodu(y); y.link = a; cozuldu++; }
+  }
+  console.log(`Google Haberler baglantisi: ${cozuldu} cozuldu, ${gnCozulen} denendi, ${bekleyen.length - cozuldu} kaldi`);
 
   // Yazilar orijinal dilinde kalir; onceki bir surumden kalan ceviri alanlari varsa temizle
   for (const k of Object.values(sonuc.kaynaklar))

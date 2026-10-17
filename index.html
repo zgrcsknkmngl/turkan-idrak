@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -730,6 +730,7 @@ function varsayilanArayuz(){ return cihazDili().startsWith("tr") ? "tr" : "en"; 
 function varsayilanCeviri(){
   const d = cihazDili();
   if(d.startsWith("zh")) return "zh-CN";
+  if(d.startsWith("fil")) return "tl";
   const kok = d.split("-")[0];
   return CEVIRI_DILLERI.some(([k])=>k===kok) ? kok : "en";
 }
@@ -912,7 +913,7 @@ async function arayuzuHazirla(kod){
 }
 
 const S = {
-  dil:       yukle("ti.dil", null) || yukle("ti.ceviriDili", null) || "tr",   // ilk açılış her zaman Türkçe
+  dil:       yukle("ti.dil", null) || yukle("ti.ceviriDili", null) || varsayilanCeviri(),   // ilk açılış: telefonun dili
   arayuz:    "tr", ceviriDili: "tr", arayuzMT: {},      // ikisi de S.dil'den türetilir
   kaynaklar: yukle("ti.kaynaklar6", VARSAYILAN),
   kayitli:   yukle("ti.kayitli", []),
@@ -1242,8 +1243,7 @@ function acilanCiz(y){
   const kimlikSatiri = kimlikYaz(S.bilgi[y.kaynak] || y.kb);
   const k = kayitliMi(y.id);
   let alan = ""; try{ alan = new URL(y.link).hostname; }catch(e){}
-  const dildeOku = !/(^|\.)news\.google\.com$/i.test(alan)
-    ? ceviriAdresi(y.link, S.ceviriDili) : "";
+  const dildeOku = "";   // kaynak sayfası telefonun dilinde, tarayıcının kendi çevirisiyle okunur
   const ozet = c ? c.ozet : y.ozet;
   return `<section class="acilan" aria-label="${kac(t("paylasilan_yazi"))}">
     <div class="ust"><span class="etk">${t("paylasilan_yazi")}</span><button class="kapat" data-kapat="1" aria-label="${kac(t("kapat"))}">×</button></div>
@@ -1364,6 +1364,9 @@ function ceviriAdresi(adres, hedef){
 }
 
 function okumaAdresi(y){
+  return y.link;   // kaynak sayfası olduğu gibi açılır; çeviriyi Chrome telefonun diline göre önerir ya da yapar
+}
+function okumaAdresiEski(y){
   let alan = ""; try{ alan = new URL(y.link).hostname; }catch(e){ return y.link; }
   if(/(^|\.)news\.google\.com$/i.test(alan)) return y.link;
   const hedef = S.dil, kok = d => String(d||"").toLowerCase().split("-")[0];

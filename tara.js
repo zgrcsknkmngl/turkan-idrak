@@ -393,7 +393,7 @@ async function cek(kaynak, deneme = 0) {
 /* Google Haberler'den gelen yazıların bağlantısı news.google.com'a gider; okur o sayfayı kendi diline çeviremez.
    Her taramada sınırlı sayıda bağlantı yayıncının kendi adresine çevrilir (Google'ın kendi sayfasının kullandığı yol).
    Olmazsa bağlantı olduğu gibi kalır; hiçbir şey bozulmaz. */
-const GN_COZ_SINIRI = 100;
+const GN_COZ_SINIRI = 0;   // kapalı: kaynak sayfaları artık çeviri sunucusundan değil doğrudan açılıyor; Google Haberler'i boşuna yormayalım
 let gnCozulen = 0;
 const gnMi = u => /(^|\/\/|\.)news\.google\.com\//i.test(String(u || ""));
 async function gnCoz(url) {

@@ -127,7 +127,24 @@ const KAYNAKLAR = [
   { ad:"Yonhap", ulke:"Güney Kore", nitelik:"kamu", tur:"ajans", url:"https://en.yna.co.kr/RSS/news.xml", yedek:"https://news.google.com/rss/search?q=site:en.yna.co.kr+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Kyiv Independent", ulke:"Ukrayna", tur:"ajans", url:"https://kyivindependent.com/news-archive/rss/", yedek:"https://news.google.com/rss/search?q=site:kyivindependent.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" }
+  { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
+  // Raporlar ve endeksler (16 Ekim 2026)
+  { ad:"Heritage", ulke:"ABD", tur:"kurum", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:heritage.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"World Justice Project", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:worldjusticeproject.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Freedom House", ulke:"ABD", tur:"rapor", url:"https://news.google.com/rss/search?q=site:freedomhouse.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"RSF", ulke:"Fransa", tur:"rapor", url:"https://news.google.com/rss/search?q=site:rsf.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Transparency International", ulke:"Almanya", tur:"rapor", url:"https://news.google.com/rss/search?q=site:transparency.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Human Rights Watch", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:hrw.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Af Örgütü", ulke:"İngiltere", tur:"rapor", kimlik:"bağımsız", url:"https://www.amnesty.org/en/feed/", yedek:"https://news.google.com/rss/search?q=site:amnesty.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"İHD", ulke:"Türkiye", tur:"rapor", kimlik:"bağımsız", url:"https://www.ihd.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:ihd.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"TİHV", ulke:"Türkiye", tur:"rapor", kimlik:"bağımsız", url:"https://tihv.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:tihv.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"BM Haber", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.un.org/feed/subscribe/en/news/all/rss.xml", yedek:"https://news.google.com/rss/search?q=site:news.un.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"BM İnsan Hakları", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:ohchr.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"UNDP", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:undp.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Dünya Bankası", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:worldbank.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"IMF", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:imf.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"OECD", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:oecd.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"McKinsey Global Institute", ulke:"ABD", tur:"rapor", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:mckinsey.com+%22McKinsey+Global+Institute%22+when:120d&hl=en-US&gl=US&ceid=US:en" },
 ];
 
 const ARSIV_SINIRI = 70;

@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -329,6 +329,13 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .dil-liste button b{font-size:11px;letter-spacing:.04em;color:var(--dim);min-width:22px}
   .dil-liste button.secili{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
   .dil-not{margin:12px 2px 0;font:12.5px/1.5 var(--sans);color:var(--dim)}
+  .dil-ara{width:100%;box-sizing:border-box;margin:0 0 6px;padding:11px 13px;border-radius:10px;border:1px solid var(--rule);
+    background:var(--ink);color:var(--vellum);font:15px var(--sans)}
+  .dil-grup h4{margin:14px 2px 8px;font:600 11.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ember)}
+  .dil-grup[hidden],.dil-liste button[hidden]{display:none}
+  .dil-liste button span{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .dil-liste button small{font-size:11.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dil-bos{margin:16px 2px 0;font:14px var(--sans);color:var(--dim)}
   /* Yazının altında site adı; marka bloğu birkaç piksel yukarıda */
   .masthead{padding-top:9px}
   .masthead .marka{display:flex;flex-direction:column;align-items:center;gap:5px}
@@ -679,15 +686,34 @@ function yaz(k,v){
 
 /* ---------- Diller ---------- */
 const ARAYUZ_DILLERI = [["tr","Türkçe"],["en","English"]];
-/* çeviri hedefi: her dil kendi adıyla listelenir, herkes kendininkini tanır */
-const CEVIRI_DILLERI = [
-  ["tr","Türkçe"],["en","English"],["ku","Kurdî (Kurmancî)"],["ar","العربية"],["fa","فارسی"],["ur","اردو"],
-  ["az","Azərbaycanca"],["kk","Қазақша"],["uz","Oʻzbekcha"],["ky","Кыргызча"],["tk","Türkmençe"],
-  ["ru","Русский"],["uk","Українська"],["de","Deutsch"],["fr","Français"],["es","Español"],
-  ["pt","Português"],["it","Italiano"],["nl","Nederlands"],["pl","Polski"],["el","Ελληνικά"],
-  ["bs","Bosanski"],["sq","Shqip"],["ka","ქართული"],["id","Bahasa Indonesia"],["ms","Bahasa Melayu"],
-  ["hi","हिन्दी"],["bn","বাংলা"],["zh-CN","中文"],["ja","日本語"],["ko","한국어"],["sw","Kiswahili"]
+/* 65 dil, bölgelere göre: her dil kendi adıyla listelenir, herkes kendininkini tanır */
+const DIL_GRUPLARI = [
+  ["turk",   [["tr","Türkçe"],["az","Azərbaycanca"],["kk","Қазақша"],["uz","Oʻzbekcha"],["ky","Кыргызча"],["tk","Türkmençe"],
+              ["tt","Татарча"],["ug","ئۇيغۇرچە"],["crh","Qırımtatarca"]]],
+  ["ortadogu",[["ar","العربية"],["fa","فارسی"],["ku","Kurdî (Kurmancî)"],["ckb","کوردی (سۆرانی)"],["ps","پښتو"],
+              ["ka","ქართული"],["hy","Հայերեն"]]],
+  ["guneyasya",[["ur","اردو"],["hi","हिन्दी"],["bn","বাংলা"],["pa","ਪੰਜਾਬੀ"],["ta","தமிழ்"],["te","తెలుగు"],
+              ["mr","मराठी"],["gu","ગુજરાતી"],["ne","नेपाली"]]],
+  ["asya",   [["zh-CN","中文"],["ja","日本語"],["ko","한국어"],["mn","Монгол"],["tg","Тоҷикӣ"],["id","Bahasa Indonesia"],
+              ["ms","Bahasa Melayu"],["vi","Tiếng Việt"],["th","ไทย"],["tl","Filipino"],["my","မြန်မာ"]]],
+  ["avrupa", [["en","English"],["ru","Русский"],["uk","Українська"],["de","Deutsch"],["fr","Français"],["es","Español"],
+              ["pt","Português"],["it","Italiano"],["nl","Nederlands"],["pl","Polski"],["el","Ελληνικά"],["ro","Română"],
+              ["hu","Magyar"],["bg","Български"],["sr","Српски"],["mk","Македонски"],["bs","Bosanski"],["sq","Shqip"],
+              ["cs","Čeština"],["sv","Svenska"],["fi","Suomi"]]],
+  ["afrika", [["sw","Kiswahili"],["ha","Hausa"],["am","አማርኛ"],["so","Soomaali"],["yo","Yorùbá"],["om","Afaan Oromoo"],
+              ["zu","isiZulu"],["ig","Igbo"]]]
 ];
+const CEVIRI_DILLERI = DIL_GRUPLARI.flatMap(([,d]) => d);
+/* Türkçe adlar: dil penceresinde ikinci satır ve aramada ("alman", "kırım" yazan bulsun) */
+const DIL_TR = {tr:"Türkçe", az:"Azerbaycan Türkçesi", kk:"Kazakça", uz:"Özbekçe", ky:"Kırgızca", tk:"Türkmence", tt:"Tatarca",
+  ug:"Uygurca", crh:"Kırım Tatarcası", ar:"Arapça", fa:"Farsça", ku:"Kürtçe (Kurmanci)", ckb:"Kürtçe (Sorani)", ps:"Peştuca",
+  ka:"Gürcüce", hy:"Ermenice", ur:"Urduca", hi:"Hintçe", bn:"Bengalce", pa:"Pencapça", ta:"Tamilce", te:"Telugu dili",
+  mr:"Marathi dili", gu:"Guceratça", ne:"Nepalce", "zh-CN":"Çince", ja:"Japonca", ko:"Korece", mn:"Moğolca", tg:"Tacikçe",
+  id:"Endonezce", ms:"Malayca", vi:"Vietnamca", th:"Tayca", tl:"Filipince", my:"Birmanca", en:"İngilizce", ru:"Rusça",
+  uk:"Ukraynaca", de:"Almanca", fr:"Fransızca", es:"İspanyolca", pt:"Portekizce", it:"İtalyanca", nl:"Felemenkçe", pl:"Lehçe",
+  el:"Yunanca", ro:"Rumence", hu:"Macarca", bg:"Bulgarca", sr:"Sırpça", mk:"Makedonca", bs:"Boşnakça", sq:"Arnavutça",
+  cs:"Çekçe", sv:"İsveççe", fi:"Fince", sw:"Svahili", ha:"Hausaca", am:"Amharca", so:"Somalice", yo:"Yorubaca",
+  om:"Oromoca", zu:"Zuluca", ig:"İgboca"};
 const cihazDili = () => ((navigator.languages && navigator.languages[0]) || navigator.language || "tr").toLowerCase();
 function varsayilanArayuz(){ return cihazDili().startsWith("tr") ? "tr" : "en"; }
 function varsayilanCeviri(){
@@ -735,7 +761,9 @@ const SOZLUK = {
     tef_yakinda:"İlk yazılar yakında", tef_yakinda_aciklama:"Davetli yazarlarımızın yazıları geldikçe burada yayımlanacak.",
     yukleniyor:"yükleniyor…",
     hakkinda:"Hakkında", iletisim:"İletişim", gizlilik:"Gizlilik",
-    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin",
+    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin", dil_ara:"Dil ara…", dil_bulunamadi:"Bu adla bir dil yok.",
+    grup_turk:"Türk dünyası", grup_ortadogu:"Orta Doğu ve Kafkasya", grup_guneyasya:"Güney Asya", grup_asya:"Asya",
+    grup_avrupa:"Avrupa", grup_afrika:"Afrika",
     dil_aciklama:"Arayüz ve çeviriler bu dilde. Yazılar orijinal dilinde gelir; “Çevir”e dokununca başlık ve özet bu dile çevrilir.",
     dil_not:"Türkçe ve İngilizce dışındaki dillerde arayüz makine çevirisiyle gösterilir.",
     ceviri_aciklama:"Yazılar orijinal dilinde gelir. “Çevir”e dokununca başlık ve özet seçtiğin dile çevrilir.",
@@ -783,7 +811,9 @@ const SOZLUK = {
     tef_yakinda:"First pieces coming soon", tef_yakinda_aciklama:"Pieces from our invited writers will be published here as they arrive.",
     yukleniyor:"loading…",
     hakkinda:"About", iletisim:"Contact", gizlilik:"Privacy",
-    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language",
+    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language", dil_ara:"Search languages…", dil_bulunamadi:"No language by that name.",
+    grup_turk:"Turkic world", grup_ortadogu:"Middle East & Caucasus", grup_guneyasya:"South Asia", grup_asya:"Asia",
+    grup_avrupa:"Europe", grup_afrika:"Africa",
     dil_aciklama:"The interface and translations use this language. Articles arrive in their original language; tap “translate” to see the headline and summary in it.",
     dil_not:"In languages other than Turkish and English, the interface is machine-translated.",
     ceviri_aciklama:"Articles arrive in their original language. Tap “translate” to see the headline and summary in the language you choose.",
@@ -1008,12 +1038,12 @@ async function cek(){
 
     S.tum = new Map();
     for(const [ad, kayit] of Object.entries(veri.kaynaklar||{})){
-      S.bilgi[ad] = {ulke:kayit.ulke||"", nitelik:kayit.nitelik||"", kimlik:kayit.kimlik||""};
+      S.bilgi[ad] = {ulke:kayit.ulke||"", nitelik:kayit.nitelik||"", kimlik:kayit.kimlik||"", dil:kayit.dil||""};
       for(const y of (kayit.yazilar||[])){ if(y.pay) S.tum.set(y.pay, y); S.tum.set(y.id, y); }
       const mevcut = S.kaynaklar.find(k=>k.ad===ad);
       if(mevcut) mevcut.tur = kayit.tur || mevcut.tur || "kurum";
       else S.kaynaklar.push({ad, url:"", acik:true, sunucu:true, tur:kayit.tur||"kurum"});
-      S.bellek[ad] = {yazilar:(kayit.yazilar||[]).filter(taze).slice(0,40), zaman:Date.parse(kayit.tarandi)||Date.now()};
+      S.bellek[ad] = {yazilar:(kayit.yazilar||[]).filter(taze).slice(0,70), zaman:Date.parse(kayit.tarandi)||Date.now()};
       if(kayit.durum && kayit.durum!=="tamam") S.hata.push({ad, mesaj:kayit.durum});
     }
     // sunucunun artik taramadigi eski kaynaklar listeden kalksin (kapanan, adi degisen)
@@ -1024,7 +1054,8 @@ async function cek(){
       if(S.suzgec!=="hepsi" && !sunucuda.has(S.suzgec)) S.suzgec="hepsi";
     }
     yaz("ti.kaynaklar6", S.kaynaklar);
-    yaz("ti.bellek", S.bellek);   // cevrimdisi icin kucuk kopya
+    // cevrimdisi icin kucuk kopya: telefonun deposu dolmasin diye kaynak basina 40 yazi
+    yaz("ti.bellek", Object.fromEntries(Object.entries(S.bellek).map(([ad,v]) => [ad, {...v, yazilar:(v.yazilar||[]).slice(0,40)}])));
   }catch(e){
     S.hata.push({ad:t("nav_idrak"), mesaj:e.message});
   }
@@ -1059,7 +1090,7 @@ async function ikisiniCevir(y){
   const hedef = S.ceviriDili;
   const [b,o] = await Promise.all([cevir(y.baslik), cevir(y.ozet)]);
   const kok = x => String(x||"").toLowerCase().split("-")[0];
-  return {baslik:b.metin, ozet:o.metin, dil:hedef, ayni: !!b.dil && kok(b.dil)===kok(hedef)};
+  return {baslik:b.metin, ozet:o.metin, dil:hedef, kd:kok(b.dil), ayni: !!b.dil && kok(b.dil)===kok(hedef)};
 }
 function ceviriSakla(id, c){
   S.ceviri[id] = c;
@@ -1290,6 +1321,19 @@ const I = {
   pay:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.8l7.2-4.2M8.4 13.2l7.2 4.2"/></svg>'
 };
 
+/* "Kaynak": yazı okurun seçtiği dilde değilse kaynağın kendisi o dile çevrilmiş olarak açılır
+   (telefonun dili ne olursa olsun, Türkan'da hangi dil seçiliyse o). Google'ın çeviri sayfasının üstünde
+   "orijinal" düğmesi de var. Google Haberler bağlantıları henüz çevrilemiyor, onlar olduğu gibi açılır. */
+function okumaAdresi(y){
+  let alan = ""; try{ alan = new URL(y.link).hostname; }catch(e){ return y.link; }
+  if(/(^|\.)news\.google\.com$/i.test(alan)) return y.link;
+  const hedef = S.dil, kok = d => String(d||"").toLowerCase().split("-")[0];
+  const c = S.ceviri[y.id];
+  const yaziDili = (c && c.kd) || kok((S.bilgi[y.kaynak]||{}).dil);
+  if((c && c.ayni && c.dil===hedef) || (yaziDili && yaziDili===kok(hedef))) return y.link;
+  return "https://translate.google.com/translate?sl=auto&tl=" + encodeURIComponent(hedef) + "&u=" + encodeURIComponent(y.link);
+}
+
 function kart(y){
   const c = trOf(y);
   const k = kayitliMi(y.id);
@@ -1313,7 +1357,7 @@ function kart(y){
     <div class="acts">
       <button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${t(k?"kayitli":"kaydet")}</span></button>
       ${ceviriDugmesi(y)}
-      <a class="act" href="${kac(y.link)}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dis}<span>${t("kaynak")}</span></a>
+      <a class="act" href="${kac(okumaAdresi(y))}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dis}<span>${t("kaynak")}</span></a>
       <button class="act" data-pay="${y.id}">${I.pay}<span>${t("paylas")}</span></button>
     </div></article>`;
 }
@@ -1470,7 +1514,7 @@ function cizKaynaklar(){
   $("#sources").innerHTML = `
     <div class="ayar">
       <div class="ayar-bas">${t("dil_baslik")}</div>
-      <label class="ayar-satir"><span>${t("dil_etiket")}</span><select id="secDil">${secenek(CEVIRI_DILLERI, S.dil)}</select></label>
+      <label class="ayar-satir"><span>${t("dil_etiket")}</span><select id="secDil">${DIL_GRUPLARI.map(([g,d])=>`<optgroup label="${kac(t("grup_"+g))}">${secenek(d, S.dil)}</optgroup>`).join("")}</select></label>
       <p class="ayar-not">${t("dil_aciklama")}</p>
     </div>
     <p class="note" style="padding-top:14px">${S.guncellendi
@@ -1586,10 +1630,14 @@ const DIL_IPUCU = {tr:"Dili değiştir", en:"Change language", ku:"Ziman biguher
   ru:"Сменить язык", uk:"Змінити мову", de:"Sprache ändern", fr:"Changer de langue", es:"Cambiar idioma", pt:"Mudar idioma",
   it:"Cambia lingua", nl:"Taal wijzigen", pl:"Zmień język", el:"Αλλαγή γλώσσας", bs:"Promijeni jezik", sq:"Ndrysho gjuhën",
   ka:"ენის შეცვლა", id:"Ubah bahasa", ms:"Tukar bahasa", hi:"भाषा बदलें", bn:"ভাষা পরিবর্তন করুন", "zh-CN":"更改语言",
-  ja:"言語を変更", ko:"언어 변경", sw:"Badilisha lugha"};
+  ja:"言語を変更", ko:"언어 변경", sw:"Badilisha lugha", tt:"Телне үзгәртү", ug:"تىلنى ئۆزگەرتىش", ckb:"گۆڕینی زمان",
+  ps:"ژبه بدله کړئ", hy:"Փոխել լեզուն", pa:"ਭਾਸ਼ਾ ਬਦਲੋ", ta:"மொழியை மாற்று", te:"భాషను మార్చండి", mr:"भाषा बदला",
+  gu:"ભાષા બદલો", ne:"भाषा परिवर्तन गर्नुहोस्", mn:"Хэл солих", tg:"Иваз кардани забон", vi:"Đổi ngôn ngữ", th:"เปลี่ยนภาษา",
+  tl:"Palitan ang wika", ro:"Schimbă limba", hu:"Nyelv módosítása", bg:"Смяна на езика", sr:"Промени језик", mk:"Промени јазик",
+  cs:"Změnit jazyk", sv:"Byt språk", fi:"Vaihda kieli", ha:"Canza harshe", am:"ቋንቋ ቀይር", so:"Beddel luqadda", zu:"Shintsha ulimi"};
 function dilIpucuGoster(){
   try{ if(localStorage.getItem("ti.dilIpucu")) return; }catch(e){ return; }
-  const c = cihazDili(), kok = c.startsWith("zh") ? "zh-CN" : c.split("-")[0];
+  const c = cihazDili(), kok = c.startsWith("zh") ? "zh-CN" : c.startsWith("fil") ? "tl" : c.split("-")[0];
   if(kok === "tr" || S.dil !== "tr") return;             // Türkçe telefonda ya da dil zaten seçilmişse gerek yok
   const d = $("#dilAc"); if(!d) return;
   const r = d.getBoundingClientRect(); if(!r.width) return;
@@ -1617,12 +1665,30 @@ function dilPenceresiAc(){
   let p = $("#dilPencere");
   if(!p){ p = document.createElement("div"); p.id = "dilPencere"; p.className = "dil-pencere"; document.body.appendChild(p);
     p.addEventListener("click", e => { if(e.target === p) dilPenceresiKapat(); }); }
+  const yerli = k => (CEVIRI_DILLERI.find(([d])=>d===k)||[])[1];
+  const yerelAd = k => { const a = S.arayuz==="tr" ? DIL_TR[k] : dilAdi(k); return a && a !== yerli(k) && a.toLowerCase() !== k ? a : ""; };
   p.innerHTML = `<div class="dil-kutu" role="dialog" aria-modal="true" aria-label="${kac(t("dil_sec"))}">
     <div class="dil-bas">${kac(t("dil_sec"))}</div>
-    <div class="dil-liste">${CEVIRI_DILLERI.map(([k,a]) =>
-      `<button data-dilsec="${k}" lang="${k}"${k===S.dil?' class="secili" aria-current="true"':""}><b>${k.split("-")[0].toUpperCase()}</b>${kac(a)}</button>`).join("")}</div>
+    <input class="dil-ara" type="search" placeholder="${kac(t("dil_ara"))}" aria-label="${kac(t("dil_ara"))}" autocomplete="off">
+    ${DIL_GRUPLARI.map(([g, diller]) => `<div class="dil-grup" data-grup="${g}"><h4>${kac(t("grup_"+g))}</h4><div class="dil-liste">${
+      diller.map(([k,a]) => { const y = yerelAd(k);
+        return `<button data-dilsec="${k}" lang="${k}" data-ara="${kac((a+" "+y+" "+(DIL_TR[k]||"")+" "+k).toLocaleLowerCase("tr"))}"${k===S.dil?' class="secili" aria-current="true"':""}>`
+          + `<b>${k.split("-")[0].toUpperCase()}</b><span>${kac(a)}${y?`<small>${kac(y)}</small>`:""}</span></button>`; }).join("")
+    }</div></div>`).join("")}
+    <p class="dil-bos" hidden>${kac(t("dil_bulunamadi"))}</p>
     <p class="dil-not">${kac(t("dil_not"))}</p></div>`;
   p.hidden = false;
+  const ara = p.querySelector(".dil-ara");
+  ara.addEventListener("input", () => {
+    const q = ara.value.trim().toLocaleLowerCase("tr"); let toplam = 0;
+    p.querySelectorAll(".dil-grup").forEach(g => {
+      let n = 0;
+      g.querySelectorAll("[data-dilsec]").forEach(b => { const v = !q || b.dataset.ara.includes(q); b.hidden = !v; if(v) n++; });
+      g.hidden = !n; toplam += n;
+    });
+    p.querySelector(".dil-bos").hidden = toplam > 0;
+  });
+  const secili = p.querySelector(".secili"); if(secili) secili.scrollIntoView({block:"center"});
   p.querySelectorAll("[data-dilsec]").forEach(b => b.addEventListener("click", () => dilSec(b.dataset.dilsec)));
 }
 function dilPenceresiKapat(){ const p = $("#dilPencere"); if(p) p.hidden = true; }

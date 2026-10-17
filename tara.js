@@ -382,7 +382,9 @@ async function cek(kaynak, deneme = 0) {
   }
   const metin = await c.text();
   try {
-    return ayikla(metin, kaynak.ad);
+    const yazilar = ayikla(metin, kaynak.ad);
+    yazilar.dil = ((metin.match(/<language>\s*([^<\s]+)\s*<\/language>/i) || [])[1] || "").toLowerCase();
+    return yazilar;
   } catch (e) {
     // Google Haberler besleme yerine "olağandışı trafik" sayfası döndürdüyse bir kez daha dene
     if (gn && deneme < 1 && !/<rss[\s>]/i.test(metin)) { await uyu(8000); return cek(kaynak, deneme + 1); }
@@ -390,14 +392,54 @@ async function cek(kaynak, deneme = 0) {
   }
 }
 
+/* Google Haberler'den gelen yazıların bağlantısı news.google.com'a gider; okur o sayfayı kendi diline çeviremez.
+   Her taramada sınırlı sayıda bağlantı yayıncının kendi adresine çevrilir (Google'ın kendi sayfasının kullandığı yol).
+   Olmazsa bağlantı olduğu gibi kalır; hiçbir şey bozulmaz. */
+const GN_COZ_SINIRI = 40;
+let gnCozulen = 0;
+const gnMi = u => /(^|\/\/|\.)news\.google\.com\//i.test(String(u || ""));
+async function gnCoz(url) {
+  const m = String(url).match(/news\.google\.com\/(?:rss\/)?articles\/([^?#/]+)/);
+  if (!m || gnCozulen >= GN_COZ_SINIRI) return null;
+  gnCozulen++;
+  const kod = m[1];
+  const ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
+  try {
+    await gnSirasi();
+    const s = await fetch("https://news.google.com/articles/" + kod, { headers: { "user-agent": ua }, signal: AbortSignal.timeout(15000) });
+    if (!s.ok) return null;
+    const html = await s.text();
+    const imza = (html.match(/data-n-a-sg="([^"]+)"/) || [])[1];
+    const zmn = (html.match(/data-n-a-ts="([^"]+)"/) || [])[1];
+    if (!imza || !zmn) return null;
+    const istek = [[["Fbv4je",
+      `["garturlreq",[["X","X",["X","X"],null,null,1,1,"US:en",null,1,null,null,null,null,null,0,1],"X","X",1,[1,1,1],1,1,null,0,0,null,0],"${kod}",${zmn},"${imza}"]`]]];
+    await gnSirasi();
+    const r = await fetch("https://news.google.com/_/DotsSplashUi/data/batchexecute", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded;charset=UTF-8", "user-agent": ua },
+      body: "f.req=" + encodeURIComponent(JSON.stringify(istek)),
+      signal: AbortSignal.timeout(15000)
+    });
+    if (!r.ok) return null;
+    // yanıt ")]}'" ile başlar; asıl veri '[["wrb.fr",...' ile başlayan satırdadır
+    const satir = (await r.text()).split("\n").find(l => l.trim().startsWith('[["wrb.fr"'));
+    if (!satir) return null;
+    const adres = JSON.parse(JSON.parse(satir)[0][2])[1];
+    return /^https?:\/\//i.test(adres) && !gnMi(adres) ? adres : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 /* Kaynağın kendi adresi düşerse (403 vb.) yedek adresi dene */
 async function cekYedekli(k) {
   try {
-    return { yazilar: await cek(k), yol: "asıl" };
+    const y = await cek(k); return { yazilar: y, yol: "asıl", dil: y.dil };
   } catch (e) {
     if (!k.yedek) throw e;
     try {
-      return { yazilar: await cek({ ...k, url: k.yedek }), yol: "yedek" };
+      const y = await cek({ ...k, url: k.yedek }); return { yazilar: y, yol: "yedek", dil: y.dil };
     } catch (e2) {
       throw new Error(e.message + " · yedek yol: " + e2.message);
     }
@@ -530,18 +572,28 @@ function siteDosyalari(oncekiTaban) {
     const eskiKayit = onceki.kaynaklar[k.ad] || { yazilar: [] };
     const kimlikBilgisi = { tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "" };
     try {
-      const { yazilar: yeni, yol } = await cekYedekli(k);
+      const { yazilar: yeni, yol, dil } = await cekYedekli(k);
 
-      // onceki taramada bulunan gorseli tasi
+      // onceki taramada bulunan gorseli, cozulmus baglantiyi ve paylasim kodunu tasi
       const eskiler = new Map(eskiKayit.yazilar.map(y => [y.id, y]));
       for (const y of yeni) {
         const e = eskiler.get(y.id);
         if (!e) continue;
         if (!y.gorsel && e.gorsel) y.gorsel = e.gorsel;
+        if (gnMi(y.link) && e.link && !gnMi(e.link)) y.link = e.link;
+        if (e.pay && !y.pay) y.pay = e.pay;
       }
 
-      // beslemede gorsel yoksa makalenin kendi sayfasindan dene
-      const eksik = yeni.filter(y => !y.gorsel && y.link).slice(0, 12);
+      // Google Haberler baglantilarini yayincinin adresine cevir (yeni yazilar once)
+      for (const y of yeni) {
+        if (gnCozulen >= GN_COZ_SINIRI) break;
+        if (!gnMi(y.link)) continue;
+        const a = await gnCoz(y.link);
+        if (a) { if (!y.pay) y.pay = payKodu(y); y.link = a; }
+      }
+
+      // beslemede gorsel yoksa makalenin kendi sayfasindan dene (Google Haberler sayfasini bosuna yorma)
+      const eksik = yeni.filter(y => !y.gorsel && y.link && !gnMi(y.link)).slice(0, 12);
       if (eksik.length) {
         for (let i = 0; i < eksik.length; i += 4) {
           await Promise.all(eksik.slice(i, i + 4).map(async y => {
@@ -560,11 +612,19 @@ function siteDosyalari(oncekiTaban) {
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
       birlesik.length = 0; birlesik.push(...tekil);
 
+      // butce kaldiysa arsivdeki cozulmemis baglantilar da (en yenileri once)
+      for (const y of birlesik.slice(0, ARSIV_SINIRI)) {
+        if (gnCozulen >= GN_COZ_SINIRI) break;
+        if (!gnMi(y.link)) continue;
+        const a = await gnCoz(y.link);
+        if (a) { if (!y.pay) y.pay = payKodu(y); y.link = a; }
+      }
+
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: birlesik.slice(0, ARSIV_SINIRI),
         tarandi: new Date().toISOString(),
         durum: "tamam"
-      }, yol === "yedek" ? { yol: "yedek" } : {}, kimlikBilgisi);
+      }, yol === "yedek" ? { yol: "yedek" } : {}, (dil || eskiKayit.dil) ? { dil: dil || eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}${yol === "yedek" ? " (yedek yoldan)" : ""}`);
     } catch (e) {
       for (const y of eskiKayit.yazilar) if (!y.pay) y.pay = payKodu(y);
@@ -573,7 +633,7 @@ function siteDosyalari(oncekiTaban) {
         yazilar: eskiKayit.yazilar.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true))),
         tarandi: eskiKayit.tarandi || null,
         durum: "hata: " + e.message
-      }, kimlikBilgisi);
+      }, eskiKayit.dil ? { dil: eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✗ ${k.ad} — ${e.message} (${eskiKayit.yazilar.length} eski yazi korundu)`);
     }
   }
@@ -590,6 +650,7 @@ function siteDosyalari(oncekiTaban) {
     cikan += once - k.yazilar.length;
   }
   console.log(`\nUc aydan eski ${cikan} yazi arsivden cikarildi`);
+  console.log(`Google Haberler baglantisi cozulmeye calisildi: ${gnCozulen}`);
 
   // Yazilar orijinal dilinde kalir; onceki bir surumden kalan ceviri alanlari varsa temizle
   for (const k of Object.values(sonuc.kaynaklar))

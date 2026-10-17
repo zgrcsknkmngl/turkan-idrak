@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -867,7 +867,7 @@ function arayuzKaynagi(){
   return liste;
 }
 const metinOzeti = s => { let h = 5381; for(let i=0;i<s.length;i++) h = ((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); };
-const arayuzSurumu = () => metinOzeti(arayuzKaynagi().map(x=>x[0]+"="+x[1]).join("|"));
+const arayuzSurumu = () => metinOzeti("2|" + arayuzKaynagi().map(x=>x[0]+"="+x[1]).join("|"));   // 2: satır eşleme yenilendi, eski yarım çeviriler yenilensin
 function mtKur(metin){
   const sonuc = {};
   for(const [k,m] of Object.entries(metin||{})){
@@ -886,7 +886,7 @@ async function arayuzuHazirla(kod){
   if(sakli && sakli.kod===kod && sakli.surum===surum){ S.arayuzMT = mtKur(sakli.metin); return; }
   S.arayuzMT = {};
   const parcalar = []; let p = [], uz = 0;
-  for(const x of liste){ if(uz + x[1].length > 1400 && p.length){ parcalar.push(p); p = []; uz = 0; } p.push(x); uz += x[1].length + 1; }
+  for(const x of liste){ if(uz + x[1].length > 700 && p.length){ parcalar.push(p); p = []; uz = 0; } p.push(x); uz += x[1].length + 1; }
   if(p.length) parcalar.push(p);
   const metin = {};
   try{
@@ -895,9 +895,16 @@ async function arayuzuHazirla(kod){
         + encodeURIComponent(kod) + "&dt=t&q=" + encodeURIComponent(parca.map(x=>x[1]).join("\n")));
       if(!r.ok) throw new Error("çeviri " + r.status);
       const j = await r.json();
-      const satir = (j[0]||[]).map(s=>(s&&s[0])||"").join("").split("\n");
-      if(satir.length !== parca.length) continue;       // satırlar kaydıysa bu parça İngilizce kalır
-      parca.forEach((x,i) => { const s = satir[i].trim(); if(s) metin[x[0]] = s; });
+      // Google çeviriyi bölüt bölüt döndürür; her bölütün aslı da yanında gelir. Aslı satır sonuyla bitince satır biter.
+      const satir = []; let tampon = "";
+      for(const s of (j[0]||[])){
+        if(!s) continue;
+        tampon += String(s[0]||"").replace(/\n/g, " ");
+        if(String(s[1]||"").endsWith("\n")){ satir.push(tampon.trim()); tampon = ""; }
+      }
+      if(tampon.trim()) satir.push(tampon.trim());
+      if(satir.length !== parca.length) continue;       // yine de kaydıysa bu parça İngilizce kalır
+      parca.forEach((x,i) => { const s = satir[i]; if(s) metin[x[0]] = s; });
     }
   }catch(e){ /* çeviri kapısı yanıt vermezse arayüz İngilizce kalır */ }
   if(S.dil !== kod) return;
@@ -1014,7 +1021,8 @@ const etiketAdi = e => e[S.arayuz] || (S.arayuz!=="tr" && e.en) || e.tr;
 function nezaman(x){
   const d = tarihOku(x); if(!d) return "";
   const dk = Math.floor((Date.now()-d)/60000);
-  let rtf; try{ rtf = new Intl.RelativeTimeFormat(S.arayuz, {numeric:"auto"}); }catch(e){ rtf = null; }
+  let rtf; try{ const dl = Intl.RelativeTimeFormat.supportedLocalesOf([S.arayuz]).length ? S.arayuz : "en";
+    rtf = new Intl.RelativeTimeFormat(dl, {numeric:"auto"}); }catch(e){ rtf = null; }
   if(dk < 1) return t("az_once");
   if(!rtf) return d.toLocaleDateString(S.arayuz);
   if(dk < 60) return rtf.format(-dk, "minute");
@@ -1235,7 +1243,7 @@ function acilanCiz(y){
   const k = kayitliMi(y.id);
   let alan = ""; try{ alan = new URL(y.link).hostname; }catch(e){}
   const dildeOku = !/(^|\.)news\.google\.com$/i.test(alan)
-    ? "https://translate.google.com/translate?sl=auto&tl="+encodeURIComponent(S.ceviriDili)+"&u="+encodeURIComponent(y.link) : "";
+    ? ceviriAdresi(y.link, S.ceviriDili) : "";
   const ozet = c ? c.ozet : y.ozet;
   return `<section class="acilan" aria-label="${kac(t("paylasilan_yazi"))}">
     <div class="ust"><span class="etk">${t("paylasilan_yazi")}</span><button class="kapat" data-kapat="1" aria-label="${kac(t("kapat"))}">×</button></div>
@@ -1342,6 +1350,19 @@ const I = {
 const kuruluMu = () => matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: minimal-ui)").matches
   || navigator.standalone === true || document.referrer.startsWith("android-app://");
 
+function ceviriAdresi(adres, hedef){
+  try{
+    const u = new URL(adres);
+    if(u.protocol !== "https:" || /^[\d.]+$/.test(u.hostname) || u.port) throw 0;
+    const alan = u.hostname.toLowerCase().replace(/-/g, "--").replace(/\./g, "-") + ".translate.goog";
+    const q = new URLSearchParams(u.search);
+    q.set("_x_tr_sl", "auto"); q.set("_x_tr_tl", hedef); q.set("_x_tr_hl", hedef); q.set("_x_tr_pto", "wapp");
+    return "https://" + alan + u.pathname + "?" + q.toString() + u.hash;
+  }catch(e){
+    return "https://translate.google.com/translate?sl=auto&tl=" + encodeURIComponent(hedef) + "&u=" + encodeURIComponent(adres);
+  }
+}
+
 function okumaAdresi(y){
   let alan = ""; try{ alan = new URL(y.link).hostname; }catch(e){ return y.link; }
   if(/(^|\.)news\.google\.com$/i.test(alan)) return y.link;
@@ -1349,7 +1370,7 @@ function okumaAdresi(y){
   const c = S.ceviri[y.id];
   const yaziDili = (c && c.kd) || kok((S.bilgi[y.kaynak]||{}).dil);
   if((c && c.ayni && c.dil===hedef) || (yaziDili && yaziDili===kok(hedef))) return y.link;
-  return "https://translate.google.com/translate?sl=auto&tl=" + encodeURIComponent(hedef) + "&u=" + encodeURIComponent(y.link);
+  return ceviriAdresi(y.link, hedef);
 }
 
 function kart(y){

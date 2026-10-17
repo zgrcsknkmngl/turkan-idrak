@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -314,6 +314,17 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     font:700 14px/1.35 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38);cursor:pointer;opacity:0;transform:translateY(-4px);
     transition:opacity .3s ease,transform .3s ease}
   .dil-ipucu.acik{opacity:1;transform:none}
+  /* Tarayıcıdan girenlere: "Uygulamayı yükle" */
+  .yukle-hap{position:fixed;z-index:40;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);transform:translate(-50%,12px);
+    display:flex;align-items:center;gap:8px;padding:7px 8px 7px 12px;border-radius:999px;background:var(--raised);
+    border:1.5px solid var(--gold);color:var(--vellum);box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .35s,transform .35s;
+    font:600 14px var(--sans);white-space:nowrap}
+  .yukle-hap.acik{opacity:1;transform:translate(-50%,0)}
+  .yukle-hap .yk-ana{display:flex;align-items:center;gap:8px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;padding:0;text-decoration:none}
+  .yukle-hap svg{width:20px;height:26px;flex:none}
+  .yukle-hap .yk-kapat{width:28px;height:28px;border-radius:50%;border:0;background:transparent;color:var(--dim);font-size:18px;line-height:1;cursor:pointer}
+  .yukle-ios{position:fixed;z-index:41;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 136px);max-width:420px;margin:0 auto;
+    padding:13px 15px;border-radius:12px;background:#F4EFE3;color:#0B1420;font:500 14px/1.5 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38)}
   .dil-ipucu small{display:block;margin-top:2px;font-weight:500;font-size:12px;opacity:.65}
   .dil-ipucu::before{content:"";position:absolute;top:-6px;right:var(--ok,18px);width:12px;height:12px;background:inherit;
     transform:rotate(45deg);border-radius:2px}
@@ -761,7 +772,8 @@ const SOZLUK = {
     tef_yakinda:"İlk yazılar yakında", tef_yakinda_aciklama:"Davetli yazarlarımızın yazıları geldikçe burada yayımlanacak.",
     yukleniyor:"yükleniyor…",
     hakkinda:"Hakkında", iletisim:"İletişim", gizlilik:"Gizlilik",
-    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin", dil_ara:"Dil ara…", dil_bulunamadi:"Bu adla bir dil yok.",
+    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin", yukle:"Uygulamayı yükle", yukle_kapat:"Kapat",
+    yukle_ios:"Safari'de alttaki Paylaş simgesine (□↑) dokun, ardından “Ana Ekrana Ekle”yi seç.", dil_ara:"Dil ara…", dil_bulunamadi:"Bu adla bir dil yok.",
     grup_turk:"Türk dünyası", grup_ortadogu:"Orta Doğu ve Kafkasya", grup_guneyasya:"Güney Asya", grup_asya:"Asya",
     grup_avrupa:"Avrupa", grup_afrika:"Afrika",
     dil_aciklama:"Arayüz ve çeviriler bu dilde. Yazılar orijinal dilinde gelir; “Çevir”e dokununca başlık ve özet bu dile çevrilir.",
@@ -811,7 +823,8 @@ const SOZLUK = {
     tef_yakinda:"First pieces coming soon", tef_yakinda_aciklama:"Pieces from our invited writers will be published here as they arrive.",
     yukleniyor:"loading…",
     hakkinda:"About", iletisim:"Contact", gizlilik:"Privacy",
-    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language", dil_ara:"Search languages…", dil_bulunamadi:"No language by that name.",
+    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language", yukle:"Install the app", yukle_kapat:"Close",
+    yukle_ios:"In Safari, tap the Share icon (□↑) at the bottom, then choose “Add to Home Screen”.", dil_ara:"Search languages…", dil_bulunamadi:"No language by that name.",
     grup_turk:"Turkic world", grup_ortadogu:"Middle East & Caucasus", grup_guneyasya:"South Asia", grup_asya:"Asia",
     grup_avrupa:"Europe", grup_afrika:"Africa",
     dil_aciklama:"The interface and translations use this language. Articles arrive in their original language; tap “translate” to see the headline and summary in it.",
@@ -1324,6 +1337,11 @@ const I = {
 /* "Kaynak": yazı okurun seçtiği dilde değilse kaynağın kendisi o dile çevrilmiş olarak açılır
    (telefonun dili ne olursa olsun, Türkan'da hangi dil seçiliyse o). Google'ın çeviri sayfasının üstünde
    "orijinal" düğmesi de var. Google Haberler bağlantıları henüz çevrilemiyor, onlar olduğu gibi açılır. */
+/* Uygulama olarak kuruluysa (Play'den) yazılar uygulamanın içindeki tarayıcı penceresinde açılır;
+   tarayıcıda açılmışsa aynı sekmede açılır, yeni sekme birikmez */
+const kuruluMu = () => matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: minimal-ui)").matches
+  || navigator.standalone === true || document.referrer.startsWith("android-app://");
+
 function okumaAdresi(y){
   let alan = ""; try{ alan = new URL(y.link).hostname; }catch(e){ return y.link; }
   if(/(^|\.)news\.google\.com$/i.test(alan)) return y.link;
@@ -1546,7 +1564,16 @@ function cizKaynaklar(){
 document.addEventListener("click", e=>{
   const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
   if(!h) return;
-  if(h.dataset.oku){ okunduIsaretle(h.dataset.oku); const en=h.closest(".entry"); if(en) en.classList.add("okundu"); return; }
+  if(h.dataset.oku){
+    okunduIsaretle(h.dataset.oku); const en=h.closest(".entry"); if(en) en.classList.add("okundu");
+    // tarayıcıda yeni sekme açma: aynı sekmede aç, geri gelince okur kaldığı yeri bulsun
+    if(h.tagName==="A" && !kuruluMu()){
+      e.preventDefault();
+      try{ sessionStorage.setItem("ti.donus", JSON.stringify({ekran:S.ekran, kategori:S.kategori, suzgec:S.suzgec, goster:S.goster, y:Math.round(scrollY)})); }catch(_){}
+      location.assign(h.href);
+    }
+    return;
+  }
   if(h.dataset.kapat) return yaziyiKapat();
   if(h.id==="tema") return temaDegistir();
   if(h.dataset.gozdeFiltre){
@@ -1660,6 +1687,48 @@ function dilIpucuGoster(){
   setTimeout(kapat, 9000);
   try{ localStorage.setItem("ti.dilIpucu","1"); }catch(e){}
 }
+
+/* ---------- "Uygulamayı yükle": yalnız tarayıcıdan girenlere ----------
+   PLAY_ADRESI şimdilik boş: Chrome'un kendi kurulum penceresi açılır (dosya inmez, uyarı çıkmaz).
+   Google Play onayı gelince buraya mağaza adresi yazılır; Android'de düğme doğrudan Play'e götürür:
+   "https://play.google.com/store/apps/details?id=com.turkanidrak.app" */
+const PLAY_ADRESI = "";
+let kurulumIstegi = null;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); kurulumIstegi = e; });
+addEventListener("appinstalled", () => { kurulumIstegi = null; const h = $(".yukle-hap"); if(h) h.remove(); });
+const iosMu = () => /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
+const androidMu = () => /android/i.test(navigator.userAgent);
+function yukleDugmesiGoster(){
+  if(kuruluMu() || $(".yukle-hap")) return;
+  try{ const k = +localStorage.getItem("ti.yukleKapat") || 0; if(Date.now() - k < 14*86400000) return; }catch(e){}
+  const play = PLAY_ADRESI && androidMu();
+  if(!play && !kurulumIstegi && !iosMu()) return;          // bu tarayıcıda kurulum yolu yok
+  const h = document.createElement("div"); h.className = "yukle-hap"; h.setAttribute("role","region");
+  const simge = '<svg aria-hidden="true"><use href="#anka"/></svg>';
+  h.innerHTML = (play
+      ? `<a class="yk-ana" href="${kac(PLAY_ADRESI)}" target="_blank" rel="noopener">${simge}<span>${kac(t("yukle"))}</span></a>`
+      : `<button class="yk-ana" type="button">${simge}<span>${kac(t("yukle"))}</span></button>`)
+    + `<button class="yk-kapat" type="button" aria-label="${kac(t("yukle_kapat"))}">×</button>`;
+  document.body.appendChild(h);
+  requestAnimationFrame(() => h.classList.add("acik"));
+  const kapat = (kalici) => { h.remove(); const i = $(".yukle-ios"); if(i) i.remove();
+    if(kalici) try{ localStorage.setItem("ti.yukleKapat", String(Date.now())); }catch(e){} };
+  h.querySelector(".yk-kapat").addEventListener("click", () => kapat(true));
+  if(!play) h.querySelector(".yk-ana").addEventListener("click", async () => {
+    if(kurulumIstegi){
+      kurulumIstegi.prompt();
+      const sonuc = await kurulumIstegi.userChoice.catch(() => null);
+      kurulumIstegi = null;
+      if(sonuc && sonuc.outcome === "accepted") kapat(false);
+    } else if(iosMu()){
+      let i = $(".yukle-ios");
+      if(i){ i.remove(); return; }
+      i = document.createElement("div"); i.className = "yukle-ios"; i.textContent = t("yukle_ios");
+      document.body.appendChild(i);
+    }
+  });
+}
+setTimeout(yukleDugmesiGoster, 6500);     // açılış sahnesi ve dil işaretinden sonra
 
 function dilPenceresiAc(){
   let p = $("#dilPencere");
@@ -1819,8 +1888,19 @@ basligiSigdir();
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(basligiSigdir);
 addEventListener("resize", basligiSigdir);
 if(ACILIS){ const y = paylasilaniBul(ACILIS); if(y){ S.acilan = y; S.ekran = "feed"; } }
+/* Bir yazıdan geri dönen okur: hangi ekrandaysa, hangi bölüme ve nereye kadar inmişse oraya */
+let donus = null;
+try{ donus = JSON.parse(sessionStorage.getItem("ti.donus") || "null"); sessionStorage.removeItem("ti.donus"); }catch(e){}
+if(donus && !ACILIS){
+  S.ekran = donus.ekran || S.ekran; S.kategori = donus.kategori || S.kategori;
+  S.suzgec = donus.suzgec || S.suzgec; S.goster = Math.max(40, donus.goster || 40);
+}
+let okurDokundu = false;
+["touchstart","wheel","keydown"].forEach(ev => addEventListener(ev, () => { okurDokundu = true; }, {once:true, passive:true}));
 ciz();
-cek();
+if(donus && !ACILIS) requestAnimationFrame(() => scrollTo(0, donus.y || 0));
+cek().then(() => { if(donus && !ACILIS && !okurDokundu) scrollTo(0, donus.y || 0); });
+addEventListener("pageshow", e => { if(e.persisted) try{ sessionStorage.removeItem("ti.donus"); }catch(_){} });
 
 /* cevrimdisi acilis ve uygulama paketi icin */
 if("serviceWorker" in navigator && !YEREL){

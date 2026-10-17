@@ -128,6 +128,7 @@ const KAYNAKLAR = [
   { ad:"Kyiv Independent", ulke:"Ukrayna", tur:"ajans", url:"https://kyivindependent.com/news-archive/rss/", yedek:"https://news.google.com/rss/search?q=site:kyivindependent.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
+  { ad:"Project Syndicate", ulke:"Çekya", tur:"dergi", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:project-syndicate.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   // Raporlar ve endeksler (16 Ekim 2026)
   { ad:"Heritage", ulke:"ABD", tur:"kurum", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:heritage.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"World Justice Project", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:worldjusticeproject.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -342,7 +343,20 @@ async function sayfadanGorsel(url) {
   } catch (e) { return ""; }
 }
 
-async function cek(kaynak) {
+/* Google Haberler, art arda gelen isteklerde bir noktadan sonra kapıyı kapatıyor (HTTP 429/503 ya da boş sayfa).
+   Ona giden istekler sıraya girer, aralarında 2 saniye bırakılır; geri çevrilirse 8 saniye sonra bir kez daha denenir. */
+const GN_ARA = 2000;
+let gnSonraki = 0;
+const uyu = ms => new Promise(r => setTimeout(r, ms));
+async function gnSirasi() {
+  const simdi = Date.now(), bekle = Math.max(0, gnSonraki - simdi);
+  gnSonraki = Math.max(simdi, gnSonraki) + GN_ARA;
+  if (bekle) await uyu(bekle);
+}
+
+async function cek(kaynak, deneme = 0) {
+  const gn = kaynak.url.includes("news.google.com");
+  if (gn) await gnSirasi();
   const dur = AbortSignal.timeout(25000);
   const c = await fetch(kaynak.url, {
     signal: dur,
@@ -362,8 +376,18 @@ async function cek(kaynak) {
       "upgrade-insecure-requests": "1"
     }
   });
-  if (!c.ok) throw new Error("HTTP " + c.status);
-  return ayikla(await c.text(), kaynak.ad);
+  if (!c.ok) {
+    if (gn && (c.status === 429 || c.status === 503) && deneme < 1) { await uyu(8000); return cek(kaynak, deneme + 1); }
+    throw new Error("HTTP " + c.status);
+  }
+  const metin = await c.text();
+  try {
+    return ayikla(metin, kaynak.ad);
+  } catch (e) {
+    // Google Haberler besleme yerine "olağandışı trafik" sayfası döndürdüyse bir kez daha dene
+    if (gn && deneme < 1 && !/<rss[\s>]/i.test(metin)) { await uyu(8000); return cek(kaynak, deneme + 1); }
+    throw e;
+  }
 }
 
 /* Kaynağın kendi adresi düşerse (403 vb.) yedek adresi dene */

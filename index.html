@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -305,6 +305,30 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .masthead .bas-dugmeler{display:flex;align-items:center;gap:8px;margin-inline-start:auto;flex:none}
   .masthead .bas-dugmeler > .tema-dugme{margin:0}
   .ileti-dugme{text-decoration:none}
+  .dil-dugme{flex:none;display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 9px 0 7px;border-radius:999px;cursor:pointer;
+    border:1.5px solid var(--gold);background:var(--ink);color:var(--vellum);font:700 12px/1 var(--sans);letter-spacing:.04em}
+  .dil-dugme svg{width:15px;height:15px;flex:none}
+  @keyframes dil-nabiz{0%,100%{box-shadow:0 0 0 0 rgba(63,145,228,0)}50%{box-shadow:0 0 0 7px rgba(63,145,228,.38)}}
+  .dil-dugme.nabiz{animation:dil-nabiz 1.3s ease-in-out 4}
+  .dil-ipucu{position:fixed;z-index:1200;max-width:240px;padding:10px 13px;border-radius:12px;background:#F4EFE3;color:#0B1420;
+    font:700 14px/1.35 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38);cursor:pointer;opacity:0;transform:translateY(-4px);
+    transition:opacity .3s ease,transform .3s ease}
+  .dil-ipucu.acik{opacity:1;transform:none}
+  .dil-ipucu small{display:block;margin-top:2px;font-weight:500;font-size:12px;opacity:.65}
+  .dil-ipucu::before{content:"";position:absolute;top:-6px;right:var(--ok,18px);width:12px;height:12px;background:inherit;
+    transform:rotate(45deg);border-radius:2px}
+  /* Dil penceresi */
+  .dil-pencere{position:fixed;inset:0;z-index:1500;background:rgba(3,8,16,.55);display:flex;align-items:flex-end;justify-content:center}
+  .dil-pencere[hidden]{display:none}
+  .dil-kutu{width:100%;max-width:560px;max-height:74vh;overflow:auto;background:var(--raised);color:var(--vellum);
+    border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 30px rgba(0,0,0,.35)}
+  .dil-bas{font-family:var(--serif);font-size:20px;margin:0 0 12px}
+  .dil-liste{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .dil-liste button{display:flex;align-items:center;gap:9px;text-align:start;padding:11px 12px;border:1px solid var(--rule);
+    border-radius:10px;background:transparent;color:inherit;font:15px var(--sans);cursor:pointer}
+  .dil-liste button b{font-size:11px;letter-spacing:.04em;color:var(--dim);min-width:22px}
+  .dil-liste button.secili{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+  .dil-not{margin:12px 2px 0;font:12.5px/1.5 var(--sans);color:var(--dim)}
   /* Yazının altında site adı; marka bloğu birkaç piksel yukarıda */
   .masthead{padding-top:9px}
   .masthead .marka{display:flex;flex-direction:column;align-items:center;gap:5px}
@@ -328,6 +352,16 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     @keyframes rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
   }
 
+  /* Telefonlar: başlıkta dört düğme sığsın (bu blok sonda durmalı) */
+  @media (max-width:430px){
+    .masthead .bas{gap:7px}
+    .masthead .mark{width:28px;height:36px}
+    .masthead .bas-dugmeler{gap:3px}
+    .masthead .bas-dugmeler > .tema-dugme{width:28px;height:28px}
+    .masthead .bas-dugmeler > .tema-dugme svg{width:15px;height:15px}
+    .masthead .dil-dugme{height:28px;padding:0 8px 0 6px;gap:4px;font-size:11px}
+    .masthead .dil-dugme svg{width:14px;height:14px}
+  }
   /* ---------- Açılış: iki anka, batıdan ve doğudan, Ayasofya'nın üstünde buluşup göğe ---------- */
   #acilis{display:none}
   .acilis-var #acilis{display:block;position:fixed;inset:0;z-index:2000;overflow:hidden;cursor:pointer;
@@ -581,6 +615,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     <div class="bas-dugmeler">
     <button class="tema-dugme ara-dugme" id="aramaAc" aria-label="ara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2L20 20"/></svg></button>
     <a class="tema-dugme ileti-dugme" id="iletisimAc" href="iletisim.html" aria-label="İletişim" title="İletişim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4.5 7.5l7.5 5.5 7.5-5.5"/></svg></a>
+    <button class="dil-dugme" id="dilAc" aria-label="Dil" title="Dil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.5 2.3 3.8 5.2 3.8 8.6s-1.3 6.3-3.8 8.6M12 3.4C9.5 5.7 8.2 8.6 8.2 12s1.3 6.3 3.8 8.6"/></svg><span id="dilKod">TR</span></button>
     <button class="tema-dugme" id="tema" aria-label="açık temaya geç"></button>
     </div>
   </div>
@@ -678,7 +713,8 @@ const SOZLUK = {
     kaynak_acilmadi_aciklama:"Bu kaynağın besleme adresi yanıt vermedi. Nedenini Kaynaklar ekranında görebilirsin.",
     yerel_acildi:"Dosya telefonda yerel açıldı",
     yerel_aciklama:"Tarayıcı, indirilmiş bir dosyanın dışarıdan veri çekmesini güvenlik gereği engelliyor. Uygulamanın çalışması için sayfanın bir adreste yayında olması gerekiyor.",
-    hic_acilmadi:"Kaynaklara ulaşılamadı",
+    hic_acilmadi:"Kaynaklara ulaşılamadı", kategori_bos:"Bu bölümde henüz yazı yok",
+    kategori_bos_aciklama:"Kaynaklar her saat taranıyor; yeni yazılar geldikçe burada görünecek.",
     hic_aciklama:"İnternet bağlantını kontrol edip biraz sonra yeniden dene.",
     yeniden_dene:"Yeniden dene",
     yenile:"yenile", yenileniyor:"yenileniyor…",
@@ -699,7 +735,9 @@ const SOZLUK = {
     tef_yakinda:"İlk yazılar yakında", tef_yakinda_aciklama:"Davetli yazarlarımızın yazıları geldikçe burada yayımlanacak.",
     yukleniyor:"yükleniyor…",
     hakkinda:"Hakkında", iletisim:"İletişim", gizlilik:"Gizlilik",
-    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri",
+    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin",
+    dil_aciklama:"Arayüz ve çeviriler bu dilde. Yazılar orijinal dilinde gelir; “Çevir”e dokununca başlık ve özet bu dile çevrilir.",
+    dil_not:"Türkçe ve İngilizce dışındaki dillerde arayüz makine çevirisiyle gösterilir.",
     ceviri_aciklama:"Yazılar orijinal dilinde gelir. “Çevir”e dokununca başlık ve özet seçtiğin dile çevrilir.",
     az_once:"az önce",
     gozdeler:"Gözdeler", gozdeye_ekle:"Gözdelere ekle", gozdede:"Gözdelerde",
@@ -723,7 +761,8 @@ const SOZLUK = {
     kaynak_acilmadi_aciklama:"This source’s feed did not respond. You can see why on the Sources screen.",
     yerel_acildi:"The file was opened locally",
     yerel_aciklama:"Browsers do not let a downloaded file fetch data from the internet. The app has to be opened from its web address.",
-    hic_acilmadi:"Sources could not be reached",
+    hic_acilmadi:"Sources could not be reached", kategori_bos:"No articles in this section yet",
+    kategori_bos_aciklama:"Sources are scanned every hour; new articles will appear here as they arrive.",
     hic_aciklama:"Check your internet connection and try again in a moment.",
     yeniden_dene:"Try again",
     yenile:"refresh", yenileniyor:"refreshing…",
@@ -744,7 +783,9 @@ const SOZLUK = {
     tef_yakinda:"First pieces coming soon", tef_yakinda_aciklama:"Pieces from our invited writers will be published here as they arrive.",
     yukleniyor:"loading…",
     hakkinda:"About", iletisim:"Contact", gizlilik:"Privacy",
-    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation",
+    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language",
+    dil_aciklama:"The interface and translations use this language. Articles arrive in their original language; tap “translate” to see the headline and summary in it.",
+    dil_not:"In languages other than Turkish and English, the interface is machine-translated.",
     ceviri_aciklama:"Articles arrive in their original language. Tap “translate” to see the headline and summary in the language you choose.",
     az_once:"just now",
     gozdeler:"Favorites", gozdeye_ekle:"Add to favorites", gozdede:"In favorites",
@@ -759,7 +800,7 @@ const SOZLUK = {
 const ULKE_EN = {"ABD":"USA","Kanada":"Canada","İngiltere":"UK","Belçika":"Belgium","Avrupa":"Europe","Almanya":"Germany",
   "İspanya":"Spain","Türkiye":"Türkiye","Rusya":"Russia","Hindistan":"India","Avustralya":"Australia","Katar":"Qatar",
   "Güney Afrika":"South Africa","İsviçre":"Switzerland","Hong Kong":"Hong Kong","Japonya":"Japan","Yafa":"Jaffa",
-  "Fransa":"France","Çin":"China","Venezuela":"Venezuela","Uruguay":"Uruguay","Kolombiya":"Colombia","İran":"Iran","Küba":"Cuba","Brezilya":"Brazil","Meksika":"Mexico","Nijerya":"Nigeria","Mısır":"Egypt","Kenya":"Kenya","Pakistan":"Pakistan","Endonezya":"Indonesia","Güney Kore":"South Korea","Ukrayna":"Ukraine","Fas":"Morocco",
+  "Fransa":"France","Çin":"China","Venezuela":"Venezuela","Uruguay":"Uruguay","Kolombiya":"Colombia","Çekya":"Czechia","İran":"Iran","Küba":"Cuba","Brezilya":"Brazil","Meksika":"Mexico","Nijerya":"Nigeria","Mısır":"Egypt","Kenya":"Kenya","Pakistan":"Pakistan","Endonezya":"Indonesia","Güney Kore":"South Korea","Ukrayna":"Ukraine","Fas":"Morocco",
   "Suudi Arabistan":"Saudi Arabia","Balkanlar":"Balkans","Uluslararası":"International","Küresel":"Global"};
 const NITELIK_EN = {"bağımsız":"independent","üniversite":"university","devlet fonlu":"state-funded","devlet destekli":"state-backed",
   "devlet bağlantılı":"state-linked","devlet":"state","kamu":"public","kamu yayıncısı":"public broadcaster","özel":"private",
@@ -769,9 +810,60 @@ const KAYNAK_EN = {"BBC Dünya":"BBC World","Af Örgütü":"Amnesty Internationa
   "TRT World Rapor":"TRT World Research","ORF Hindistan":"ORF India","SAIIA Güney Afrika":"SAIIA South Africa",
   "ISS Afrika":"ISS Africa","CIPS Kanada":"CIPS Canada","AA Analiz":"AA Analysis"};
 
+/* ---------- Tek dil: arayüz ve çeviri aynı dilde. Türkçe ve İngilizce dışındaki dillerde arayüz,
+   İngilizce metinlerin makine çevirisiyle gösterilir; sonuç telefonda saklanır ---------- */
+const MT_DOKUNMA = new Set(["nav_idrak","nav_tefekkur"]);      // marka adları çevrilmez
+function arayuzKaynagi(){
+  const liste = [];
+  for(const [k,v] of Object.entries(SOZLUK.en)){
+    if(MT_DOKUNMA.has(k)) continue;
+    let m; try{ m = typeof v === "function" ? v("{0}","{1}","{2}") : v; }catch(e){ continue; }
+    if(typeof m !== "string" || !m.trim() || m.includes("\n")) continue;
+    liste.push([k, m]);
+  }
+  return liste;
+}
+const metinOzeti = s => { let h = 5381; for(let i=0;i<s.length;i++) h = ((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); };
+const arayuzSurumu = () => metinOzeti(arayuzKaynagi().map(x=>x[0]+"="+x[1]).join("|"));
+function mtKur(metin){
+  const sonuc = {};
+  for(const [k,m] of Object.entries(metin||{})){
+    const asil = SOZLUK.en[k];
+    if(typeof asil === "function"){
+      let bek = 0; try{ bek = (asil("{0}","{1}","{2}").match(/\{\d\}/g)||[]).length; }catch(e){}
+      if((m.match(/\{\d\}/g)||[]).length === bek) sonuc[k] = (...a) => m.replace(/\{(\d)\}/g, (_,i) => a[+i] ?? "");
+    } else sonuc[k] = m;
+  }
+  return sonuc;
+}
+async function arayuzuHazirla(kod){
+  if(SOZLUK[kod]){ S.arayuzMT = {}; return; }
+  const liste = arayuzKaynagi(), surum = arayuzSurumu();
+  const sakli = yukle("ti.arayuzMT", null);
+  if(sakli && sakli.kod===kod && sakli.surum===surum){ S.arayuzMT = mtKur(sakli.metin); return; }
+  S.arayuzMT = {};
+  const parcalar = []; let p = [], uz = 0;
+  for(const x of liste){ if(uz + x[1].length > 1400 && p.length){ parcalar.push(p); p = []; uz = 0; } p.push(x); uz += x[1].length + 1; }
+  if(p.length) parcalar.push(p);
+  const metin = {};
+  try{
+    for(const parca of parcalar){
+      const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl="
+        + encodeURIComponent(kod) + "&dt=t&q=" + encodeURIComponent(parca.map(x=>x[1]).join("\n")));
+      if(!r.ok) throw new Error("çeviri " + r.status);
+      const j = await r.json();
+      const satir = (j[0]||[]).map(s=>(s&&s[0])||"").join("").split("\n");
+      if(satir.length !== parca.length) continue;       // satırlar kaydıysa bu parça İngilizce kalır
+      parca.forEach((x,i) => { const s = satir[i].trim(); if(s) metin[x[0]] = s; });
+    }
+  }catch(e){ /* çeviri kapısı yanıt vermezse arayüz İngilizce kalır */ }
+  if(S.dil !== kod) return;
+  if(Object.keys(metin).length){ yaz("ti.arayuzMT", {kod, surum, metin}); S.arayuzMT = mtKur(metin); }
+}
+
 const S = {
-  arayuz:    yukle("ti.arayuz", null) || varsayilanArayuz(),
-  ceviriDili:yukle("ti.ceviriDili", null) || varsayilanCeviri(),
+  dil:       yukle("ti.dil", null) || yukle("ti.ceviriDili", null) || "tr",   // ilk açılış her zaman Türkçe
+  arayuz:    "tr", ceviriDili: "tr", arayuzMT: {},      // ikisi de S.dil'den türetilir
   kaynaklar: yukle("ti.kaynaklar6", VARSAYILAN),
   kayitli:   yukle("ti.kayitli", []),
   gozde:     new Set(yukle("ti.gozde", [])),
@@ -787,11 +879,17 @@ const S = {
   bilgi:{},             // kaynak kimligi: ulke, nitelik
   tum:new Map()         // paylasim kodu / kimlik -> yazi (akistaki butun yazilar)
 };
-if(!SOZLUK[S.arayuz]) S.arayuz = "tr";
+if(!CEVIRI_DILLERI.some(([k])=>k===S.dil)) S.dil = "en";
+S.arayuz = S.ceviriDili = S.dil;
+if(!SOZLUK[S.dil]){ const sakli = yukle("ti.arayuzMT", null);
+  if(sakli && sakli.kod===S.dil && sakli.surum===arayuzSurumu()) S.arayuzMT = mtKur(sakli.metin); }
 const ACILIS = new URLSearchParams(location.search).get("y");
 
 function t(k, ...a){
-  const s = (SOZLUK[S.arayuz] && SOZLUK[S.arayuz][k] !== undefined) ? SOZLUK[S.arayuz][k] : (SOZLUK.tr[k] !== undefined ? SOZLUK.tr[k] : k);
+  const s = (SOZLUK[S.arayuz] && SOZLUK[S.arayuz][k] !== undefined) ? SOZLUK[S.arayuz][k]
+          : S.arayuzMT[k] !== undefined ? S.arayuzMT[k]
+          : SOZLUK.en[k] !== undefined ? SOZLUK.en[k]
+          : (SOZLUK.tr[k] !== undefined ? SOZLUK.tr[k] : k);
   return typeof s === "function" ? s(...a) : s;
 }
 const sayi = n => Number(n).toLocaleString(S.arayuz);
@@ -799,11 +897,11 @@ function dilAdi(kod){
   try{ const a = new Intl.DisplayNames([S.arayuz], {type:"language"}).of(kod); if(a) return a.charAt(0).toLocaleUpperCase(S.arayuz)+a.slice(1); }catch(e){}
   return (CEVIRI_DILLERI.find(([k])=>k===kod) || [kod,kod])[1];
 }
-const kaynakAdi = ad => (S.arayuz==="en" && KAYNAK_EN[ad]) || ad;
+const kaynakAdi = ad => (S.arayuz!=="tr" && KAYNAK_EN[ad]) || ad;
 function kimlikYaz(b){
   if(!b) return "";
   const u = b.ulke || "";
-  return S.arayuz==="en" ? (ULKE_EN[u]||u) : u;
+  return S.arayuz!=="tr" ? (ULKE_EN[u]||u) : u;
 }
 
 const $ = s => document.querySelector(s);
@@ -868,7 +966,7 @@ const ETIKETLER = [
   {kod:"savunma", tr:"Savunma",    en:"Defense", k:["savunma","defense","defence","military","askeri","weapon","silah","missile","fuze"]},
   {kod:"afrika",  tr:"Afrika",     en:"Africa",  k:["afrika","africa","sahel","nigeria","nijerya","ethiopia","etiyopya"]}
 ];
-const etiketAdi = e => e[S.arayuz] || e.tr;
+const etiketAdi = e => e[S.arayuz] || (S.arayuz!=="tr" && e.en) || e.tr;
 
 function nezaman(x){
   const d = tarihOku(x); if(!d) return "";
@@ -1141,7 +1239,8 @@ function temaDegistir(){
 
 /* ---------- Arayüz dili ---------- */
 function arayuzuCiz(){
-  document.documentElement.lang = S.arayuz;
+  document.documentElement.lang = S.dil;
+  const dd = $("#dilAc"); if(dd){ $("#dilKod").textContent = S.dil.split("-")[0].toUpperCase(); dd.setAttribute("aria-label", t("dil_sec")); dd.title = t("dil_sec"); }
   document.querySelectorAll("[data-t]").forEach(e=>{ e.textContent = t(e.dataset.t); });
   $("#q").placeholder = t("ara");
   $("#qsil").setAttribute("aria-label", t("aramayi_temizle_aria"));
@@ -1314,6 +1413,14 @@ function cizAkis(){
         <button class="go" data-sifirla="1">${t("aramayi_temizle")}</button></div>`;
       return;
     }
+    // Akış dolu ama seçili bölüm boşsa: bağlantı hatası değil, bölüm henüz boş
+    if(S.kategori!=="hepsi" && S.suzgec==="hepsi" && S.yazilar.length){
+      $("#feed").innerHTML = `<div class="state">
+        <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+        <h3>${t("kategori_bos")}</h3><p>${t("kategori_bos_aciklama")}</p>
+        <button class="go" data-kat="hepsi">${t("tum_akisa_don")}</button></div>`;
+      return;
+    }
     const tekKaynak = S.suzgec!=="hepsi";
     $("#feed").innerHTML = `<div class="state">
       <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
@@ -1363,9 +1470,8 @@ function cizKaynaklar(){
   $("#sources").innerHTML = `
     <div class="ayar">
       <div class="ayar-bas">${t("dil_baslik")}</div>
-      <label class="ayar-satir"><span>${t("arayuz_dili")}</span><select id="secArayuz">${secenek(ARAYUZ_DILLERI, S.arayuz)}</select></label>
-      <label class="ayar-satir"><span>${t("ceviri_dili")}</span><select id="secCeviri">${secenek(CEVIRI_DILLERI, S.ceviriDili)}</select></label>
-      <p class="ayar-not">${t("ceviri_aciklama")}</p>
+      <label class="ayar-satir"><span>${t("dil_etiket")}</span><select id="secDil">${secenek(CEVIRI_DILLERI, S.dil)}</select></label>
+      <p class="ayar-not">${t("dil_aciklama")}</p>
     </div>
     <p class="note" style="padding-top:14px">${S.guncellendi
       ? t("son_tarama", new Date(S.guncellendi).toLocaleString(S.arayuz,{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}))
@@ -1448,14 +1554,7 @@ document.addEventListener("click", e=>{
   }
 });
 document.addEventListener("change", e=>{
-  if(e.target.id==="secArayuz"){
-    S.arayuz = SOZLUK[e.target.value] ? e.target.value : "tr";
-    yaz("ti.arayuz", S.arayuz); arayuzuCiz(); ciz();
-  }
-  if(e.target.id==="secCeviri"){
-    S.ceviriDili = e.target.value;
-    yaz("ti.ceviriDili", S.ceviriDili); ciz();
-  }
+  if(e.target.id==="secDil") dilSec(e.target.value);
 });
 ["feed","tefekkur","saved","sources"].forEach(e=>
   $("#nav-"+e).addEventListener("click",()=>{ S.ekran=e; S.goster=40; ciz(); scrollTo({top:0}); }));
@@ -1481,14 +1580,75 @@ $("#qsil").addEventListener("click", ()=>{
   S.ara=""; S.goster=40; ciz(); $("#q").focus();
 });
 
+/* Telefonu Türkçe olmayan okura, ilk açılışta kendi dilinde tek bir işaret: "dili buradan değiştir" */
+const DIL_IPUCU = {tr:"Dili değiştir", en:"Change language", ku:"Ziman biguherîne", ar:"تغيير اللغة", fa:"تغییر زبان",
+  ur:"زبان تبدیل کریں", az:"Dili dəyiş", kk:"Тілді өзгерту", uz:"Tilni oʻzgartirish", ky:"Тилди өзгөртүү", tk:"Dili üýtget",
+  ru:"Сменить язык", uk:"Змінити мову", de:"Sprache ändern", fr:"Changer de langue", es:"Cambiar idioma", pt:"Mudar idioma",
+  it:"Cambia lingua", nl:"Taal wijzigen", pl:"Zmień język", el:"Αλλαγή γλώσσας", bs:"Promijeni jezik", sq:"Ndrysho gjuhën",
+  ka:"ენის შეცვლა", id:"Ubah bahasa", ms:"Tukar bahasa", hi:"भाषा बदलें", bn:"ভাষা পরিবর্তন করুন", "zh-CN":"更改语言",
+  ja:"言語を変更", ko:"언어 변경", sw:"Badilisha lugha"};
+function dilIpucuGoster(){
+  try{ if(localStorage.getItem("ti.dilIpucu")) return; }catch(e){ return; }
+  const c = cihazDili(), kok = c.startsWith("zh") ? "zh-CN" : c.split("-")[0];
+  if(kok === "tr" || S.dil !== "tr") return;             // Türkçe telefonda ya da dil zaten seçilmişse gerek yok
+  const d = $("#dilAc"); if(!d) return;
+  const r = d.getBoundingClientRect(); if(!r.width) return;
+  const b = document.createElement("div"); b.className = "dil-ipucu"; b.setAttribute("role","status");
+  const yerel = DIL_IPUCU[kok] || DIL_IPUCU.en;
+  b.innerHTML = `🌐 ${kac(yerel)}${yerel !== DIL_IPUCU.en ? `<small>Change language</small>` : ""}`;
+  document.body.appendChild(b);
+  const w = b.offsetWidth, orta = r.left + r.width/2;
+  const sol = Math.max(8, Math.min(innerWidth - w - 8, orta - w + 26));
+  b.style.left = sol + "px"; b.style.top = (r.bottom + 11) + "px";
+  b.style.setProperty("--ok", Math.max(10, sol + w - orta - 6) + "px");
+  requestAnimationFrame(() => b.classList.add("acik"));
+  d.classList.add("nabiz");
+  let kapandi = false;
+  const kapat = () => { if(kapandi) return; kapandi = true; b.remove(); d.classList.remove("nabiz");
+    document.removeEventListener("click", disari, true); };
+  const disari = e => { if(!b.contains(e.target)) kapat(); };
+  b.addEventListener("click", () => { kapat(); dilPenceresiAc(); });
+  setTimeout(() => document.addEventListener("click", disari, true), 0);
+  setTimeout(kapat, 9000);
+  try{ localStorage.setItem("ti.dilIpucu","1"); }catch(e){}
+}
+
+function dilPenceresiAc(){
+  let p = $("#dilPencere");
+  if(!p){ p = document.createElement("div"); p.id = "dilPencere"; p.className = "dil-pencere"; document.body.appendChild(p);
+    p.addEventListener("click", e => { if(e.target === p) dilPenceresiKapat(); }); }
+  p.innerHTML = `<div class="dil-kutu" role="dialog" aria-modal="true" aria-label="${kac(t("dil_sec"))}">
+    <div class="dil-bas">${kac(t("dil_sec"))}</div>
+    <div class="dil-liste">${CEVIRI_DILLERI.map(([k,a]) =>
+      `<button data-dilsec="${k}" lang="${k}"${k===S.dil?' class="secili" aria-current="true"':""}><b>${k.split("-")[0].toUpperCase()}</b>${kac(a)}</button>`).join("")}</div>
+    <p class="dil-not">${kac(t("dil_not"))}</p></div>`;
+  p.hidden = false;
+  p.querySelectorAll("[data-dilsec]").forEach(b => b.addEventListener("click", () => dilSec(b.dataset.dilsec)));
+}
+function dilPenceresiKapat(){ const p = $("#dilPencere"); if(p) p.hidden = true; }
+async function dilSec(kod){
+  if(!CEVIRI_DILLERI.some(([k])=>k===kod)) return;
+  dilPenceresiKapat();
+  S.dil = S.arayuz = S.ceviriDili = kod; yaz("ti.dil", kod);
+  if(!SOZLUK[kod]){ const sakli = yukle("ti.arayuzMT", null);
+    S.arayuzMT = (sakli && sakli.kod===kod && sakli.surum===arayuzSurumu()) ? mtKur(sakli.metin) : {}; }
+  else S.arayuzMT = {};
+  arayuzuCiz(); ciz();
+  if(!SOZLUK[kod] && !Object.keys(S.arayuzMT).length){ await arayuzuHazirla(kod); if(S.dil===kod){ arayuzuCiz(); ciz(); } }
+}
+$("#dilAc").addEventListener("click", dilPenceresiAc);
+addEventListener("keydown", e => { if(e.key==="Escape") dilPenceresiKapat(); });
+
 arayuzuCiz();
 bellektenTopla();
+if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
+  arayuzuHazirla(S.dil).then(() => { arayuzuCiz(); ciz(); });
 
 /* ---------- Açılış: iki anka denizden çıkar, Ayasofya'nın üstünde buluşur, göğe yükselir (4,8 sn: Fetih suresi, 48) ---------- */
 function acilisOynat(){
   const kok = document.documentElement, ac = document.getElementById("acilis");
   if(!ac) return;
-  const bitir = () => { ac.remove(); kok.classList.remove("acilis-var"); };
+  const bitir = () => { ac.remove(); kok.classList.remove("acilis-var"); setTimeout(dilIpucuGoster, 600); };
   if(!kok.classList.contains("acilis-var") || !ac.animate){ bitir(); return; }
   try{ sessionStorage.setItem("ti.acilis","1"); }catch(e){}
   let bitti = false;

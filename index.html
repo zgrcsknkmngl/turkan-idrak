@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -258,6 +258,19 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .tef-giris h3{font-family:var(--serif);font-weight:500;font-size:23px;margin:0 0 8px}
   .tef-giris p{font-family:var(--serif);font-size:15.5px;line-height:1.6;color:var(--ozet);margin:0 0 12px}
   .tef-kart{display:block;padding:19px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit}
+  /* Tefekkür yazısı uygulamanın içinde okunur: başlık, panorama ve kaydırma şeridi yerinde kalır */
+  .tef-oku{padding:18px 0 8px}
+  .tef-geri{background:none;border:0;padding:6px 0;margin:0 0 6px;color:var(--dim);font:500 14px var(--sans);cursor:pointer}
+  .tef-oku .tarih{font:12.5px var(--serif);color:var(--dim);margin:6px 0 10px}
+  .tef-oku h1{font-family:var(--serif);font-weight:500;font-size:clamp(26px,7vw,34px);line-height:1.2;margin:0 0 10px;color:var(--vellum)}
+  .tef-oku .yazar-satir{font:14px/1.5 var(--sans);color:var(--dim);margin:0 0 22px}
+  .tef-oku .yazar-satir strong{font-weight:600;color:var(--ember)}
+  .tef-oku .slogan{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--ozet);margin:0 0 14px}
+  .tef-oku p{font-family:var(--serif);font-size:17.5px;line-height:1.78;color:var(--ozet);margin:0 0 18px}
+  .tef-oku .misra{margin:24px 0;line-height:1.95}
+  .tef-oku .imza{margin:32px 0 10px;text-align:center;letter-spacing:.04em}
+  .tef-oku .imza strong{display:block;font:600 14px var(--sans);letter-spacing:.1em;color:var(--vellum)}
+  .tef-oku .imza em{display:block;margin-top:6px}
   .tef-kart .yz{font-size:11.5px;font-weight:600;letter-spacing:.05em;color:var(--ember)}
   .tef-kart h2{font-family:var(--serif);font-weight:500;font-size:20px;line-height:1.3;margin:6px 0 7px}
   .alt-baglantilar{padding:28px 0 10px;font-size:12.5px;color:var(--sonuk);text-align:center}
@@ -1314,9 +1327,42 @@ async function tefekkuruCek(){
   S.tefekkurYukleniyor = false;
   if(S.ekran==="tefekkur") cizTefekkur();
 }
+S.tefAcik = null; S.tefMetin = {};
+async function tefAc(yol, gecmiseYaz = true){
+  S.tefAcik = yol; S.ekran = "tefekkur";
+  if(gecmiseYaz) try{ history.pushState({tef:yol}, "", "#" + yol.replace(/\.html$/, "")); }catch(e){}
+  ciz(); scrollTo({top:0});
+  if(S.tefMetin[yol] !== undefined) return;
+  try{
+    const c = await fetch(yol, {cache:"no-cache"});
+    if(!c.ok) throw 0;
+    const sayfa = new DOMParser().parseFromString(await c.text(), "text/html");
+    const yazi = sayfa.querySelector("article");
+    S.tefMetin[yol] = yazi ? yazi.innerHTML : null;
+  }catch(e){ S.tefMetin[yol] = null; }
+  if(S.tefAcik === yol && S.ekran === "tefekkur") cizTefekkur();
+}
+function tefKapat(){
+  if(history.state && history.state.tef) history.back();
+  else { S.tefAcik = null; cizTefekkur(); }
+}
+addEventListener("popstate", e => {
+  const yol = e.state && e.state.tef;
+  if(yol) tefAc(yol, false);
+  else if(S.tefAcik){ S.tefAcik = null; if(S.ekran === "tefekkur") cizTefekkur(); }
+});
+
 const tarihYaz = x => { const d=tarihOku(x); return d ? d.toLocaleDateString(S.arayuz,{day:"numeric",month:"long",year:"numeric"}) : ""; };
 const altBaglantilar = () => `<div class="alt-baglantilar"><a href="hakkinda.html">${t("hakkinda")}</a>·<a href="iletisim.html">${t("iletisim")}</a>·<a href="gizlilik.html">${t("gizlilik")}</a></div>`;
 function cizTefekkur(){
+  if(S.tefAcik){
+    const metin = S.tefMetin[S.tefAcik];
+    $("#count").textContent = "";
+    $("#tefekkur").innerHTML = `<div class="tef-oku"><button class="tef-geri" type="button" data-tefgeri="1">← ${t("nav_tefekkur")}</button>${
+      metin === undefined ? `<div class="state"><p>${t("yukleniyor")}</p></div>`
+      : metin === null ? `<div class="state"><p>${t("hic_acilmadi")}</p></div>` : metin}</div>` + altBaglantilar();
+    return;
+  }
   const liste = S.tefekkur || [];
   $("#count").textContent = liste.length ? t("yazi_sayisi", sayi(liste.length)) : "";
   const giris = `<div class="tef-giris"><h3>${t("tef_baslik")}</h3><p>${t("tef_giris")}</p></div>`;
@@ -1586,6 +1632,9 @@ function cizKaynaklar(){
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
+  const tk = e.target.closest("a.tef-kart");
+  if(tk){ e.preventDefault(); tefAc(tk.getAttribute("href")); return; }
+  if(e.target.closest("[data-tefgeri]")){ tefKapat(); return; }
   const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
   if(!h) return;
   if(h.dataset.oku){
@@ -1652,7 +1701,8 @@ document.addEventListener("change", e=>{
   if(e.target.id==="secDil") dilSec(e.target.value);
 });
 ["feed","tefekkur","saved","sources"].forEach(e=>
-  $("#nav-"+e).addEventListener("click",()=>{ S.ekran=e; S.goster=40; ciz(); scrollTo({top:0}); }));
+  $("#nav-"+e).addEventListener("click",()=>{ if(S.tefAcik){ S.tefAcik=null; try{ history.replaceState(null,"",location.pathname+location.search); }catch(_){} }
+    S.ekran=e; S.goster=40; ciz(); scrollTo({top:0}); }));
 
 /* asagi cekip birakinca yenile */
 let cekBas=0, cekAktif=false;
@@ -1925,6 +1975,8 @@ ciz();
 if(donus && !ACILIS) requestAnimationFrame(() => scrollTo(0, donus.y || 0));
 cek().then(() => { if(donus && !ACILIS && !okurDokundu) scrollTo(0, donus.y || 0); });
 addEventListener("pageshow", e => { if(e.persisted) try{ sessionStorage.removeItem("ti.donus"); }catch(_){} });
+/* Doğrudan bir Tefekkür yazısının adresiyle gelinirse (#tefekkur-...) yazı uygulamanın içinde açılır */
+{ const h = location.hash.slice(1); if(/^tefekkur-[\w-]+$/.test(h)) tefAc(h + ".html", false); }
 
 /* cevrimdisi acilis ve uygulama paketi icin */
 if("serviceWorker" in navigator && !YEREL){

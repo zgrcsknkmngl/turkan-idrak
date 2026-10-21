@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -260,6 +260,9 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .tef-kart{display:block;padding:19px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit}
   /* Tefekkür yazısı uygulamanın içinde okunur: başlık, panorama ve kaydırma şeridi yerinde kalır */
   .tef-oku{padding:18px 0 8px}
+  .tef-entry .yazi{cursor:pointer}
+  .tef-oku .tef-acts{margin:4px 0 22px;padding:10px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .tef-oku .tef-metin > .tef-acts:last-child{margin-top:26px}
   .tef-geri{background:none;border:0;padding:6px 0;margin:0 0 6px;color:var(--dim);font:500 14px var(--sans);cursor:pointer}
   .tef-oku .tarih{font:12.5px var(--serif);color:var(--dim);margin:6px 0 10px}
   .tef-oku h1{font-family:var(--serif);font-weight:500;font-size:clamp(26px,7vw,34px);line-height:1.2;margin:0 0 10px;color:var(--vellum)}
@@ -1134,11 +1137,11 @@ function ceviriSakla(id, c){
 /* Çeviriden sonra bütün ekranı yeniden çizmek yerine yalnız o kartın metnini ve düğmelerini değiştir.
    Görsel yeniden yüklenmez, sayfa kıpırdamaz. */
 function kartiYenile(id){
-  const y = [...S.yazilar,...S.kayitli].find(x=>x.id===id);
+  const y = [...S.yazilar,...S.kayitli,...tefOgeleri()].find(x=>x.id===id);
   if(!y) return;
   document.querySelectorAll(`article.entry [data-kay="${id}"]`).forEach(b=>{
     const eski = b.closest("article.entry"); if(!eski) return;
-    const gecici = document.createElement("div"); gecici.innerHTML = kart(y);
+    const gecici = document.createElement("div"); gecici.innerHTML = y.tef ? tefKart(y, false) : kart(y);
     const yeni = gecici.firstElementChild; if(!yeni) return;
     for(const s of [".yazi",".acts"]){ const a=eski.querySelector(s), c=yeni.querySelector(s); if(a&&c) a.innerHTML=c.innerHTML; }
   });
@@ -1154,7 +1157,7 @@ function topluDugmesi(){
 }
 
 async function yaziyiCevir(id){
-  const y = [...S.yazilar,...S.kayitli,S.acilan].filter(Boolean).find(x=>x.id===id);
+  const y = [...S.yazilar,...S.kayitli,S.acilan,...tefOgeleri()].filter(Boolean).find(x=>x.id===id);
   if(!y || !cevrilmeli(y)) return;
   const d = document.querySelector(`[data-cev="${id}"]`);
   if(d){ d.classList.add("busy"); d.lastElementChild.textContent = t("cevriliyor"); }
@@ -1194,7 +1197,7 @@ async function hepsiniCevir(){
 function kaydet(id){
   const i = S.kayitli.findIndex(x=>x.id===id);
   if(i > -1) S.kayitli.splice(i,1);
-  else { const y = S.yazilar.find(x=>x.id===id) || (S.acilan && S.acilan.id===id ? S.acilan : null); if(y) S.kayitli.unshift(y); }
+  else { const y = S.yazilar.find(x=>x.id===id) || (S.acilan && S.acilan.id===id ? S.acilan : null) || tefOgeleri().find(x=>x.id===id); if(y) S.kayitli.unshift(y); }
   if(S.kayitli.length>300) S.kayitli.length=300;
   yaz("ti.kayitli", S.kayitli); ciz();
 }
@@ -1204,17 +1207,19 @@ const kayitliMi = id => S.kayitli.some(x=>x.id===id);
    kaynak oradan okunur. Kart onizlemesi y/<kod>/ sayfasindan gelir. */
 function paylasimAdresi(y){
   const taban = new URL("./", location.href).href.split("?")[0].split("#")[0];
+  if(y.tef) return taban + y.tef;   // Tefekkür: yazının kendi sayfası (önizleme için), açınca uygulamanın içine yönlenir
   return y.pay ? taban+"y/"+y.pay+"/" : taban+"?y="+encodeURIComponent(y.id);
 }
 async function paylas(id, dugme){
-  const y = [...S.yazilar, ...S.kayitli, S.acilan].filter(Boolean).find(x=>x.id===id);
+  const y = [...S.yazilar, ...S.kayitli, S.acilan, ...tefOgeleri()].filter(Boolean).find(x=>x.id===id);
   if(!y) return;
   const c = trOf(y);
   const baslik = c ? c.baslik : y.baslik;
   const adres = paylasimAdresi(y);
   try{
-    if(navigator.share){ await navigator.share({title:baslik, text:baslik+" — "+kaynakAdi(y.kaynak), url:adres}); return; }
-    await navigator.clipboard.writeText(baslik+" — "+kaynakAdi(y.kaynak)+"\n"+adres);
+    const imza = y.tef ? y.yazar + " · Türkan İdrak Tefekkür" : kaynakAdi(y.kaynak);
+    if(navigator.share){ await navigator.share({title:baslik, text:baslik+" — "+imza, url:adres}); return; }
+    await navigator.clipboard.writeText(baslik+" — "+imza+"\n"+adres);
     if(dugme){ const e=dugme.lastElementChild; e.textContent=t("kopyalandi"); setTimeout(()=>e.textContent=t("paylas"),1600); }
   }catch(e){ /* kullanici vazgecti */ }
 }
@@ -1327,9 +1332,81 @@ async function tefekkuruCek(){
   S.tefekkurYukleniyor = false;
   if(S.ekran==="tefekkur") cizTefekkur();
 }
-S.tefAcik = null; S.tefMetin = {};
+S.tefAcik = null; S.tefMetin = {}; S.tefCeviri = {}; S.tefCeviriAcik = false;
+/* Tefekkür yazıları da akıştaki kartlar gibi kaydedilir, çevrilir, paylaşılır.
+   "Kaynak" düğmesi yok: kaynak biziz. Yazılar Türkçe olduğu için Türkçe okura çevir düğmesi gösterilmez. */
+function tefOge(x){
+  const slug = String(x.yol||"").replace(/\.html$/, "");
+  return {id:"tef:"+slug, kaynak:"Tefekkür", baslik:x.baslik||"", ozet:x.ozet||"", yazar:x.yazar||"",
+          gorsel:"", link:x.yol||"", tarih:x.tarih||"", tef:x.yol||""};
+}
+const tefOgeleri = () => (S.tefekkur||[]).map(tefOge);
+const tefCevrilebilir = () => S.ceviriDili !== "tr";
+function tefDugmeleri(y){
+  const k = kayitliMi(y.id);
+  return `<button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${t(k?"kayitli":"kaydet")}</span></button>`
+    + (tefCevrilebilir() ? ceviriDugmesi(y) : "")
+    + `<button class="act" data-pay="${y.id}">${I.pay}<span>${t("paylas")}</span></button>`;
+}
+function tefKart(y, listede){
+  const c = trOf(y);
+  const ust = listede
+    ? `<span class="src">${kac(y.yazar)}</span><span class="when">${kac(tarihYaz(y.tarih))}</span>`
+    : `<span class="src">${kac(t("nav_tefekkur"))}</span><span class="yazar">${kac(y.yazar)}</span><span class="when">${kac(tarihYaz(y.tarih))}</span>`;
+  return `<article class="entry tef-entry"><div class="meta">${ust}</div>
+    <div class="govde"><div class="yazi" data-tefac="${kac(y.tef)}" role="link" tabindex="0">
+      <h2>${kac(c ? c.baslik : y.baslik)}</h2>${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
+      ${(c ? c.ozet : y.ozet) ? `<p class="sum">${kac(c ? c.ozet : y.ozet)}</p>` : ""}
+    </div></div>
+    <div class="acts">${tefDugmeleri(y)}</div></article>`;
+}
+function tefOkuDugmeleri(y){
+  const k = kayitliMi(y.id);
+  const cev = !tefCevrilebilir() ? ""
+    : `<button class="act" data-tefcevir="${kac(y.tef)}">${I.dil}<span>${t(S.tefCeviriAcik ? "orijinal" : "cevir")}</span></button>`;
+  return `<button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${t(k?"kayitli":"kaydet")}</span></button>`
+    + cev + `<button class="act" data-pay="${y.id}">${I.pay}<span>${t("paylas")}</span></button>`;
+}
+/* Yazının tamamını okurun diline çevir: başlık, paragraflar, mısralar satır satır; imzadaki ad olduğu gibi kalır */
+async function tefYaziyiCevir(yol){
+  if(S.tefCeviriAcik){ S.tefCeviriAcik = false; cizTefekkur(); return; }
+  const anahtar = yol + "|" + S.ceviriDili;
+  if(!S.tefCeviri[anahtar]){
+    document.querySelectorAll("[data-tefcevir] span").forEach(s => s.textContent = t("cevriliyor"));
+    try{
+      const kap = document.createElement("div"); kap.innerHTML = S.tefMetin[yol] || "";
+      const isler = [];
+      kap.querySelectorAll("h1, p").forEach(el => {
+        if(el.classList.contains("yazar-satir") || el.classList.contains("tarih")) return;
+        if(el.classList.contains("imza")){ el.querySelectorAll("em").forEach(em => isler.push([em, em.textContent])); return; }
+        if(el.classList.contains("misra")){
+          const satirlar = el.innerHTML.split(/<br\s*\/?>/i).map(s => { const d = document.createElement("div"); d.innerHTML = s; return d.textContent; });
+          const kutu = {el, satirlar, sonuc: []};
+          satirlar.forEach((s, i) => isler.push([kutu, s, i]));
+          return;
+        }
+        isler.push([el, el.textContent]);
+      });
+      for(let i = 0; i < isler.length; i += 3){
+        const grup = isler.slice(i, i+3);
+        const sonuc = await Promise.all(grup.map(([, m]) => cevir(m)));
+        grup.forEach(([hedef, , sira], j) => {
+          if(hedef.satirlar){ hedef.sonuc[sira] = sonuc[j].metin; }
+          else hedef.textContent = sonuc[j].metin;
+        });
+      }
+      isler.forEach(([hedef]) => { if(hedef.satirlar && !hedef.yazildi){ hedef.yazildi = true;
+        hedef.el.innerHTML = hedef.sonuc.map(s => kac(s || "")).join("<br>"); } });
+      S.tefCeviri[anahtar] = kap.innerHTML;
+    }catch(e){
+      document.querySelectorAll("[data-tefcevir] span").forEach(s => s.textContent = t("ceviri_kapali"));
+      return;
+    }
+  }
+  S.tefCeviriAcik = true; cizTefekkur();
+}
 async function tefAc(yol, gecmiseYaz = true){
-  S.tefAcik = yol; S.ekran = "tefekkur";
+  S.tefAcik = yol; S.ekran = "tefekkur"; S.tefCeviriAcik = false;
   if(gecmiseYaz) try{ history.pushState({tef:yol}, "", "#" + yol.replace(/\.html$/, "")); }catch(e){}
   ciz(); scrollTo({top:0});
   if(S.tefMetin[yol] !== undefined) return;
@@ -1357,10 +1434,17 @@ const altBaglantilar = () => `<div class="alt-baglantilar"><a href="hakkinda.htm
 function cizTefekkur(){
   if(S.tefAcik){
     const metin = S.tefMetin[S.tefAcik];
+    const cevrilmis = S.tefCeviriAcik ? S.tefCeviri[S.tefAcik + "|" + S.ceviriDili] : null;
     $("#count").textContent = "";
-    $("#tefekkur").innerHTML = `<div class="tef-oku"><button class="tef-geri" type="button" data-tefgeri="1">← ${t("nav_tefekkur")}</button>${
+    $("#tefekkur").innerHTML = `<div class="tef-oku"><button class="tef-geri" type="button" data-tefgeri="1">← ${t("nav_tefekkur")}</button><div class="tef-metin">${
       metin === undefined ? `<div class="state"><p>${t("yukleniyor")}</p></div>`
-      : metin === null ? `<div class="state"><p>${t("hic_acilmadi")}</p></div>` : metin}</div>` + altBaglantilar();
+      : metin === null ? `<div class="state"><p>${t("hic_acilmadi")}</p></div>` : (cevrilmis || metin)}</div></div>` + altBaglantilar();
+    if(metin){
+      const y = tefOgeleri().find(o => o.tef === S.tefAcik) || tefOge({yol:S.tefAcik});
+      const cubuk = () => { const d = document.createElement("div"); d.className = "acts tef-acts"; d.innerHTML = tefOkuDugmeleri(y); return d; };
+      const ys = $("#tefekkur .tef-metin .yazar-satir"); if(ys) ys.after(cubuk());
+      $("#tefekkur .tef-metin").append(cubuk());
+    }
     return;
   }
   const liste = S.tefekkur || [];
@@ -1369,9 +1453,7 @@ function cizTefekkur(){
   const govde = S.tefekkur===null
     ? `<div class="state"><p>${t("yukleniyor")}</p></div>`
     : liste.length
-      ? liste.map(x=>`<a class="tef-kart" href="${kac(x.yol||"#")}">
-          <div class="yz">${kac(x.yazar||"")}${x.tarih ? " · "+kac(tarihYaz(x.tarih)) : ""}</div>
-          <h2>${kac(x.baslik||"")}</h2>${x.ozet ? `<p class="sum">${kac(x.ozet)}</p>` : ""}</a>`).join("")
+      ? liste.map(x => tefKart(tefOge(x), true)).join("")
       : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
           <h3>${t("tef_yakinda")}</h3><p>${t("tef_yakinda_aciklama")}</p></div>`;
   $("#tefekkur").innerHTML = giris + govde + altBaglantilar();
@@ -1585,7 +1667,7 @@ function cizAkis(){
 
 function cizKayitli(){
   $("#count").textContent = S.kayitli.length ? t("kayit_sayisi", sayi(S.kayitli.length)) : "";
-  $("#saved").innerHTML = (S.kayitli.length ? S.kayitli.map(kart).join("")
+  $("#saved").innerHTML = (S.kayitli.length ? S.kayitli.map(y => y.tef ? tefKart(y, false) : kart(y)).join("")
     : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
        <h3>${t("kayit_yok")}</h3>
        <p>${t("kayit_yok_aciklama")}</p>
@@ -1632,8 +1714,10 @@ function cizKaynaklar(){
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click", e=>{
-  const tk = e.target.closest("a.tef-kart");
-  if(tk){ e.preventDefault(); tefAc(tk.getAttribute("href")); return; }
+  const ta = e.target.closest("[data-tefac]");
+  if(ta){ tefAc(ta.dataset.tefac); return; }
+  const tc = e.target.closest("[data-tefcevir]");
+  if(tc){ tefYaziyiCevir(tc.dataset.tefcevir); return; }
   if(e.target.closest("[data-tefgeri]")){ tefKapat(); return; }
   const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
   if(!h) return;

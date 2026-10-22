@@ -571,11 +571,11 @@ const SOZLUK = {
     hic_aciklama:"İnternet bağlantını kontrol edip biraz sonra yeniden dene.",
     yeniden_dene:"Yeniden dene",
     yenile:"yenile", yenileniyor:"yenileniyor…",
-    hepsini_cevir:n=>`hepsini çevir (${n})`, cevriliyor_n:n=>`çevriliyor… ${n}`,
+    hepsini_cevir:n=>`hepsini çevir (${n})`, ceviri_acik:"çeviri açık ✓ · özgün metinlere dön", cevriliyor_n:n=>`çevriliyor… ${n}`,
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
     kaydet:"kaydet", kayitli:"kayıtlı", cevir:"çevir", cevriliyor:"çevriliyor…", ceviri_kapali:"çeviri kapalı",
-    orijinal:"orijinali", kaynak:"kaynak", paylas:"paylaş", kopyalandi:"kopyalandı",
+    orijinal:"özgün metin", kaynak:"kaynak", paylas:"paylaş", kopyalandi:"kopyalandı",
     kayit_yok:"Henüz kayıt yok",
     kayit_yok_aciklama:"İdrak’taki bir yazının altındaki <strong>kaydet</strong>’e dokun, burada birikir.",
     idrake_don:"İdrak’a dön",
@@ -592,9 +592,9 @@ const SOZLUK = {
     yukle_ios:"Safari'de alttaki Paylaş simgesine (□↑) dokun, ardından “Ana Ekrana Ekle”yi seç.", dil_ara:"Dil ara…", dil_bulunamadi:"Bu adla bir dil yok.",
     grup_turk:"Türk dünyası", grup_ortadogu:"Orta Doğu ve Kafkasya", grup_guneyasya:"Güney Asya", grup_asya:"Asya",
     grup_avrupa:"Avrupa", grup_afrika:"Afrika",
-    dil_aciklama:"Arayüz ve çeviriler bu dilde. Yazılar orijinal dilinde gelir; “Çevir”e dokununca başlık ve özet bu dile çevrilir.",
+    dil_aciklama:"Arayüz ve çeviriler bu dilde. Yazılar özgün dilinde gelir; “Çevir”e dokununca başlık ve özet bu dile çevrilir.",
     dil_not:"Türkçe ve İngilizce dışındaki dillerde arayüz makine çevirisiyle gösterilir.",
-    ceviri_aciklama:"Yazılar orijinal dilinde gelir. “Çevir”e dokununca başlık ve özet seçtiğin dile çevrilir.",
+    ceviri_aciklama:"Yazılar özgün dilinde gelir. “Çevir”e dokununca başlık ve özet seçtiğin dile çevrilir.",
     az_once:"az önce",
     gozdeler:"Gözdeler", gozdeye_ekle:"Gözdelere ekle", gozdede:"Gözdelerde",
     gozde_yok:"Henüz gözde kaynağın yok",
@@ -622,7 +622,7 @@ const SOZLUK = {
     hic_aciklama:"Check your internet connection and try again in a moment.",
     yeniden_dene:"Try again",
     yenile:"refresh", yenileniyor:"refreshing…",
-    hepsini_cevir:n=>`translate all (${n})`, cevriliyor_n:n=>`translating… ${n}`,
+    hepsini_cevir:n=>`translate all (${n})`, ceviri_acik:"translation on ✓ · show originals", cevriliyor_n:n=>`translating… ${n}`,
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
     kaydet:"save", kayitli:"saved", cevir:"translate", cevriliyor:"translating…", ceviri_kapali:"translation unavailable",
@@ -952,6 +952,8 @@ async function cek(){
 /* ---------- Çeviri: okurun seçtiği dile, yalnızca istenince ---------- */
 const trOf = y => { const c = S.ceviri[y.id]; return (c && (c.dil||"tr")===S.ceviriDili && !c.ayni) ? c : null; };
 const cevrilmeli = y => { const c = S.ceviri[y.id]; return !(c && (c.dil||"tr")===S.ceviriDili); };
+S.orjIstek = new Set();   // bu oturumda okurun tek tek "orijinali" dediği yazılar: toplu ve kendiliğinden çeviri bunlara dokunmaz
+const topluCevrilmeli = y => cevrilmeli(y) && !S.orjIstek.has(y.id);
 
 async function cevir(m){
   if(!m) return {metin:"", dil:""};
@@ -987,13 +989,17 @@ const ekrandakiler = () => [...document.querySelectorAll("#feed article.entry [d
   .map(b=>S.yazilar.find(y=>y.id===b.dataset.kay)).filter(Boolean);
 function topluDugmesi(){
   const d = document.querySelector("[data-toplu]"); if(!d) return;
-  const kalan = ekrandakiler().filter(cevrilmeli).length;
+  const kalan = ekrandakiler().filter(topluCevrilmeli).length;
   if(S.topluCeviri){ d.disabled = true; d.textContent = t("cevriliyor_n", S.topluKalan||0); }
-  else if(!kalan){ d.remove(); }
+  else if(!kalan){
+    if(ekrandakiler().some(y => trOf(y))){ d.removeAttribute("data-toplu"); d.dataset.orjToplu = "1"; d.disabled = false; d.textContent = t("ceviri_acik"); }
+    else d.remove();
+  }
   else { d.disabled = false; d.textContent = t("hepsini_cevir", sayi(kalan)); }
 }
 
 async function yaziyiCevir(id){
+  S.orjIstek.delete(id);
   const y = [...S.yazilar,...S.kayitli,S.acilan,...tefOgeleri()].filter(Boolean).find(x=>x.id===id);
   if(!y || !cevrilmeli(y)) return;
   const d = document.querySelector(`[data-cev="${id}"]`);
@@ -1007,14 +1013,21 @@ async function yaziyiCevir(id){
   }
 }
 function orijinaliGoster(id){
+  S.orjIstek.add(id);
   delete S.ceviri[id]; yaz("ti.ceviri", S.ceviri);
   if(S.acilan && S.acilan.id===id) ciz(); else { kartiYenile(id); topluDugmesi(); }
+}
+
+function orijinallereDon(){
+  S.otoCeviri = false;
+  ekrandakiler().forEach(y => { const c = S.ceviri[y.id]; if(c && (c.dil||"tr") === S.ceviriDili) delete S.ceviri[y.id]; });
+  yaz("ti.ceviri", S.ceviri); ciz();
 }
 
 async function hepsiniCevir(){
   if(S.topluCeviri) return;
   S.otoCeviri = true;                       // bu oturumda yeni görünen yazılar da çevrilsin
-  const liste = ekrandakiler().filter(cevrilmeli);
+  const liste = ekrandakiler().filter(topluCevrilmeli);
   if(!liste.length){ topluDugmesi(); return; }
   S.topluCeviri = true; S.topluKalan = liste.length; topluDugmesi();
   for(let i=0; i<liste.length; i+=3){
@@ -1482,11 +1495,13 @@ function cizAkis(){
     return;
   }
   const parca = liste.slice(0, S.goster);
-  const cevrilmemis = parca.filter(cevrilmeli).length;
+  const cevrilmemis = parca.filter(topluCevrilmeli).length;
+  const cevrilmis = parca.filter(y => trOf(y)).length;
   const cubuk = `<div class="cubuk">
       <button class="mini" data-yeni="1"${S.yukleniyor?" disabled":""}>${t(S.yukleniyor?"yenileniyor":"yenile")}</button>
       ${cevrilmemis ? `<button class="mini" data-toplu="1"${S.topluCeviri?" disabled":""}>${
-          S.topluCeviri ? t("cevriliyor_n", S.topluKalan||0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>` : ""}
+          S.topluCeviri ? t("cevriliyor_n", S.topluKalan||0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>`
+        : (cevrilmis ? `<button class="mini" data-orj-toplu="1">${t("ceviri_acik")}</button>` : "")}
       <button class="mini${S.gozdeFiltre?" secili":""}" data-gozde-filtre="1" aria-pressed="${S.gozdeFiltre}">★ ${t("gozdeler")}${S.gozde.size ? " ("+sayi(S.gozde.size)+")" : ""}</button>
       ${S.suzgec!=="hepsi" ? `<button class="mini${S.gozde.has(S.suzgec)?" secili":""}" data-gozde-ekle="${kac(S.suzgec)}">${S.gozde.has(S.suzgec) ? "★ "+t("gozdede") : "☆ "+t("gozdeye_ekle")}</button>` : ""}
       ${S.dolu ? `<span class="uyari">${t("depo_doldu")}</span>` : ""}
@@ -1553,7 +1568,7 @@ document.addEventListener("click", e=>{
   const tc = e.target.closest("[data-tefcevir]");
   if(tc){ tefYaziyiCevir(tc.dataset.tefcevir); return; }
   if(e.target.closest("[data-tefgeri]")){ tefKapat(); return; }
-  const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
+  const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-orj-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
   if(!h) return;
   if(h.dataset.oku){
     okunduIsaretle(h.dataset.oku); const en=h.closest(".entry"); if(en) en.classList.add("okundu");
@@ -1588,6 +1603,7 @@ document.addEventListener("click", e=>{
   if(h.dataset.orj) return orijinaliGoster(h.dataset.orj);
   if(h.dataset.yeni) return cek();
   if(h.dataset.toplu) return hepsiniCevir();
+  if(h.dataset.orjToplu) return orijinallereDon();
   if(h.dataset.daha){ S.goster+=40; cizAkis(); return; }
   if(h.dataset.etiket){
     S.etiket = S.etiket===h.dataset.etiket ? "" : h.dataset.etiket;

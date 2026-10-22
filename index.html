@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -398,6 +398,16 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   }
   /* ---------- Açılış: iki anka, batıdan ve doğudan, Ayasofya'nın üstünde buluşup göğe ---------- */
   #acilis{display:none}
+  /* Video açılışı: koyu lacivert zeminde, yatay video ortada ve kırpılmadan */
+  #acilisVideo{position:fixed;inset:0;z-index:2001;background:#0a1128;display:flex;align-items:center;justify-content:center}
+  #acilisVideo video{width:100%;height:100%;object-fit:contain;background:#0a1128}
+  #acilisVideo .av-dugme{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);display:flex;align-items:center;gap:8px;
+    padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.12);color:#fff;
+    font:600 15px var(--sans,system-ui);letter-spacing:.02em;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    cursor:pointer;opacity:0;pointer-events:none;transition:opacity .45s ease}
+  #acilisVideo .av-dugme.gorunur{opacity:1;pointer-events:auto}
+  #acilisVideo .av-atla{right:18px}
+  #acilisVideo .av-ses{left:18px;padding:10px 14px}
   .acilis-var #acilis{display:block;position:fixed;inset:0;z-index:2000;overflow:hidden;cursor:pointer;
     --ust:min(calc(66% - 12.4vw), calc(95% - 24.8vw)); --alt:calc(var(--ust) + 24.8vw); --kus:min(24vw,150px);
     background:linear-gradient(180deg,#040B19 0%,#0B2550 calc(var(--ust) * .55),#16417A var(--ust),#313A4C var(--alt),#121826 100%)}
@@ -789,7 +799,7 @@ const SOZLUK = {
     tef_yakinda:"İlk yazılar yakında", tef_yakinda_aciklama:"Davetli yazarlarımızın yazıları geldikçe burada yayımlanacak.",
     yukleniyor:"yükleniyor…",
     hakkinda:"Hakkında", iletisim:"İletişim", gizlilik:"Gizlilik",
-    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin", yukle:"Uygulamayı yükle", yukle_kapat:"Kapat",
+    dil_baslik:"Dil", arayuz_dili:"Arayüz", ceviri_dili:"Çeviri", dil_etiket:"Dil", dil_sec:"Dil seçin", atla:"Atla", ses_ac:"Sesi aç", yukle:"Uygulamayı yükle", yukle_kapat:"Kapat",
     yukle_ios:"Safari'de alttaki Paylaş simgesine (□↑) dokun, ardından “Ana Ekrana Ekle”yi seç.", dil_ara:"Dil ara…", dil_bulunamadi:"Bu adla bir dil yok.",
     grup_turk:"Türk dünyası", grup_ortadogu:"Orta Doğu ve Kafkasya", grup_guneyasya:"Güney Asya", grup_asya:"Asya",
     grup_avrupa:"Avrupa", grup_afrika:"Afrika",
@@ -840,7 +850,7 @@ const SOZLUK = {
     tef_yakinda:"First pieces coming soon", tef_yakinda_aciklama:"Pieces from our invited writers will be published here as they arrive.",
     yukleniyor:"loading…",
     hakkinda:"About", iletisim:"Contact", gizlilik:"Privacy",
-    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language", yukle:"Install the app", yukle_kapat:"Close",
+    dil_baslik:"Language", arayuz_dili:"Interface", ceviri_dili:"Translation", dil_etiket:"Language", dil_sec:"Choose language", atla:"Skip", ses_ac:"Turn sound on", yukle:"Install the app", yukle_kapat:"Close",
     yukle_ios:"In Safari, tap the Share icon (□↑) at the bottom, then choose “Add to Home Screen”.", dil_ara:"Search languages…", dil_bulunamadi:"No language by that name.",
     grup_turk:"Turkic world", grup_ortadogu:"Middle East & Caucasus", grup_guneyasya:"South Asia", grup_asya:"Asia",
     grup_avrupa:"Europe", grup_afrika:"Africa",
@@ -1938,12 +1948,65 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
   arayuzuHazirla(S.dil).then(() => { arayuzuCiz(); ciz(); });
 
 /* ---------- Açılış: iki anka denizden çıkar, Ayasofya'nın üstünde buluşur, göğe yükselir (4,8 sn: Fetih suresi, 48) ---------- */
+/* ---------- Video açılışı (acilis.mp4, 19 sn; dik ekranda varsa acilis-dikey.mp4) ----------
+   Günün ilk açılışında video baştan oynar, "Atla" 4 sn sonra belirir.
+   Gün içindeki sonraki açılışlarda "Atla" baştan hazırdır. Video bitince yumuşakça uygulamaya geçer.
+   Video yoksa, açılmazsa ya da 3,5 sn içinde başlamazsa (yavaş bağlantı) kısa ankalı sahne oynar. */
+const INTRO_VIDEO = "acilis.mp4";
+function videoAcilis(ac, bitir, yedek){
+  const bugun = new Date().toLocaleDateString("sv");          // yerel gün, YYYY-AA-GG
+  let ilkBugun = true; try{ ilkBugun = localStorage.getItem("ti.introGun") !== bugun; }catch(e){}
+  const k = document.createElement("div"); k.id = "acilisVideo";
+  k.innerHTML = `<video playsinline preload="auto" aria-hidden="true"></video>
+    <button class="av-dugme av-atla" type="button">${kac(t("atla"))} →</button>
+    <button class="av-dugme av-ses" type="button" aria-label="${kac(t("ses_ac"))}">🔇 ${kac(t("ses_ac"))}</button>`;
+  document.body.appendChild(k);
+  ac.style.visibility = "hidden";
+  const v = k.querySelector("video"), atla = k.querySelector(".av-atla"), ses = k.querySelector(".av-ses");
+  let bitti = false, basladi = false;
+  const kapat = sure => {
+    if(bitti) return; bitti = true;
+    try{ v.pause(); }catch(e){}
+    k.animate([{opacity:1},{opacity:0}], {duration:sure, easing:"ease-in", fill:"forwards"}).finished.then(() => { k.remove(); bitir(); });
+  };
+  const yedegeGec = () => {
+    if(basladi || bitti) return; bitti = true;
+    try{ v.pause(); v.removeAttribute("src"); v.load(); }catch(e){}
+    k.remove(); ac.style.visibility = ""; yedek();
+  };
+  atla.addEventListener("click", () => kapat(320));
+  ses.addEventListener("click", () => { v.muted = false; v.volume = 1; ses.classList.remove("gorunur"); });
+  v.addEventListener("playing", () => {
+    if(basladi) return; basladi = true;
+    try{ localStorage.setItem("ti.introGun", bugun); }catch(e){}
+    setTimeout(() => atla.classList.add("gorunur"), ilkBugun ? 4000 : 0);
+  });
+  v.addEventListener("ended", () => kapat(750));
+  const adaylar = innerHeight > innerWidth ? ["acilis-dikey.mp4", INTRO_VIDEO] : [INTRO_VIDEO];
+  v.addEventListener("error", () => {                       // bu dosya yoksa sıradakini dene
+    adaylar.shift();
+    if(adaylar.length && !basladi && !bitti){ v.src = adaylar[0]; v.play().catch(() => { v.muted = true; v.play().catch(()=>{}); }); }
+    else yedegeGec();
+  });
+  setTimeout(yedegeGec, 4000);
+  v.src = adaylar[0];
+  v.muted = false;
+  const oynat = v.play();
+  if(oynat && oynat.catch) oynat.catch(() => {           // tarayıcı sesli otomatik oynatmaya izin vermediyse: sessiz başla
+    v.muted = true;
+    v.play().then(() => ses.classList.add("gorunur")).catch(yedegeGec);
+  });
+}
+
 function acilisOynat(){
   const kok = document.documentElement, ac = document.getElementById("acilis");
   if(!ac) return;
   const bitir = () => { ac.remove(); kok.classList.remove("acilis-var"); setTimeout(dilIpucuGoster, 600); };
   if(!kok.classList.contains("acilis-var") || !ac.animate){ bitir(); return; }
   try{ sessionStorage.setItem("ti.acilis","1"); }catch(e){}
+  videoAcilis(ac, bitir, kisaSahne);
+
+  function kisaSahne(){
   let bitti = false;
   ac.addEventListener("click", () => {             // dokununca hemen geç
     if(bitti) return; bitti = true;
@@ -2030,6 +2093,7 @@ function acilisOynat(){
       {duration:z(450), delay:z(2720), easing:"ease-out", fill:"forwards"});
     ac.animate([{opacity:1},{opacity:0}], {duration:z(450), delay:z(3250), easing:"ease-in", fill:"forwards"})
       .finished.then(() => { if(!bitti){ bitti = true; bitir(); } });
+  }
   }
 }
 acilisOynat();

@@ -27,6 +27,7 @@ self.addEventListener("fetch", e => {
   if (istek.method !== "GET") return;
   const adres = new URL(istek.url);
   if (adres.origin !== self.location.origin) return;   // yayıncı görselleri, çeviri, yazı tipleri: dokunma
+  if (/\.mp4$/i.test(adres.pathname)) return;           // açılış videosu: tarayıcının kendi önbelleği yönetsin
 
   e.respondWith((async () => {
     try {

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Açılış videosu · temiz kopya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;background:#0a1128;color:#F4EFE3;font:16px/1.5 Inter,system-ui,sans-serif;display:flex;justify-content:center}
+  main{width:100%;max-width:520px;padding:28px 20px 48px;box-sizing:border-box}
+  h1{font:600 24px/1.25 Newsreader,Georgia,serif;margin:0 0 6px}
+  p{color:#BCC8D6;margin:0 0 18px}
+  button{display:block;width:100%;margin:10px 0;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.25);
+    background:#13224a;color:#fff;font:600 16px Inter,system-ui,sans-serif;cursor:pointer}
+  button:disabled{opacity:.45;cursor:default}
+  #durum{min-height:24px;color:#E6C46B;font-weight:500;margin:14px 0}
+  #onizleme{display:block;width:100%;height:auto;border-radius:12px;background:#000;margin-top:8px}
+  .indir{display:block;text-align:center;margin:12px 0;padding:13px;border-radius:14px;background:#E6C46B;color:#0a1128;font-weight:600;text-decoration:none}
+  #v{display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>Açılış videosu · temiz kopya</h1>
+  <p>Videoyu, sonunda beliren "Türkan İdrak Tefekkür" yazısıyla birlikte kaydeder. Her kopya yaklaşık 21 saniye sürer; bu sürede ekranı açık tutun, başka uygulamaya geçmeyin.</p>
+  <button id="yatay" type="button">Yatay kopya hazırla (16:9)</button>
+  <button id="dikey" type="button">Dikey kopya hazırla (9:16)</button>
+  <div id="durum"></div>
+  <canvas id="onizleme" width="640" height="360"></canvas>
+  <div id="baglantilar"></div>
+  <video id="v" src="acilis.mp4" playsinline preload="auto"></video>
+</main>
+<script>
+"use strict";
+/* Açılış videosunu, uygulamadaki kapanış yazısıyla birlikte kaydeder (yatay ve dikey).
+   Yazı, uygulamadakiyle aynı zamanlamada (16,3. saniye) ve aynı renklerle tuvale çizilir. */
+const v = document.getElementById("v");
+const tuval = document.getElementById("onizleme"), g = tuval.getContext("2d");
+const kucuk = document.createElement("canvas"), gk = kucuk.getContext("2d");
+const durum = document.getElementById("durum"), baglantilar = document.getElementById("baglantilar");
+const dugmeler = [...document.querySelectorAll("button")];
+let sesBaglami = null, sesHedefi = null;
+
+function sesHazirla(){
+  if(sesBaglami) return;
+  sesBaglami = new (window.AudioContext || window.webkitAudioContext)();
+  const kaynak = sesBaglami.createMediaElementSource(v);
+  sesHedefi = sesBaglami.createMediaStreamDestination();
+  kaynak.connect(sesHedefi);
+  kaynak.connect(sesBaglami.destination);          // kaydederken ses hoparlörden de duyulsun
+}
+function bicimSec(){
+  const adaylar = ["video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
+  return adaylar.find(b => window.MediaRecorder && MediaRecorder.isTypeSupported(b)) || "";
+}
+const yumusat = x => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+
+/* Kapanış yazısı: video alanının %55 yüksekliğinde, hilal ile silüet arasındaki boş gökte */
+function yaziCiz(bx, by, bw, bh, t){
+  const a1 = yumusat((t - 16.3) / 1.1), a2 = yumusat((t - 16.65) / 1.0);
+  if(a1 <= 0) return;
+  const boy = bw * 0.07, alanBoy = bw * 0.029, bosluk = bw * 0.013;
+  const parcalar = [["Türkan ", "#F4EFE3"], ["İdrak ", "#8CC6FF"], ["Tefekkür", "#FF6166"]];
+  g.save();
+  g.font = `600 ${boy}px Newsreader, Georgia, serif`;
+  g.textBaseline = "alphabetic";
+  const genislik = parcalar.reduce((s, [m]) => s + g.measureText(m).width, 0);
+  const blokYuk = boy * 0.95 + bosluk + alanBoy;
+  const satirY = by + bh * 0.55 - blokYuk / 2 + boy * 0.8 + (1 - a1) * bw * 0.006;
+  let x = bx + (bw - genislik) / 2;
+  g.globalAlpha = a1;
+  g.filter = a1 < 1 ? `blur(${((1 - a1) * bw * 0.004).toFixed(1)}px)` : "none";
+  g.shadowColor = "rgba(8,14,34,.85)"; g.shadowBlur = bw * 0.012;
+  for(const [m, renk] of parcalar){ g.fillStyle = renk; g.fillText(m, x, satirY); x += g.measureText(m).width; }
+  g.filter = "none";
+  if(a2 > 0){
+    g.globalAlpha = a2;
+    g.font = `500 ${alanBoy}px Inter, system-ui, sans-serif`;
+    let aralik = 0;
+    if("letterSpacing" in g){ aralik = alanBoy * 0.12; g.letterSpacing = aralik + "px"; }
+    const m = "turkanidrak.com", w = g.measureText(m).width - aralik;
+    g.fillStyle = "#E6C46B"; g.shadowBlur = bw * 0.009;
+    g.fillText(m, bx + (bw - w) / 2, satirY + bosluk + alanBoy + (1 - a2) * bw * 0.005);
+  }
+  g.restore();
+}
+
+/* Bir kare: yatayda video tam kare; dikeyde videonun bulanık kopyası zeminde, video ortada */
+function kareCiz(dikey, t, karartma){
+  const W = tuval.width, H = tuval.height, vw = v.videoWidth || 16, vh = v.videoHeight || 9;
+  g.save();
+  g.fillStyle = "#0a1128"; g.fillRect(0, 0, W, H);
+  if(dikey){
+    const o = Math.max(kucuk.width / vw, kucuk.height / vh), sw = kucuk.width / o, sh = kucuk.height / o;
+    gk.drawImage(v, (vw - sw) / 2, (vh - sh) / 2, sw, sh, 0, 0, kucuk.width, kucuk.height);
+    g.filter = `blur(${Math.round(W * 0.02)}px) brightness(0.62) saturate(1.3)`;
+    g.drawImage(kucuk, -W * 0.08, -H * 0.08, W * 1.16, H * 1.16);
+    g.filter = "none";
+    const bw = W, bh = W * 9 / 16, by = (H - bh) / 2;
+    g.shadowColor = "rgba(10,17,40,.5)"; g.shadowBlur = W * 0.06;
+    g.fillStyle = "#0a1128"; g.fillRect(0, by, bw, bh);
+    g.shadowBlur = 0;
+    g.drawImage(v, 0, by, bw, bh);
+    yaziCiz(0, by, bw, bh, t);
+  } else {
+    g.drawImage(v, 0, 0, W, H);
+    yaziCiz(0, 0, W, H, t);
+  }
+  if(karartma > 0){ g.globalAlpha = Math.min(1, karartma); g.fillStyle = "#0a1128"; g.fillRect(0, 0, W, H); }
+  g.restore();
+}
+
+async function kaydet(dikey){
+  dugmeler.forEach(b => b.disabled = true);
+  let kilit = null;
+  try{
+    sesHazirla(); await sesBaglami.resume();
+    durum.textContent = "Hazırlanıyor…";
+    try{ await Promise.all([document.fonts.load("600 64px Newsreader"), document.fonts.load("500 24px Inter")]); }catch(e){}
+    if(v.readyState < 1) await new Promise((tamam, olmadi) => {
+      v.addEventListener("loadedmetadata", tamam, {once:true});
+      v.addEventListener("error", () => olmadi(new Error("video açılamadı")), {once:true});
+    });
+    const vw = v.videoWidth || 1280, vh = v.videoHeight || 720;
+    if(dikey){ tuval.width = 1080; tuval.height = 1920; kucuk.width = 72; kucuk.height = 128; }
+    else { tuval.width = vw; tuval.height = vh; }
+    const bicim = bicimSec();
+    if(!bicim) throw new Error("bu tarayıcı video kaydedemiyor");
+    const akis = new MediaStream([...tuval.captureStream(30).getVideoTracks(), ...sesHedefi.stream.getAudioTracks()]);
+    const kayit = new MediaRecorder(akis, {mimeType: bicim, videoBitsPerSecond: dikey ? 10e6 : 8e6, audioBitsPerSecond: 160e3});
+    const parcalar = [];
+    kayit.ondataavailable = e => { if(e.data && e.data.size) parcalar.push(e.data); };
+    const durdu = new Promise(tamam => kayit.onstop = tamam);
+    try{ if(navigator.wakeLock) kilit = await navigator.wakeLock.request("screen"); }catch(e){}
+
+    v.pause(); v.currentTime = 0; v.muted = false;
+    await new Promise(tamam => { if(v.readyState >= 2 && v.currentTime === 0) tamam(); else v.addEventListener("seeked", tamam, {once:true}); });
+    kareCiz(dikey, 0, 0);
+    kayit.start(250);
+    await v.play();
+    await new Promise(tamam => {
+      let sonBas = null;
+      const dongu = () => {
+        const sure = v.duration || 19;
+        if(!v.ended){
+          kareCiz(dikey, v.currentTime, 0);
+          durum.textContent = `Kaydediliyor… ${Math.floor(v.currentTime)} / ${Math.round(sure)} sn`;
+          requestAnimationFrame(dongu); return;
+        }
+        if(sonBas === null) sonBas = performance.now();
+        const gecen = (performance.now() - sonBas) / 1000;           // son kare yazıyla 1,2 sn kalır, 0,8 sn'de laciverte söner
+        kareCiz(dikey, sure + gecen, (gecen - 1.2) / 0.8);
+        if(gecen < 2.1) requestAnimationFrame(dongu); else tamam();
+      };
+      requestAnimationFrame(dongu);
+    });
+    kayit.stop(); await durdu;
+
+    const uzanti = bicim.startsWith("video/mp4") ? "mp4" : "webm";
+    const blob = new Blob(parcalar, {type: bicim.split(";")[0]});
+    const ad = `turkan-acilis-${dikey ? "dikey" : "yatay"}.${uzanti}`;
+    const a = document.createElement("a");
+    a.className = "indir"; a.href = URL.createObjectURL(blob); a.download = ad;
+    a.textContent = `⬇ ${ad} (${(blob.size / 1048576).toFixed(1)} MB)`;
+    baglantilar.appendChild(a);
+    durum.textContent = "Hazır. İnmediyse altın renkli düğmeye dokunun.";
+    a.click();
+  }catch(e){
+    durum.textContent = "Olmadı: " + ((e && e.message) || e);
+  }finally{
+    try{ kilit && kilit.release(); }catch(e){}
+    dugmeler.forEach(b => b.disabled = false);
+  }
+}
+document.getElementById("yatay").addEventListener("click", () => kaydet(false));
+document.getElementById("dikey").addEventListener("click", () => kaydet(true));
+</script>
+</body>
+</html>

@@ -137,7 +137,7 @@ const KAYNAKLAR = [
   { ad:"Transparency International", ulke:"Almanya", tur:"rapor", url:"https://news.google.com/rss/search?q=site:transparency.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Human Rights Watch", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:hrw.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Af Örgütü", ulke:"İngiltere", tur:"rapor", kimlik:"bağımsız", url:"https://www.amnesty.org/en/feed/", yedek:"https://news.google.com/rss/search?q=site:amnesty.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  // --- Kitap İncelemeleri: eleştiri dergileri, yayın dünyası, dünya edebiyatı ve çeviri, bölgelerden sesler ---
+  // --- Kültür Sanat / kitap: eleştiri dergileri, yayın dünyası, dünya edebiyatı ve çeviri, bölgelerden sesler ---
   { ad:"London Review of Books", ulke:"İngiltere", tur:"kitap", url:"https://www.lrb.co.uk/feeds/rss", yedek:"https://news.google.com/rss/search?q=site:lrb.co.uk+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Times Literary Supplement", ulke:"İngiltere", tur:"kitap", url:"https://www.the-tls.com/feed/", yedek:"https://news.google.com/rss/search?q=site:the-tls.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"New York Review of Books", ulke:"ABD", tur:"kitap", url:"https://www.nybooks.com/feed/", yedek:"https://news.google.com/rss/search?q=site:nybooks.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
@@ -158,6 +158,17 @@ const KAYNAKLAR = [
   { ad:"Brittle Paper", ulke:"Nijerya", tur:"kitap", url:"https://brittlepaper.com/feed/", yedek:"https://news.google.com/rss/search?q=site:brittlepaper.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Asian Review of Books", ulke:"Hong Kong", tur:"kitap", url:"https://asianreviewofbooks.com/feed/", yedek:"https://news.google.com/rss/search?q=site:asianreviewofbooks.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"K24", ulke:"Türkiye", tur:"kitap", url:"https://www.k24kitap.org/rss", yedek:"https://news.google.com/rss/search?q=site:k24kitap.org+when:60d&hl=tr&gl=TR&ceid=TR:tr" },
+  // --- Kültür Sanat / sinema ve dizi eleştirisi: yalnızca eleştiri ağırlıklı, ciddi yayınlar (magazin ve gişe siteleri bilerek dışarıda) ---
+  { ad:"Cahiers du Cinéma", ulke:"Fransa", tur:"kitap", url:"https://www.cahiersducinema.com/feed/", yedek:"https://news.google.com/rss/search?q=site:cahiersducinema.com+when:60d&hl=fr&gl=FR&ceid=FR:fr" },
+  { ad:"Sight and Sound", ulke:"İngiltere", tur:"kitap", url:"https://news.google.com/rss/search?q=%22Sight+and+Sound%22+site:bfi.org.uk+when:60d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Film Comment", ulke:"ABD", tur:"kitap", url:"https://www.filmcomment.com/feed/", yedek:"https://news.google.com/rss/search?q=site:filmcomment.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Senses of Cinema", ulke:"Avustralya", tur:"kitap", url:"https://www.sensesofcinema.com/feed/", yedek:"https://news.google.com/rss/search?q=site:sensesofcinema.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"MUBI Notebook", ulke:"Uluslararası", tur:"kitap", url:"https://news.google.com/rss/search?q=site:mubi.com+notebook+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Altyazı", ulke:"Türkiye", tur:"kitap", url:"https://altyazi.net/feed/", yedek:"https://news.google.com/rss/search?q=site:altyazi.net+when:60d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"RogerEbert.com", ulke:"ABD", tur:"kitap", url:"https://www.rogerebert.com/feed", yedek:"https://news.google.com/rss/search?q=site:rogerebert.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Guardian Film", ulke:"İngiltere", tur:"kitap", url:"https://www.theguardian.com/film+tone/reviews/rss", yedek:"https://news.google.com/rss/search?q=site:theguardian.com+film+review+when:14d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Little White Lies", ulke:"İngiltere", tur:"kitap", url:"https://lwlies.com/feed/", yedek:"https://news.google.com/rss/search?q=site:lwlies.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Otros Cines", ulke:"Arjantin", tur:"kitap", url:"https://www.otroscines.com/feed/", yedek:"https://news.google.com/rss/search?q=site:otroscines.com+when:30d&hl=es-419&gl=AR&ceid=AR:es-419" },
   { ad:"BM Haber", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.un.org/feed/subscribe/en/news/all/rss.xml", yedek:"https://news.google.com/rss/search?q=site:news.un.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"BM İnsan Hakları", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:ohchr.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"UNDP", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:undp.org+when:120d&hl=en-US&gl=US&ceid=US:en" },

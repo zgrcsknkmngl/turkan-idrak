@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -836,11 +836,49 @@ function nezaman(x){
   return d.toLocaleDateString(S.arayuz, {day:"numeric", month:"long"});
 }
 
-/* ---------- Akış: kendi sunucumuzun ürettiği dosyadan ---------- */
+/* ---------- Yedek yol ----------
+   Ana adrese (turkanidrak.com) ulaşılamazsa, örneğin erişim engeli ya da kesinti olursa,
+   aynı dosyalar GitHub'ın kendi adresinden, o da olmazsa bir içerik ağından gelir. Okur bir şey fark etmez.
+   Ana adresin kapalı olduğu 6 saat hatırlanır; o sürede doğrudan yedeğe gidilir, boşuna beklenmez. */
+const DEPO_YOLLARI = [
+  "https://raw.githubusercontent.com/zgrcsknkmngl/turkan-idrak/main/",
+  "https://cdn.jsdelivr.net/gh/zgrcsknkmngl/turkan-idrak@main/"
+];
+const zamanAsimi = ms => new Promise((_, red) => setTimeout(() => red(new Error("zaman aşımı")), ms));
+function anaKapaliMi(){ try{ return Date.now() - (+localStorage.getItem("ti.anaKapali") || 0) < 6*3600e3; }catch(e){ return false; } }
+function anaKapali(evet){ try{ evet ? localStorage.setItem("ti.anaKapali", String(Date.now())) : localStorage.removeItem("ti.anaKapali"); }catch(e){} }
+async function tekGetir(adres, tur, sure){
+  const c = await Promise.race([fetch(adres, {cache:"no-store"}), zamanAsimi(sure)]);
+  if(!c.ok) throw new Error("HTTP " + c.status);
+  return tur === "json" ? c.json() : c.text();
+}
+const akisTarihi = v => (v && Date.parse(v.guncellendi)) || 0;
+async function yedekliGetir(dosya, tur = "json"){
+  const ana = dosya + (tur === "json" ? "?t=" + Date.now() : "");
+  const yedekler = DEPO_YOLLARI.map(t => t + dosya);
+  const sira = anaKapaliMi() ? [...yedekler, ana] : [ana, ...yedekler];
+  let sonHata = null, elde = null;
+  for(const adres of sira){
+    const anaMi = adres === ana;
+    try{
+      const veri = await tekGetir(adres, tur, anaMi ? 5000 : 9000);
+      if(dosya !== "akis.json"){ if(anaMi) anaKapali(false); return veri; }
+      // Akışta tazeliğe bakılır: ağ yokken telefondaki eski kopya dönmüş olabilir; taze olanı bulana kadar diğer yolları da dene
+      if(!elde || akisTarihi(veri) > akisTarihi(elde)) elde = veri;
+      if(Date.now() - akisTarihi(veri) < 3*3600e3){ anaKapali(!anaMi); return veri; }
+      if(anaMi) anaKapali(true);
+    }catch(e){
+      sonHata = e;
+      if(anaMi) anaKapali(true);
+    }
+  }
+  if(elde) return elde;
+  throw sonHata || new Error(dosya);
+}
+
+/* ---------- Akış: kendi sunucumuzun ürettiği dosyadan (gerekirse yedek yoldan) ---------- */
 async function akisiCek(){
-  const c = await fetch("akis.json?t="+Date.now(), {cache:"no-store"});
-  if(!c.ok) throw new Error("akis.json (HTTP "+c.status+")");
-  return c.json();
+  return yedekliGetir("akis.json", "json");
 }
 
 async function cek(){
@@ -1112,8 +1150,7 @@ async function tefekkuruCek(){
   if(S.tefekkur || S.tefekkurYukleniyor) return;
   S.tefekkurYukleniyor = true;
   try{
-    const c = await fetch("tefekkur.json?t="+Date.now(), {cache:"no-store"});
-    S.tefekkur = c.ok ? await c.json() : [];
+    S.tefekkur = await yedekliGetir("tefekkur.json", "json");
   }catch(e){ S.tefekkur = []; }
   if(!Array.isArray(S.tefekkur)) S.tefekkur = [];
   S.tefekkurYukleniyor = false;
@@ -1198,9 +1235,7 @@ async function tefAc(yol, gecmiseYaz = true){
   ciz(); scrollTo({top:0});
   if(S.tefMetin[yol] !== undefined) return;
   try{
-    const c = await fetch(yol, {cache:"no-cache"});
-    if(!c.ok) throw 0;
-    const sayfa = new DOMParser().parseFromString(await c.text(), "text/html");
+    const sayfa = new DOMParser().parseFromString(await yedekliGetir(yol, "metin"), "text/html");
     const yazi = sayfa.querySelector("article");
     S.tefMetin[yol] = yazi ? yazi.innerHTML : null;
   }catch(e){ S.tefMetin[yol] = null; }

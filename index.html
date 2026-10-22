@@ -544,7 +544,7 @@ const SOZLUK = {
     ara:"ara — konu, ülke, kurum…", ara_ac:"ara", aramayi_temizle_aria:"aramayı temizle",
     acik_temaya:"açık temaya geç", koyu_temaya:"koyu temaya geç",
     kaynak_yazi:(n,m)=>`${n} kaynak · ${m} yazı`, kayit_sayisi:n=>`${n} kayıt`, yazi_sayisi:n=>`${n} yazı`,
-    kat_hepsi:"Tümü", kat_kurum:"Düşünce Kuruluşları", kat_dergi:"Dergiler", kat_ajans:"Haber Ajansları", kat_rapor:"Raporlar", tumu:"Tümü",
+    kat_hepsi:"Tümü", kat_kurum:"Düşünce Kuruluşları", kat_dergi:"Dergiler", kat_ajans:"Haber Ajansları", kat_kitap:"Kitap İncelemeleri", kat_rapor:"Raporlar", tumu:"Tümü",
     akis_aliniyor:"akış alınıyor…",
     sonuc_yok:"Sonuç yok",
     etiket_eslesmedi:e=>`${e} etiketiyle eşleşen yazı bulunamadı.`,
@@ -595,7 +595,7 @@ const SOZLUK = {
     ara:"search — topic, country, institution…", ara_ac:"search", aramayi_temizle_aria:"clear search",
     acik_temaya:"switch to light theme", koyu_temaya:"switch to dark theme",
     kaynak_yazi:(n,m)=>`${n} sources · ${m} articles`, kayit_sayisi:n=>`${n} saved`, yazi_sayisi:n=>`${n} articles`,
-    kat_hepsi:"All", kat_kurum:"Think Tanks", kat_dergi:"Magazines", kat_ajans:"News Agencies", kat_rapor:"Reports", tumu:"All",
+    kat_hepsi:"All", kat_kurum:"Think Tanks", kat_dergi:"Magazines", kat_ajans:"News Agencies", kat_kitap:"Book Reviews", kat_rapor:"Reports", tumu:"All",
     akis_aliniyor:"loading the feed…",
     sonuc_yok:"No results",
     etiket_eslesmedi:e=>`No articles match the tag ${e}.`,
@@ -776,7 +776,7 @@ function serpistir(liste){
   return sonuc.concat(bekleyen);
 }
 
-const KATEGORILER = ["hepsi","kurum","dergi","ajans","rapor"];
+const KATEGORILER = ["hepsi","kurum","dergi","ajans","kitap","rapor"];
 const turBul = ad => (S.kaynaklar.find(k=>k.ad===ad)||{}).tur || "kurum";
 
 function bellektenTopla(){

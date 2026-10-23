@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -168,7 +168,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .etiketler{padding:9px 18px}
   .etiketler .chip{font-size:12.5px;padding:4px 11px}
   main{padding:0 18px}
-  .entry{padding:19px 0;border-bottom:1px solid var(--rule)}
+  .entry{padding:16px 0 14px;border-bottom:1px solid var(--rule)}
   .entry.okundu h2{color:var(--okundu1)}
   .entry.okundu .sum{color:var(--okundu2)}
   .cubuk{display:flex;gap:9px;align-items:center;padding:12px 0 2px;flex-wrap:wrap}
@@ -183,16 +183,23 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .yazar{font-size:11.5px;color:var(--yazar);font-style:italic;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap;max-width:46%}
   .when{font-size:11.5px;color:var(--dim);margin-inline-start:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .govde{display:flex;gap:13px;align-items:flex-start}
-  .yazi{flex:1;min-width:0}
-  .kapak{width:86px;height:86px;object-fit:cover;border-radius:7px;flex:none;
-    background:var(--raised);border:1px solid var(--rule);margin-top:2px}
-  .kapak.yer{display:flex;align-items:center;justify-content:center;
-    font-family:var(--serif);font-size:34px;line-height:1;color:var(--kapak-yazi);
-    background:linear-gradient(158deg,var(--kapak1) 0%,var(--kapak2) 100%)}
-  .entry h2{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.32;margin:0 0 7px}
+  /* Kart: görsel üstte ve geniş; bir ekrana iki yazı sığar */
+  .govde{display:block}
+  .yazi{min-width:0}
+  .kapak-alan{position:relative;width:100%;aspect-ratio:2.6/1;border-radius:12px;overflow:hidden;margin:0 0 11px;
+    background:linear-gradient(158deg,var(--kapak1) 0%,var(--kapak2) 100%);border:1px solid var(--rule)}
+  .kapak-alan .kapak{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .kapak-alan .yer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .kapak-alan .harf{font-family:var(--serif);font-size:52px;line-height:1;color:var(--kapak-yazi)}
+  .kapak-alan .rozet{width:76px;height:76px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.28)}
+  .kapak-alan .rozet img{width:54px;height:54px;object-fit:contain;border-radius:8px}
+  .entry h2{font-family:var(--serif);font-weight:500;font-size:19.5px;line-height:1.28;margin:0 0 6px;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
   .orig{font-size:13px;color:var(--dim);font-style:italic;margin:0 0 8px}
+  .entry .orig{font-size:12.5px;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sum{font-family:var(--serif);font-size:15px;line-height:1.55;color:var(--ozet);margin:0 0 12px}
+  .entry .sum{line-height:1.5;margin:0 0 10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
   .acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
   .act{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:5px}
   .act svg{width:15px;height:15px;flex:none}
@@ -913,7 +920,7 @@ async function cek(){
 
     S.tum = new Map();
     for(const [ad, kayit] of Object.entries(veri.kaynaklar||{})){
-      S.bilgi[ad] = {ulke:kayit.ulke||"", nitelik:kayit.nitelik||"", kimlik:kayit.kimlik||"", dil:kayit.dil||""};
+      S.bilgi[ad] = {ulke:kayit.ulke||"", nitelik:kayit.nitelik||"", kimlik:kayit.kimlik||"", dil:kayit.dil||"", simge:kayit.simge||""};
       for(const y of (kayit.yazilar||[])){ if(y.pay) S.tum.set(y.pay, y); S.tum.set(y.id, y); }
       const mevcut = S.kaynaklar.find(k=>k.ad===ad);
       if(mevcut) mevcut.tur = kayit.tur || mevcut.tur || "kurum";
@@ -1351,25 +1358,55 @@ function okumaAdresiEski(y){
   return ceviriAdresi(y.link, hedef);
 }
 
+/* Özet başlığı tekrar ediyorsa ya da künye satırıyla başlıyorsa (ör. "Submitted by … on …", çevirisi "… tarafından … tarihinde gönderildi") temizle */
+function ozetSade(baslik, ozet){
+  let o = String(ozet || "").replace(/&nbsp;|\u00a0/gi, " ").replace(/\s+/g, " ").trim();
+  if(!o) return "";
+  const sade = z => String(z || "").normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const b = sade(baslik);
+  if(b && sade(o).startsWith(b)){
+    const hedef = b.replace(/ /g, "").length;
+    let say = 0, i = 0;
+    for(; i < o.length && say < hedef; i++) if(/[\p{L}\p{N}]/u.test(o[i])) say++;
+    o = o.slice(i).replace(/^[\s:|·•,.\-–—]+/, "").trim();
+  }
+  o = o.replace(/^(?:submitted\s+)?by\s+[^,.]{2,80}?\s+on\s+\w{3,9},?\s+\d{1,2}\/\d{1,2}\/\d{2,4}\s*-\s*\d{1,2}:\d{2}\s*/i, "")
+       .replace(/^[^.]{2,80}?\s+tarafından\s+[^.]{0,40}?\d{1,2}[./]\d{1,2}[./]\d{2,4}\s*-\s*\d{1,2}:\d{2}\s+tarihinde\s+gönderildi\s*/i, "");
+  const so = sade(o);
+  return (!so || so === b || so.length < 25 || so.split(" ").length < 6) ? "" : o;   // altı kelimeden kısa "özet" bilgi vermez (ör. yalnızca kurumun adı)
+}
+function rozetHata(img){
+  const r = img.closest(".rozet");
+  if(r) r.outerHTML = `<span class="harf">${kac(img.dataset.h || "")}</span>`;
+}
+function kapakAlani(y, ad){
+  const harf = kac(ad.trim()[0] || "İ");
+  const simge = (S.bilgi[y.kaynak] || y.kb || {}).simge;
+  const zemin = simge
+    ? `<div class="yer"><span class="rozet"><img src="${kac(simge)}" alt="" loading="lazy" data-h="${harf}" onerror="rozetHata(this)"></span></div>`
+    : `<div class="yer"><span class="harf">${harf}</span></div>`;
+  const gorsel = y.gorsel
+    ? `<img class="kapak" src="${kac(y.gorsel)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : "";
+  return `<div class="kapak-alan">${zemin}${gorsel}</div>`;
+}
+
 function kart(y){
   const c = trOf(y);
   const k = kayitliMi(y.id);
   const ad = kaynakAdi(y.kaynak);
+  const baslik = c ? c.baslik : y.baslik;
+  const ozet = ozetSade(baslik, c ? c.ozet : y.ozet);
   return `<article class="entry${S.okunan.includes(y.id)?" okundu":""}">
+    ${kapakAlani(y, ad)}
     <div class="meta"><span class="src">${kac(ad)}</span>${
       y.yazar ? `<span class="yazar">${kac(y.yazar)}</span>` : ""
     }<span class="when">${nezaman(y.tarih)}</span></div>
     <div class="govde">
       <div class="yazi">
-        <h2>${kac(c ? c.baslik : y.baslik)}</h2>
+        <h2>${kac(baslik)}</h2>
         ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
-        ${(c?c.ozet:y.ozet) ? `<p class="sum">${kac(c?c.ozet:y.ozet)}</p>` : ""}
+        ${ozet ? `<p class="sum">${kac(ozet)}</p>` : ""}
       </div>
-      ${y.gorsel
-        ? `<img class="kapak" src="${kac(y.gorsel)}" alt="" loading="lazy" referrerpolicy="no-referrer"
-             data-h="${kac(ad.trim()[0]||"İ")}"
-             onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'kapak yer',textContent:this.dataset.h}))">`
-        : `<div class="kapak yer">${kac(ad.trim()[0]||"İ")}</div>`}
     </div>
     <div class="acts">
       <button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${t(k?"kayitli":"kaydet")}</span></button>

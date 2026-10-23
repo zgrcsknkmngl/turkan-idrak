@@ -14,6 +14,8 @@ const KAYNAKLAR = [
      G = kurum besleme vermiyor, Google Haberler üzerinden                      */
 
   // -- Kuzey Amerika --
+  // 23 Ekim 2026: yazısını açınca ücret ya da abonelik isteyen kaynaklar çıkarıldı (Türkan'da yalnızca serbestçe okunabilen kaynaklar):
+  // Le Monde, SCMP, The Hindu, Japan Times, Christian Sci. Monitor, Haaretz, The New York Times, The Wall Street Journal, Financial Times, Reuters, The Brazilian Report, The East African, The Jakarta Post, Foreign Affairs, Foreign Policy, World Politics Review, MIT Teknoloji, The Diplomat, The Economist, Le Monde Diplomatique, Caixin, Nikkei Asia, Bloomberg Opinion, Project Syndicate, London Review of Books, Times Literary Supplement, New York Review of Books, The Bookseller, Le Monde des Livres, El País Babelia, Cahiers du Cinéma
   { ad:"RAND", ulke:"ABD",               tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://www.rand.org/pubs/new.xml" },                        // ✓
   { ad:"FPRI", ulke:"ABD",               tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:fpri.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                               // ✓
   { ad:"War on the Rocks", ulke:"ABD",   tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://warontherocks.com/feed/" },                          // ✓
@@ -62,30 +64,20 @@ const KAYNAKLAR = [
   { ad:"Dünya Ekonomik Forumu", ulke:"İsviçre", tur:"kurum", ulke:"İsviçre", kimlik:"vakıf", url:"https://news.google.com/rss/search?q=site:weforum.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                                   // G
 
   /* ===================== DERGİLER ===================== */
-  { ad:"Foreign Affairs", ulke:"ABD",    tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://www.foreignaffairs.com/rss.xml" },                   // ✓
-  { ad:"Foreign Policy", ulke:"ABD",     tur:"dergi", ulke:"ABD", kimlik:"özel", url:"https://foreignpolicy.com/feed/" },                          // ✓
-  { ad:"World Politics Review", ulke:"ABD", tur:"dergi", ulke:"ABD", kimlik:"özel", url:"https://www.worldpoliticsreview.com/feed/" },             // ✓
   { ad:"Der Spiegel", ulke:"Almanya",        tur:"dergi", ulke:"Almanya", kimlik:"özel", url:"https://www.spiegel.de/international/index.rss" },           // ✓
   { ad:"The Nation", ulke:"ABD",         tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://www.thenation.com/subject/foreign-policy/feed/" },   // ✓
   { ad:"Rest of World", ulke:"ABD",      tur:"dergi", ulke:"ABD", kimlik:"vakıf", url:"https://restofworld.org/feed/latest/" },                     // ✓
-  { ad:"MIT Teknoloji", ulke:"ABD",      tur:"dergi", ulke:"ABD", kimlik:"üniversite", url:"https://www.technologyreview.com/feed" },                    // ✓
   { ad:"Yale E360", ulke:"ABD",          tur:"dergi", ulke:"ABD", kimlik:"üniversite", url:"https://e360.yale.edu/feed.xml" },                           // ✓
   { ad:"Americas Quarterly", ulke:"ABD", tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:americasquarterly.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                  // ✓
   { ad:"Asia Times", ulke:"Hong Kong",         tur:"dergi", ulke:"Hong Kong", kimlik:"özel", url:"https://asiatimes.com/category/world/feed/" },               // ✓
-  { ad:"The Diplomat", ulke:"ABD",       tur:"dergi", ulke:"ABD", kimlik:"özel", url:"https://thediplomat.com/feed/" },
   { ad:"Jacobin", ulke:"ABD",            tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://jacobin.com/feed" },
   { ad:"+972 Magazine", ulke:"Yafa",      tur:"dergi", ulke:"Yafa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:972mag.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The Economist", ulke:"İngiltere",      tur:"dergi", ulke:"İngiltere", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:economist.com+when:120d&hl=en-US&gl=US&ceid=US:en" },                                    // G
-  { ad:"Le Monde Diplomatique", ulke:"Fransa", tur:"dergi", ulke:"Fransa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:mondediplo.com+when:120d&hl=en-US&gl=US&ceid=US:en" },                                // G
-  { ad:"Caixin", ulke:"Çin",             tur:"dergi", ulke:"Çin", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:caixinglobal.com+when:120d&hl=en-US&gl=US&ceid=US:en" },                                 // G
-  { ad:"Nikkei Asia", ulke:"Japonya",        tur:"dergi", ulke:"Japonya", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:asia.nikkei.com+when:120d&hl=en-US&gl=US&ceid=US:en" },                                  // G
 
   /* ===================== HABER AJANSLARI ===================== */
   { ad:"El Cezire Dosya", ulke:"Katar", nitelik:"devlet fonlu",          tur:"ajans", ulke:"Katar", kimlik:"devlet destekli", url:"https://news.google.com/rss/search?q=site:aljazeera.com/features+when:120d&hl=en-US&gl=US&ceid=US:en" },                // ✓
-  { ad:"BBC Dünya", ulke:"İngiltere", nitelik:"kamu",          tur:"ajans", ulke:"İngiltere", kimlik:"kamu yayıncısı", url:"https://feeds.bbci.co.uk/news/world/rss.xml" },              // ✓
+  { ad:"BBC Dünya", alan:"bbc.com", ulke:"İngiltere", nitelik:"kamu",          tur:"ajans", ulke:"İngiltere", kimlik:"kamu yayıncısı", url:"https://feeds.bbci.co.uk/news/world/rss.xml" },              // ✓
   { ad:"Deutsche Welle", ulke:"Almanya", nitelik:"devlet",     tur:"ajans", ulke:"Almanya", kimlik:"kamu yayıncısı", url:"https://rss.dw.com/rdf/rss-en-top" },                        // ✓
   { ad:"France 24", ulke:"Fransa", nitelik:"devlet",          tur:"ajans", ulke:"Fransa", kimlik:"kamu yayıncısı", url:"https://www.france24.com/en/rss" },                          // ✓
-  { ad:"Le Monde", ulke:"Fransa",           tur:"ajans", ulke:"Fransa", kimlik:"özel", url:"https://www.lemonde.fr/en/international/rss_full.xml" },     // ✓
   { ad:"The Guardian", ulke:"İngiltere",       tur:"ajans", ulke:"İngiltere", kimlik:"vakıf", url:"https://www.theguardian.com/world/rss" },                    // ✓
   { ad:"IPS Küresel Güney", ulke:"Küresel",  tur:"ajans", ulke:"Uluslararası", kimlik:"bağımsız", url:"https://www.ipsnews.net/news/regional-categories/global/feed/" }, // ✓
   { ad:"Telesur", ulke:"Venezuela", nitelik:"devlet",            tur:"ajans", ulke:"Venezuela", kimlik:"devlet", url:"https://news.google.com/rss/search?q=site:telesurenglish.net+when:120d&hl=en-US&gl=US&ceid=US:en" },                       // ✓
@@ -94,41 +86,27 @@ const KAYNAKLAR = [
   { ad:"Daily Maverick", ulke:"Güney Afrika",     tur:"ajans", ulke:"Güney Afrika", kimlik:"bağımsız", url:"https://www.dailymaverick.co.za/rss" },                      // ✓
   { ad:"Morocco World News", ulke:"Fas", tur:"ajans", ulke:"Fas", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:moroccoworldnews.com+when:120d&hl=en-US&gl=US&ceid=US:en" },     // ✓
   { ad:"Arab News", ulke:"Suudi Arabistan", nitelik:"devlet yakını",          tur:"ajans", ulke:"Suudi Arabistan", kimlik:"özel", url:"https://www.arabnews.com/rss.xml" },                         // ✓
-  { ad:"SCMP", ulke:"Hong Kong",               tur:"ajans", ulke:"Hong Kong", kimlik:"özel", url:"https://www.scmp.com/rss/91/feed/" },                        // ✓
-  { ad:"The Hindu", ulke:"Hindistan",          tur:"ajans", ulke:"Hindistan", kimlik:"özel", url:"https://www.thehindu.com/news/international/feeder/default.rss" }, // ✓
   { ad:"ThePrint", ulke:"Hindistan",           tur:"ajans", ulke:"Hindistan", kimlik:"özel", url:"https://theprint.in/category/world/feed/" },                 // ✓
-  { ad:"Japan Times", ulke:"Japonya",        tur:"ajans", ulke:"Japonya", kimlik:"özel", url:"https://www.japantimes.co.jp/feed/" },                       // ✓
   { ad:"Balkan Insight", ulke:"Balkanlar",     tur:"ajans", ulke:"Balkanlar", kimlik:"bağımsız", url:"https://balkaninsight.com/feed/" },                          // ✓
   { ad:"Euractiv", ulke:"Avrupa",           tur:"ajans", ulke:"Belçika", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:euractiv.com+when:120d&hl=en-US&gl=US&ceid=US:en" },                            // ✓
   { ad:"Kommersant", ulke:"Rusya", tur:"ajans", kimlik:"özel", url:"https://www.kommersant.ru/RSS/main.xml", yedek:"https://news.google.com/rss/search?q=site:kommersant.ru+when:7d&hl=ru&gl=RU&ceid=RU:ru" },
   { ad:"ProPublica", ulke:"ABD",         tur:"ajans", ulke:"ABD", kimlik:"vakıf", url:"https://www.propublica.org/feeds/propublica/main" },         // ✓
-  { ad:"Christian Sci. Monitor", ulke:"ABD", tur:"ajans", ulke:"ABD", kimlik:"bağımsız", url:"https://rss.csmonitor.com/feeds/world" },                // ✓
   { ad:"Mongabay", ulke:"ABD",           tur:"ajans", ulke:"ABD", kimlik:"vakıf", url:"https://news.mongabay.com/feed" },                           // ✓
   { ad:"Gazete Oksijen", ulke:"Türkiye",                tur:"ajans", url:"https://news.google.com/rss/search?q=site:gazeteoksijen.com+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
-  { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", url:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   // 12 Ekim 2026: yeni kaynaklar (besleme adresleri yayincilarin guncel adresleriyle dogrulandi)
   { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
-  { ad:"The New York Times", ulke:"ABD", tur:"ajans", url:"https://rss.nytimes.com/services/xml/rss/nyt/World.xml", yedek:"https://news.google.com/rss/search?q=site:nytimes.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The Wall Street Journal", ulke:"ABD", tur:"ajans", url:"https://feeds.content.dowjones.io/public/rss/RSSWorldNews", yedek:"https://news.google.com/rss/search?q=site:wsj.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Financial Times", ulke:"İngiltere", tur:"ajans", url:"https://www.ft.com/world?format=rss", yedek:"https://news.google.com/rss/search?q=site:ft.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://www.politico.com/rss/politicopicks.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Reuters", ulke:"İngiltere", tur:"ajans", url:"https://news.google.com/rss/search?q=site:reuters.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Bloomberg Opinion", ulke:"ABD", tur:"dergi", url:"https://www.bloomberg.com/feeds/bview/news.rss", yedek:"https://news.google.com/rss/search?q=site:bloomberg.com/opinion+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Tehran Times", ulke:"İran", nitelik:"devlet bağlantılı", tur:"ajans", url:"https://news.google.com/rss/search?q=site:tehrantimes.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Prensa Latina", ulke:"Küba", nitelik:"devlet", tur:"ajans", url:"https://news.google.com/rss/search?q=site:plenglish.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The Brazilian Report", ulke:"Brezilya", tur:"ajans", url:"https://news.google.com/rss/search?q=site:newsletters.brazilian.report+when:30d&hl=en-US&gl=US&ceid=US:en", yedek:"https://news.google.com/rss/search?q=site:brazilian.report+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Mexico News Daily", ulke:"Meksika", tur:"ajans", url:"https://mexiconewsdaily.com/feed/", yedek:"https://news.google.com/rss/search?q=site:mexiconewsdaily.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Premium Times", ulke:"Nijerya", tur:"ajans", url:"https://www.premiumtimesng.com/feed", yedek:"https://news.google.com/rss/search?q=site:premiumtimesng.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Ahram Online", ulke:"Mısır", nitelik:"devlet", tur:"ajans", url:"https://news.google.com/rss/search?q=site:english.ahram.org.eg+when:7d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The East African", ulke:"Kenya", tur:"ajans", url:"https://news.google.com/rss/search?q=site:theeastafrican.co.ke+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Dawn", ulke:"Pakistan", tur:"ajans", url:"https://www.dawn.com/feeds/home", yedek:"https://news.google.com/rss/search?q=site:dawn.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The Jakarta Post", ulke:"Endonezya", tur:"ajans", url:"https://news.google.com/rss/search?q=site:thejakartapost.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Yonhap", ulke:"Güney Kore", nitelik:"kamu", tur:"ajans", url:"https://en.yna.co.kr/RSS/news.xml", yedek:"https://news.google.com/rss/search?q=site:en.yna.co.kr+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Kyiv Independent", ulke:"Ukrayna", tur:"ajans", url:"https://kyivindependent.com/news-archive/rss/", yedek:"https://news.google.com/rss/search?q=site:kyivindependent.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
-  { ad:"Project Syndicate", ulke:"Çekya", tur:"dergi", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:project-syndicate.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   // Raporlar ve endeksler (16 Ekim 2026)
   { ad:"Heritage", ulke:"ABD", tur:"kurum", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:heritage.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"World Justice Project", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:worldjusticeproject.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -138,28 +116,21 @@ const KAYNAKLAR = [
   { ad:"Human Rights Watch", ulke:"ABD", tur:"rapor", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:hrw.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Af Örgütü", ulke:"İngiltere", tur:"rapor", kimlik:"bağımsız", url:"https://www.amnesty.org/en/feed/", yedek:"https://news.google.com/rss/search?q=site:amnesty.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   // --- Kültür Sanat / kitap: eleştiri dergileri, yayın dünyası, dünya edebiyatı ve çeviri, bölgelerden sesler ---
-  { ad:"London Review of Books", ulke:"İngiltere", tur:"kitap", url:"https://www.lrb.co.uk/feeds/rss", yedek:"https://news.google.com/rss/search?q=site:lrb.co.uk+when:60d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Times Literary Supplement", ulke:"İngiltere", tur:"kitap", url:"https://www.the-tls.com/feed/", yedek:"https://news.google.com/rss/search?q=site:the-tls.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"New York Review of Books", ulke:"ABD", tur:"kitap", url:"https://www.nybooks.com/feed/", yedek:"https://news.google.com/rss/search?q=site:nybooks.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Los Angeles Review of Books", ulke:"ABD", tur:"kitap", url:"https://lareviewofbooks.org/feed/", yedek:"https://news.google.com/rss/search?q=site:lareviewofbooks.org+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"The Paris Review", ulke:"ABD", tur:"kitap", url:"https://www.theparisreview.org/blog/feed/", yedek:"https://news.google.com/rss/search?q=site:theparisreview.org+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Publishers Weekly", ulke:"ABD", tur:"kitap", url:"https://www.publishersweekly.com/pw/feeds/recent/index.xml", yedek:"https://news.google.com/rss/search?q=site:publishersweekly.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Kirkus Reviews", ulke:"ABD", tur:"kitap", url:"https://news.google.com/rss/search?q=site:kirkusreviews.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The Bookseller", ulke:"İngiltere", tur:"kitap", url:"https://www.thebookseller.com/rss/news", yedek:"https://news.google.com/rss/search?q=site:thebookseller.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"The Guardian Books", ulke:"İngiltere", tur:"kitap", url:"https://www.theguardian.com/books/rss" },
   { ad:"Words Without Borders", ulke:"ABD", tur:"kitap", url:"https://wordswithoutborders.org/feed/", yedek:"https://news.google.com/rss/search?q=site:wordswithoutborders.org+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Asymptote", ulke:"Uluslararası", tur:"kitap", url:"https://www.asymptotejournal.com/blog/feed/", yedek:"https://news.google.com/rss/search?q=site:asymptotejournal.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Literary Hub", ulke:"ABD", tur:"kitap", url:"https://lithub.com/feed/", yedek:"https://news.google.com/rss/search?q=site:lithub.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Le Monde des Livres", ulke:"Fransa", tur:"kitap", url:"https://www.lemonde.fr/livres/rss_full.xml", yedek:"https://news.google.com/rss/search?q=site:lemonde.fr+livres+when:14d&hl=fr&gl=FR&ceid=FR:fr" },
   { ad:"Perlentaucher", ulke:"Almanya", tur:"kitap", url:"https://news.google.com/rss/search?q=site:perlentaucher.de+when:30d&hl=de&gl=DE&ceid=DE:de" },
-  { ad:"El País Babelia", ulke:"İspanya", tur:"kitap", url:"https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/babelia/portada", yedek:"https://news.google.com/rss/search?q=site:elpais.com+Babelia+when:30d&hl=es&gl=ES&ceid=ES:es" },
   { ad:"Gorky", ulke:"Rusya", tur:"kitap", url:"https://gorky.media/feed/", yedek:"https://news.google.com/rss/search?q=site:gorky.media+when:30d&hl=ru&gl=RU&ceid=RU:ru" },
   { ad:"ArabLit", ulke:"Fas", tur:"kitap", url:"https://arablit.org/feed/", yedek:"https://news.google.com/rss/search?q=site:arablit.org+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Brittle Paper", ulke:"Nijerya", tur:"kitap", url:"https://brittlepaper.com/feed/", yedek:"https://news.google.com/rss/search?q=site:brittlepaper.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Asian Review of Books", ulke:"Hong Kong", tur:"kitap", url:"https://asianreviewofbooks.com/feed/", yedek:"https://news.google.com/rss/search?q=site:asianreviewofbooks.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"K24", ulke:"Türkiye", tur:"kitap", url:"https://www.k24kitap.org/rss", yedek:"https://news.google.com/rss/search?q=site:k24kitap.org+when:60d&hl=tr&gl=TR&ceid=TR:tr" },
   // --- Kültür Sanat / sinema ve dizi eleştirisi: yalnızca eleştiri ağırlıklı, ciddi yayınlar (magazin ve gişe siteleri bilerek dışarıda) ---
-  { ad:"Cahiers du Cinéma", ulke:"Fransa", tur:"kitap", url:"https://www.cahiersducinema.com/feed/", yedek:"https://news.google.com/rss/search?q=site:cahiersducinema.com+when:60d&hl=fr&gl=FR&ceid=FR:fr" },
   { ad:"Sight and Sound", ulke:"İngiltere", tur:"kitap", url:"https://news.google.com/rss/search?q=%22Sight+and+Sound%22+site:bfi.org.uk+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Film Comment", ulke:"ABD", tur:"kitap", url:"https://www.filmcomment.com/feed/", yedek:"https://news.google.com/rss/search?q=site:filmcomment.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Senses of Cinema", ulke:"Avustralya", tur:"kitap", url:"https://www.sensesofcinema.com/feed/", yedek:"https://news.google.com/rss/search?q=site:sensesofcinema.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
@@ -235,11 +206,28 @@ function coz(x) {
 
 /* Google Haberler yoluyla gelen yazilarda "ozet", basligin tekrari ve kaynak
    adindan ibaret. Ozet basligi tekrar ediyorsa bos sayilir. */
-function ozetDuzelt(ozet, baslik) {
-  const o = String(ozet || "").replace(/&nbsp;|\u00a0/gi, " ").replace(/\s+/g, " ").trim();
-  const sade = x => String(x || "").toLocaleLowerCase("tr").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
-  const b = sade(baslik), so = sade(o);
-  if (b && so.startsWith(b) && so.slice(b.length).trim().length < 80) return "";
+function ozetDuzelt(ozet, baslik, yazar) {
+  let o = String(ozet || "").replace(/&nbsp;|\u00a0/gi, " ").replace(/\s+/g, " ").trim();
+  const sade = x => String(x || "").normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const b = sade(baslik);
+  // 1) Özet başlığı tekrar ederek başlıyorsa başlığı özetten çıkar
+  if (b && sade(o).startsWith(b)) {
+    const hedef = b.replace(/ /g, "").length;
+    let say = 0, i = 0;
+    for (; i < o.length && say < hedef; i++) if (/[\p{L}\p{N}]/u.test(o[i])) say++;
+    o = o.slice(i).replace(/^[\s:|·•,.\-–—]+/, "").trim();
+  }
+  // 2) Künye kalıpları: "Submitted by X on Thu, 10/22/2026 - 06:57", "By X", "Published ... 06:57"
+  o = o.replace(/^(?:submitted\s+)?by\s+[^,.]{2,80}?\s+on\s+\w{3,9},?\s+\d{1,2}\/\d{1,2}\/\d{2,4}\s*-\s*\d{1,2}:\d{2}\s*/i, "");
+  const ya = String(yazar || "").trim();
+  if (ya) {
+    if (o.toLowerCase().startsWith(("by " + ya).toLowerCase())) o = o.slice(ya.length + 3).replace(/^[\s,.\-–—:|]+/, "").trim();
+    else if (o.startsWith(ya + " ")) o = o.slice(ya.length).replace(/^[\s,.\-–—:|]+/, "").trim();
+  }
+  o = o.replace(/^(?:published|posted|updated)(?:\s+(?:on|date))?:?\s+[^.]{0,60}?\d{1,2}:\d{2}(?:\s*(?:am|pm|utc|gmt))?\s*/i, "");
+  // 3) Geriye başlığın kendisi ya da birkaç kelime kaldıysa özet hiç gösterilmesin
+  const so = sade(o);
+  if (!so || so === b || so.length < 25 || so.split(" ").length < 6) return "";   // altı kelimeden kısa "özet" bilgi vermez (ör. yalnızca kurumun adı)
   return o;
 }
 
@@ -328,7 +316,7 @@ function ayikla(xml, kaynakAd) {
       id: kimlik(link || bas),
       kaynak: kaynakAd,
       baslik: bas,
-      ozet: (o => o.length > 190 ? o.slice(0, 190) + "…" : o)(ozetDuzelt(ozetHam, bas)),
+      ozet: (o => o.length > 190 ? o.slice(0, 190) + "…" : o)(ozetDuzelt(ozetHam, bas, yazar)),
       yazar,
       gorsel: gorselBul(b),
       link,
@@ -587,6 +575,43 @@ function siteDosyalari(oncekiTaban) {
   degistiyseYaz("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${TABAN}sitemap.xml\n`);
 }
 
+/* ---------- kaynak simgeleri ---------- */
+const SIMGE_KLASORU = "simge";
+function alanBul(k) {
+  if (k.alan) return k.alan;
+  const m = String(k.url || "").match(/site:([^+&"]+)/);
+  let h = m ? m[1] : (() => { try { return new URL(k.url).hostname; } catch (e) { return ""; } })();
+  return h.split("/")[0].toLowerCase().replace(/^(www|rss|feeds?|news|en|english)\./, "");
+}
+async function simgeIndir(adres) {
+  try {
+    const c = await fetch(adres, { headers: { "user-agent": "Mozilla/5.0 (TurkanIdrak simge)" }, redirect: "follow", signal: AbortSignal.timeout(12000) });
+    const tip = (c.headers.get("content-type") || "").toLowerCase();
+    if (!c.ok || !/^image\/(png|x-icon|vnd\.microsoft\.icon|jpeg|webp)/.test(tip)) return null;
+    const veri = Buffer.from(await c.arrayBuffer());
+    return veri.length > 300 ? veri : null;
+  } catch (e) { return null; }
+}
+async function simgeleriHazirla() {
+  if (!fs.existsSync(SIMGE_KLASORU)) fs.mkdirSync(SIMGE_KLASORU);
+  const sonuc = {};
+  let yeni = 0;
+  for (const k of KAYNAKLAR) {
+    const alan = alanBul(k);
+    if (!alan) continue;
+    const dosya = `${SIMGE_KLASORU}/${alan}.png`;
+    if (!fs.existsSync(dosya)) {
+      const veri = await simgeIndir(`https://${alan}/apple-touch-icon.png`)
+                || await simgeIndir(`https://www.${alan}/apple-touch-icon.png`)
+                || await simgeIndir(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(alan)}&sz=128`);
+      if (veri) { fs.writeFileSync(dosya, veri); yeni++; }
+    }
+    if (fs.existsSync(dosya)) sonuc[k.ad] = dosya;
+  }
+  console.log(`Kaynak simgeleri: ${Object.keys(sonuc).length} hazır${yeni ? `, ${yeni} yeni indirildi` : ""}`);
+  return sonuc;
+}
+
 /* ---------- ana akış ---------- */
 
 (async () => {
@@ -597,10 +622,12 @@ function siteDosyalari(oncekiTaban) {
   } catch (e) { /* ilk çalışma */ }
 
   const sonuc = { guncellendi: new Date().toISOString(), taban: TABAN, kaynaklar: {} };
+  const simgeler = await simgeleriHazirla();
 
   async function tek(k){
     const eskiKayit = onceki.kaynaklar[k.ad] || { yazilar: [] };
-    const kimlikBilgisi = { tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "" };
+    const kimlikBilgisi = Object.assign({ tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "" },
+                                        simgeler[k.ad] ? { simge: simgeler[k.ad] } : {});
     try {
       const { yazilar: yeni, yol, dil } = await cekYedekli(k);
 
@@ -629,7 +656,7 @@ function siteDosyalari(oncekiTaban) {
       const basliklar = new Set(yeni.map(y => y.baslik.toLocaleLowerCase("tr")));
       const birlesik = yeni.concat(eskiKayit.yazilar.filter(y =>
         !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr"))));
-      for (const y of birlesik) if (!y.pay) y.pay = payKodu(y);
+      for (const y of birlesik) { if (!y.pay) y.pay = payKodu(y); y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
       birlesik.length = 0; birlesik.push(...tekil);
@@ -641,7 +668,7 @@ function siteDosyalari(oncekiTaban) {
       }, yol === "yedek" ? { yol: "yedek" } : {}, (dil || eskiKayit.dil) ? { dil: dil || eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}${yol === "yedek" ? " (yedek yoldan)" : ""}`);
     } catch (e) {
-      for (const y of eskiKayit.yazilar) if (!y.pay) y.pay = payKodu(y);
+      for (const y of eskiKayit.yazilar) { if (!y.pay) y.pay = payKodu(y); y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: eskiKayit.yazilar.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true))),

@@ -72,6 +72,32 @@ const KAYNAKLAR = [
   { ad:"Asia Times", ulke:"Hong Kong",         tur:"dergi", ulke:"Hong Kong", kimlik:"özel", url:"https://asiatimes.com/category/world/feed/" },               // ✓
   { ad:"Jacobin", ulke:"ABD",            tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://jacobin.com/feed" },
   { ad:"+972 Magazine", ulke:"Yafa",      tur:"dergi", ulke:"Yafa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:972mag.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  // --- Dergiler, G20 genişlemesi (24 Ekim 2026): ücretsiz, ciddi ve düzenli yayın yapan dergiler; yoksa The Conversation'ın o ülke baskısı ---
+  { ad:"Aeon", ulke:"İngiltere", tur:"dergi", url:"https://aeon.co/feed.rss", yedek:"https://news.google.com/rss/search?q=site:aeon.co+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Le Grand Continent", ulke:"Fransa", tur:"dergi", url:"https://legrandcontinent.eu/fr/feed/", yedek:"https://news.google.com/rss/search?q=site:legrandcontinent.eu+when:30d&hl=fr&gl=FR&ceid=FR:fr" },
+  { ad:"IPG Journal", ulke:"Almanya", tur:"dergi", url:"https://news.google.com/rss/search?q=site:ipg-journal.io+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Decode39", ulke:"İtalya", tur:"dergi", url:"https://decode39.com/feed/", yedek:"https://news.google.com/rss/search?q=site:decode39.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Social Europe", ulke:"Avrupa Birliği", tur:"dergi", url:"https://www.socialeurope.eu/feed", yedek:"https://news.google.com/rss/search?q=site:socialeurope.eu+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Russia in Global Affairs", ulke:"Rusya", tur:"dergi", url:"https://eng.globalaffairs.ru/feed/", yedek:"https://news.google.com/rss/search?q=site:eng.globalaffairs.ru+when:60d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Insight Turkey", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:insightturkey.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Turkish Policy Quarterly", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:turkishpolicy.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Perspektif", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:perspektif.online+when:30d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"Daktilo1984", ulke:"Türkiye", tur:"dergi", url:"https://daktilo1984.com/feed/", yedek:"https://news.google.com/rss/search?q=site:daktilo1984.com+when:30d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"Al Majalla", ulke:"Suudi Arabistan", tur:"dergi", url:"https://news.google.com/rss/search?q=site:en.majalla.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"China-US Focus", ulke:"Çin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:chinausfocus.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Sixth Tone", ulke:"Çin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:sixthtone.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Nippon.com", ulke:"Japonya", tur:"dergi", url:"https://news.google.com/rss/search?q=site:nippon.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Global Asia", ulke:"Güney Kore", tur:"dergi", url:"https://news.google.com/rss/search?q=site:globalasia.org+when:90d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The India Forum", ulke:"Hindistan", tur:"dergi", url:"https://news.google.com/rss/search?q=site:theindiaforum.in+when:60d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Conversation Endonezya", ulke:"Endonezya", tur:"dergi", url:"https://theconversation.com/id/articles.atom", yedek:"https://news.google.com/rss/search?q=site:theconversation.com/id+when:14d&hl=id&gl=ID&ceid=ID:id" },
+  { ad:"The Walrus", ulke:"Kanada", tur:"dergi", url:"https://thewalrus.ca/feed/", yedek:"https://news.google.com/rss/search?q=site:thewalrus.ca+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Policy Options", ulke:"Kanada", tur:"dergi", url:"https://policyoptions.irpp.org/feed/", yedek:"https://news.google.com/rss/search?q=site:policyoptions.irpp.org+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Nueva Sociedad", ulke:"Arjantin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:nuso.org+when:30d&hl=es-419&gl=MX&ceid=MX:es-419" },
+  { ad:"Revista Anfibia", ulke:"Arjantin", tur:"dergi", url:"https://www.revistaanfibia.com/feed/", yedek:"https://news.google.com/rss/search?q=site:revistaanfibia.com+when:30d&hl=es-419&gl=MX&ceid=MX:es-419" },
+  { ad:"Letras Libres", ulke:"Meksika", tur:"dergi", url:"https://letraslibres.com/feed/", yedek:"https://news.google.com/rss/search?q=site:letraslibres.com+when:30d&hl=es-419&gl=MX&ceid=MX:es-419" },
+  { ad:"The Conversation Brezilya", ulke:"Brezilya", tur:"dergi", url:"https://theconversation.com/br/articles.atom", yedek:"https://news.google.com/rss/search?q=site:theconversation.com/br+when:14d&hl=pt-BR&gl=BR&ceid=BR:pt-419" },
+  { ad:"Inside Story", ulke:"Avustralya", tur:"dergi", url:"https://insidestory.org.au/feed/", yedek:"https://news.google.com/rss/search?q=site:insidestory.org.au+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Conversation Afrika", ulke:"Güney Afrika", tur:"dergi", url:"https://theconversation.com/africa/articles.atom", yedek:"https://news.google.com/rss/search?q=site:theconversation.com/africa+when:14d&hl=en-US&gl=US&ceid=US:en" },
 
   /* ===================== HABER AJANSLARI ===================== */
   { ad:"El Cezire Dosya", ulke:"Katar", nitelik:"devlet fonlu",          tur:"ajans", ulke:"Katar", kimlik:"devlet destekli", url:"https://news.google.com/rss/search?q=site:aljazeera.com/features+when:120d&hl=en-US&gl=US&ceid=US:en" },                // ✓

@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -169,6 +169,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .etiketler .chip{font-size:12.5px;padding:4px 11px}
   main{padding:0 18px}
   .entry{padding:16px 0 14px;border-bottom:1px solid var(--rule)}
+  .kaynak-ozet{font-family:var(--serif);font-size:16.5px;line-height:1.55;color:var(--ozet);margin:4px 0 6px}
   .entry.okundu h2{color:var(--okundu1)}
   .entry.okundu .sum{color:var(--okundu2)}
   .cubuk{display:flex;gap:9px;align-items:center;padding:12px 0 2px;flex-wrap:wrap}
@@ -578,7 +579,7 @@ const SOZLUK = {
     hic_aciklama:"İnternet bağlantını kontrol edip biraz sonra yeniden dene.",
     yeniden_dene:"Yeniden dene",
     yenile:"yenile", yenileniyor:"yenileniyor…",
-    hepsini_cevir:n=>`hepsini çevir (${n})`, ceviri_acik:"çeviri açık ✓ · özgün metinlere dön", cevriliyor_n:n=>`çevriliyor… ${n}`,
+    hepsini_cevir:n=>"hepsini çevir", ceviri_acik:"çeviri açık ✓ · özgün metinlere dön", cevriliyor_n:n=>"çevriliyor…",
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
     kaydet:"kaydet", kayitli:"kayıtlı", cevir:"çevir", cevriliyor:"çevriliyor…", ceviri_kapali:"çeviri kapalı",
@@ -586,6 +587,8 @@ const SOZLUK = {
     kayit_yok:"Henüz kayıt yok",
     kayit_yok_aciklama:"İdrak’taki bir yazının altındaki <strong>kaydet</strong>’e dokun, burada birikir.",
     idrake_don:"İdrak’a dön",
+    kaynak_ozet:(n,l)=>`Türkan'da ${n} kaynak var: ${l}.`, ve:"ve",
+    say_kurum:"düşünce kuruluşu", say_dergi:"dergi", say_ajans:"haber ajansı", say_kitap:"kültür sanat yayını", say_rapor:"rapor kaynağı",
     son_tarama:z=>`Kaynaklar son olarak ${z} tarandı.`, henuz_taranmadi:"Kaynaklar henüz taranmadı.",
     kapali:"kapalı", ulasilamadi:"ulaşılamadı", ulasilamadi_duruyor:n=>`ulaşılamadı · ${n} yazı duruyor`,
     kaynak_silinsin:a=>`${a} kaynağı silinsin mi?`,
@@ -629,7 +632,7 @@ const SOZLUK = {
     hic_aciklama:"Check your internet connection and try again in a moment.",
     yeniden_dene:"Try again",
     yenile:"refresh", yenileniyor:"refreshing…",
-    hepsini_cevir:n=>`translate all (${n})`, ceviri_acik:"translation on ✓ · show originals", cevriliyor_n:n=>`translating… ${n}`,
+    hepsini_cevir:n=>"translate all", ceviri_acik:"translation on ✓ · show originals", cevriliyor_n:n=>"translating…",
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
     kaydet:"save", kayitli:"saved", cevir:"translate", cevriliyor:"translating…", ceviri_kapali:"translation unavailable",
@@ -637,6 +640,8 @@ const SOZLUK = {
     kayit_yok:"Nothing saved yet",
     kayit_yok_aciklama:"Tap <strong>save</strong> under any article in İdrak and it will be kept here.",
     idrake_don:"Back to İdrak",
+    kaynak_ozet:(n,l)=>`Türkan brings together ${n} sources: ${l}.`, ve:"and",
+    say_kurum:"think tanks", say_dergi:"magazines", say_ajans:"news agencies", say_kitap:"culture & arts outlets", say_rapor:"report sources",
     son_tarama:z=>`Sources were last scanned on ${z}.`, henuz_taranmadi:"Sources have not been scanned yet.",
     kapali:"off", ulasilamadi:"unreachable", ulasilamadi_duruyor:n=>`unreachable · ${n} articles kept`,
     kaynak_silinsin:a=>`Remove ${a}?`,
@@ -1450,7 +1455,7 @@ function cizKategoriler(){
     : S.yazilar.filter(y=>turBul(y.kaynak)===kod).length;
   $("#katlar").innerHTML = KATEGORILER.map(kod=>
     `<button class="chip" data-kat="${kod}" aria-pressed="${S.kategori===kod}">${
-      kac(t("kat_"+kod))}<span class="say">${sayi(sayKat(kod))}</span></button>`).join("");
+      kac(t("kat_"+kod))}</button>`).join("");
 }
 
 function cizSerit(){
@@ -1459,10 +1464,10 @@ function cizSerit(){
     .slice().sort((a,b)=>(S.gozde.has(b.ad)-S.gozde.has(a.ad)) || kaynakAdi(a.ad).localeCompare(kaynakAdi(b.ad), S.arayuz));
   const say = a => S.yazilar.filter(y=>y.kaynak===a).length;
   $("#rail").innerHTML =
-    `<button class="chip" data-suz="hepsi" aria-pressed="${S.suzgec==="hepsi"}">${t("tumu")}<span class="say">${sayi(S.yazilar.length)}</span></button>` +
+    `<button class="chip" data-suz="hepsi" aria-pressed="${S.suzgec==="hepsi"}">${t("tumu")}</button>` +
     acik.map(k=>{
       const n = say(k.ad);
-      return `<button class="chip ${n?"":"bos"}" data-suz="${kac(k.ad)}" aria-pressed="${S.suzgec===k.ad}">${S.gozde.has(k.ad)?'<span class="yz-isaret">★</span>':""}${kac(kaynakAdi(k.ad))}<span class="say">${sayi(n)}</span></button>`;
+      return `<button class="chip ${n?"":"bos"}" data-suz="${kac(k.ad)}" aria-pressed="${S.suzgec===k.ad}">${S.gozde.has(k.ad)?'<span class="yz-isaret">★</span>':""}${kac(kaynakAdi(k.ad))}</button>`;
     }).join("");
 }
 
@@ -1560,6 +1565,16 @@ function cizKayitli(){
        <button class="go" data-git="feed">${t("idrake_don")}</button></div>`) + altBaglantilar();
 }
 
+function kaynakOzeti(){
+  const parca = KATEGORILER.filter(x => x !== "hepsi")
+    .map(kod => [kod, S.kaynaklar.filter(k => (k.tur || "kurum") === kod).length])
+    .filter(([, n]) => n)
+    .map(([kod, n]) => `${sayi(n)} ${t("say_" + kod)}`);
+  if(!parca.length) return "";
+  const liste = parca.length > 1 ? parca.slice(0, -1).join(", ") + " " + t("ve") + " " + parca[parca.length - 1] : parca[0];
+  return t("kaynak_ozet", sayi(S.kaynaklar.length), liste);
+}
+
 function cizKaynaklar(){
   $("#count").textContent="";
   const hataVar = ad => S.hata.some(h=>h.ad===ad);
@@ -1576,6 +1591,7 @@ function cizKaynaklar(){
     <p class="note" style="padding-top:14px">${S.guncellendi
       ? t("son_tarama", new Date(S.guncellendi).toLocaleString(S.arayuz,{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}))
       : t("henuz_taranmadi")}</p>
+    ${kaynakOzeti() ? `<p class="kaynak-ozet">${kac(kaynakOzeti())}</p>` : ""}
     ${KATEGORILER.filter(x=>x!=="hepsi").map(kod=>{
       const grup = S.kaynaklar.map((k,i)=>({k,i})).filter(x=>(x.k.tur||"kurum")===kod)
                     .sort((a,b)=>kaynakAdi(a.k.ad).localeCompare(kaynakAdi(b.k.ad), S.arayuz));

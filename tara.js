@@ -603,12 +603,16 @@ async function simgeleriHazirla() {
     if (!fs.existsSync(dosya)) {
       const veri = await simgeIndir(`https://${alan}/apple-touch-icon.png`)
                 || await simgeIndir(`https://www.${alan}/apple-touch-icon.png`)
-                || await simgeIndir(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(alan)}&sz=128`);
+                || await simgeIndir(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(alan)}&sz=128`)
+                || await simgeIndir(`https://icons.duckduckgo.com/ip3/${alan}.ico`)
+                || await simgeIndir(`https://${alan}/favicon.ico`)
+                || await simgeIndir(`https://www.${alan}/favicon.ico`);
       if (veri) { fs.writeFileSync(dosya, veri); yeni++; }
     }
     if (fs.existsSync(dosya)) sonuc[k.ad] = dosya;
   }
-  console.log(`Kaynak simgeleri: ${Object.keys(sonuc).length} hazır${yeni ? `, ${yeni} yeni indirildi` : ""}`);
+  const eksik = KAYNAKLAR.filter(k => !sonuc[k.ad]).map(k => `${k.ad} (${alanBul(k)})`);
+  console.log(`Kaynak simgeleri: ${Object.keys(sonuc).length} hazır${yeni ? `, ${yeni} yeni indirildi` : ""}${eksik.length ? ` · bulunamayan: ${eksik.join(", ")}` : ""}`);
   return sonuc;
 }
 

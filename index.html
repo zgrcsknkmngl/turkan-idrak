@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -97,7 +97,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
   body{
     margin:0;min-height:100%;background:var(--ink);color:var(--vellum);
-    font-family:var(--sans);font-size:16px;line-height:1.5;padding-bottom:78px;
+    font-family:var(--sans);font-size:16px;line-height:1.5;padding-bottom:104px;
   }
   button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
   a{color:inherit}
@@ -238,9 +238,14 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .addbox .save{background:var(--ember);color:#fff;padding:10px 20px;border-radius:7px;font-size:14.5px;font-weight:500}
   .note{font-size:13px;color:var(--dim);line-height:1.65;padding:18px 0 4px}
 
-  nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:30;
     background:var(--raised);border-top:1px solid var(--rule);padding-bottom:env(safe-area-inset-bottom,0px)}
-  nav button{flex:1;padding:11px 0 12px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
+  nav .sekmeler{display:flex}
+  nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
+  /* Hakkında · İletişim · Gizlilik: her ekranda sekmelerin hemen altında */
+  nav .nav-alt{display:flex;justify-content:center;align-items:center;padding:0 0 5px;font-size:11.5px;line-height:1;color:var(--sonuk)}
+  nav .nav-alt a{color:var(--dim);text-decoration:none;padding:6px 10px}
+  nav .nav-alt a:active{color:var(--vellum)}
   nav button svg{width:21px;height:21px}
   nav button[aria-current="page"]{color:var(--vellum)}
   nav button[aria-current="page"] svg{color:var(--ember)}
@@ -339,7 +344,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     transition:opacity .3s ease,transform .3s ease}
   .dil-ipucu.acik{opacity:1;transform:none}
   /* Tarayıcıdan girenlere: "Uygulamayı yükle" */
-  .yukle-hap{position:fixed;z-index:40;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);transform:translate(-50%,12px);
+  .yukle-hap{position:fixed;z-index:40;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 108px);transform:translate(-50%,12px);
     display:flex;align-items:center;gap:8px;padding:7px 8px 7px 12px;border-radius:999px;background:var(--raised);
     border:1.5px solid var(--gold);color:var(--vellum);box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .35s,transform .35s;
     font:600 14px var(--sans);white-space:nowrap}
@@ -347,7 +352,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .yukle-hap .yk-ana{display:flex;align-items:center;gap:8px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;padding:0;text-decoration:none}
   .yukle-hap svg{width:20px;height:26px;flex:none}
   .yukle-hap .yk-kapat{width:28px;height:28px;border-radius:50%;border:0;background:transparent;color:var(--dim);font-size:18px;line-height:1;cursor:pointer}
-  .yukle-ios{position:fixed;z-index:41;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 136px);max-width:420px;margin:0 auto;
+  .yukle-ios{position:fixed;z-index:41;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 160px);max-width:420px;margin:0 auto;
     padding:13px 15px;border-radius:12px;background:#F4EFE3;color:#0B1420;font:500 14px/1.5 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38)}
   .dil-ipucu small{display:block;margin-top:2px;font-weight:500;font-size:12px;opacity:.65}
   .dil-ipucu::before{content:"";position:absolute;top:-6px;right:var(--ok,18px);width:12px;height:12px;background:inherit;
@@ -484,6 +489,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
 </main>
 
 <nav>
+  <div class="sekmeler">
   <button id="nav-feed" aria-current="page">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span data-t="nav_idrak">İdrak</span>
   </button>
@@ -496,6 +502,8 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   <button id="nav-sources">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5.5" cy="18.5" r="2.5"/><path d="M4 4.5c9.1 0 15.5 6.4 15.5 15.5M4 10.5c5.8 0 9.5 3.7 9.5 9.5"/></svg><span data-t="nav_kaynaklar">Kaynaklar</span>
   </button>
+  </div>
+  <div class="nav-alt"><a href="hakkinda.html" data-t="hakkinda">Hakkında</a>·<a href="iletisim.html" data-t="iletisim">İletişim</a>·<a href="gizlilik.html" data-t="gizlilik">Gizlilik</a></div>
 </nav>
 
 <script>
@@ -1289,7 +1297,7 @@ addEventListener("popstate", e => {
 });
 
 const tarihYaz = x => { const d=tarihOku(x); return d ? d.toLocaleDateString(S.arayuz,{day:"numeric",month:"long",year:"numeric"}) : ""; };
-const altBaglantilar = () => `<div class="alt-baglantilar"><a href="hakkinda.html">${t("hakkinda")}</a>·<a href="iletisim.html">${t("iletisim")}</a>·<a href="gizlilik.html">${t("gizlilik")}</a></div>`;
+const altBaglantilar = () => "";   // Hakkında · İletişim · Gizlilik artık alt şeritte, her ekranda görünüyor
 function cizTefekkur(){
   if(S.tefAcik){
     const metin = S.tefMetin[S.tefAcik];

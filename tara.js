@@ -396,7 +396,7 @@ function ayikla(xml, kaynakAd) {
       id: kimlik(link || bas),
       kaynak: kaynakAd,
       baslik: bas,
-      ozet: (o => o.length > 190 ? o.slice(0, 190) + "…" : o)(ozetDuzelt(ozetHam, bas, yazar)),
+      ozet: (o => o.length > 320 ? o.slice(0, 320) + "…" : o)(ozetDuzelt(ozetHam, bas, yazar)),
       yazar,
       gorsel: gorselBul(b),
       link,

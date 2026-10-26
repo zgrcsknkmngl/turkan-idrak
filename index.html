@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -210,7 +210,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .orig{font-size:13px;color:var(--dim);font-style:italic;margin:0 0 8px}
   .entry .orig{font-size:12.5px;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sum{font-family:var(--serif);font-size:15px;line-height:1.55;color:var(--ozet);margin:0 0 12px}
-  .entry .sum{line-height:1.5;margin:0 0 10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+  .entry .sum{line-height:1.5;margin:0 0 10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
   .acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
   .act{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:5px}
   .act svg{width:15px;height:15px;flex:none}
@@ -460,6 +460,10 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   <button class="av-dugme av-atla" type="button"></button>
   <button class="av-dugme av-ses" type="button"></button>
 </div>
+</div>
+<div class="ust-serit" id="ustSerit" role="button" tabindex="-1" aria-label="başa dön">
+  <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+  <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
 </div>
 <header class="masthead">
   <div class="bas">
@@ -794,6 +798,11 @@ function t(k, ...a){
   return typeof s === "function" ? s(...a) : s;
 }
 const sayi = n => Number(n).toLocaleString(S.arayuz);
+/* Diller arayüz dilindeki adlarına göre A'dan Z'ye (Türkçe arayüzde: Almanca, Arapça, Arnavutça…) */
+function dilUIAdi(k){ return (S.arayuz==="tr" ? DIL_TR[k] : dilAdi(k)) || (CEVIRI_DILLERI.find(([d])=>d===k)||[])[1] || k; }
+function dilSirali(){
+  return [...CEVIRI_DILLERI].sort((a,b) => dilUIAdi(a[0]).localeCompare(dilUIAdi(b[0]), S.arayuz, {sensitivity:"base"}));
+}
 function dilAdi(kod){
   try{ const a = new Intl.DisplayNames([S.arayuz], {type:"language"}).of(kod); if(a) return a.charAt(0).toLocaleUpperCase(S.arayuz)+a.slice(1); }catch(e){}
   return (CEVIRI_DILLERI.find(([k])=>k===kod) || [kod,kod])[1];
@@ -1644,7 +1653,7 @@ function cizKaynaklar(){
   $("#sources").innerHTML = `
     <div class="ayar">
       <div class="ayar-bas">${t("dil_baslik")}</div>
-      <label class="ayar-satir"><span>${t("dil_etiket")}</span><select id="secDil">${DIL_GRUPLARI.map(([g,d])=>`<optgroup label="${kac(t("grup_"+g))}">${secenek(d, S.dil)}</optgroup>`).join("")}</select></label>
+      <label class="ayar-satir"><span>${t("dil_etiket")}</span><select id="secDil">${secenek(dilSirali().map(([k,a])=>{ const ad = dilUIAdi(k); return [k, ad!==a ? ad+" · "+a : ad]; }), S.dil)}</select></label>
       <p class="ayar-not">${t("dil_aciklama")}</p>
     </div>
     <p class="note" style="padding-top:14px">${S.guncellendi
@@ -1877,11 +1886,11 @@ function dilPenceresiAc(){
   p.innerHTML = `<div class="dil-kutu" role="dialog" aria-modal="true" aria-label="${kac(t("dil_sec"))}">
     <div class="dil-bas">${kac(t("dil_sec"))}</div>
     <input class="dil-ara" type="search" placeholder="${kac(t("dil_ara"))}" aria-label="${kac(t("dil_ara"))}" autocomplete="off">
-    ${DIL_GRUPLARI.map(([g, diller]) => `<div class="dil-grup" data-grup="${g}"><h4>${kac(t("grup_"+g))}</h4><div class="dil-liste">${
-      diller.map(([k,a]) => { const y = yerelAd(k);
-        return `<button data-dilsec="${k}" lang="${k}" data-ara="${kac((a+" "+y+" "+(DIL_TR[k]||"")+" "+k).toLocaleLowerCase("tr"))}"${k===S.dil?' class="secili" aria-current="true"':""}>`
-          + `<b>${k.split("-")[0].toUpperCase()}</b><span>${kac(a)}${y?`<small>${kac(y)}</small>`:""}</span></button>`; }).join("")
-    }</div></div>`).join("")}
+    <div class="dil-grup"><div class="dil-liste">${
+      dilSirali().map(([k,a]) => { const ad = dilUIAdi(k);
+        return `<button data-dilsec="${k}" data-ara="${kac((a+" "+ad+" "+(DIL_TR[k]||"")+" "+k).toLocaleLowerCase("tr"))}"${k===S.dil?' class="secili" aria-current="true"':""}>`
+          + `<b>${k.split("-")[0].toUpperCase()}</b><span>${kac(ad)}${ad!==a?`<small lang="${k}">${kac(a)}</small>`:""}</span></button>`; }).join("")
+    }</div></div>
     <p class="dil-bos" hidden>${kac(t("dil_bulunamadi"))}</p>
     <p class="dil-not">${kac(t("dil_not"))}</p></div>`;
   p.hidden = false;

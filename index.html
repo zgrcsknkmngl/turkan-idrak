@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -698,7 +698,7 @@ const ULKE_EN = {"ABD":"USA","Kanada":"Canada","İngiltere":"UK","Belçika":"Bel
 const NITELIK_EN = {"bağımsız":"independent","üniversite":"university","devlet fonlu":"state-funded","devlet destekli":"state-backed",
   "devlet bağlantılı":"state-linked","devlet":"state","kamu":"public","kamu yayıncısı":"public broadcaster","özel":"private",
   "vakıf":"foundation","devlet yakını":"close to the state","çok taraflı":"multilateral"};
-const KAYNAK_EN = {"BBC Dünya":"BBC World","Af Örgütü":"Amnesty International","BM Haber":"UN News","BM İnsan Hakları":"UN Human Rights","Dünya Bankası":"World Bank","İHD":"Human Rights Association (İHD)","TİHV":"Human Rights Foundation of Türkiye (TİHV)","El Cezire Etüd":"Al Jazeera Centre for Studies","El Cezire Dosya":"Al Jazeera Features",
+const KAYNAK_EN = {"BBC Dünya":"BBC World","CSIS Endonezya":"CSIS Indonesia","The Conversation Afrika":"The Conversation Africa","The Conversation Brezilya":"The Conversation Brazil","The Conversation Endonezya":"The Conversation Indonesia","Af Örgütü":"Amnesty International","BM Haber":"UN News","BM İnsan Hakları":"UN Human Rights","Dünya Bankası":"World Bank","İHD":"Human Rights Association (İHD)","TİHV":"Human Rights Foundation of Türkiye (TİHV)","El Cezire Etüd":"Al Jazeera Centre for Studies","El Cezire Dosya":"Al Jazeera Features",
   "Dünya Ekonomik Forumu":"World Economic Forum","IPS Küresel Güney":"IPS Global South","MIT Teknoloji":"MIT Technology Review",
   "TRT World Rapor":"TRT World Research","ORF Hindistan":"ORF India","SAIIA Güney Afrika":"SAIIA South Africa",
   "ISS Afrika":"ISS Africa","CIPS Kanada":"CIPS Canada","AA Analiz":"AA Analysis"};
@@ -1494,6 +1494,53 @@ function cizSerit(){
     }).join("");
 }
 
+/* Harmanlama: günde onlarca haber giren ajanslar akışı boğmasın. Hiçbir yazı silinmez, yalnız sırası değişir.
+   Yazılar 24 saatlik dilimlere ayrılır (yeni dilim önce). Her dilimde kaynaklar sırayla birer yazı verir:
+   önce her kaynağın en yeni yazısı, sonra ikincisi... "Tümü"nde ayrıca haber ajansları üç kartta birden fazla yer almaz;
+   artanlar dilimin sonuna kalır. Tek kaynak seçiliyken ya da arama yapılırken düz kronolojik sıra kalır. */
+const zamanBellegi = new WeakMap();
+function yaziZamani(y){
+  let z = zamanBellegi.get(y);
+  if(z === undefined){ const d = tarihOku(y.tarih); z = d ? d.getTime() : -Infinity; zamanBellegi.set(y, z); }
+  return z;
+}
+function harmanla(liste, ajansSiniri){
+  const turu = new Map(S.kaynaklar.map(k => [k.ad, k.tur || "kurum"]));
+  const ajansMi = y => turu.get(y.kaynak) === "ajans";
+  const simdi = Date.now(), GUN = 86400000, dilimler = new Map();
+  for(const y of liste){
+    const z = yaziZamani(y);
+    const d = z === -Infinity ? Infinity : Math.max(0, Math.floor((simdi - z) / GUN));
+    if(!dilimler.has(d)) dilimler.set(d, []);
+    dilimler.get(d).push(y);
+  }
+  const sonuc = [];
+  for(const d of [...dilimler.keys()].sort((a,b) => a - b)){
+    const kuyruk = new Map();
+    for(const y of dilimler.get(d).sort((a,b) => yaziZamani(b) - yaziZamani(a))){
+      if(!kuyruk.has(y.kaynak)) kuyruk.set(y.kaynak, []);
+      kuyruk.get(y.kaynak).push(y);
+    }
+    const sirali = [];
+    for(let tur = 0; ; tur++){
+      const bu = [];
+      for(const q of kuyruk.values()) if(q[tur]) bu.push(q[tur]);
+      if(!bu.length) break;
+      sirali.push(...bu.sort((a,b) => yaziZamani(b) - yaziZamani(a)));
+    }
+    if(!ajansSiniri){ sonuc.push(...sirali); continue; }
+    const cikti = [], bekleyen = [];
+    let sonAjans = -99;
+    const koy = y => { if(ajansMi(y)) sonAjans = cikti.length; cikti.push(y); };
+    for(const y of sirali){
+      if(ajansMi(y)) bekleyen.push(y); else koy(y);
+      if(bekleyen.length && cikti.length - sonAjans >= 3) koy(bekleyen.shift());
+    }
+    sonuc.push(...cikti, ...bekleyen);
+  }
+  return sonuc;
+}
+
 function cizAkis(){
   if(S.yukleniyor) return;
   let liste = S.yazilar;
@@ -1521,6 +1568,7 @@ function cizAkis(){
       return kelimeler.every(w=>m.includes(w));
     });
   }
+  if(S.suzgec==="hepsi" && !S.ara.trim()) liste = harmanla(liste, S.kategori==="hepsi");
   $("#count").textContent = S.yazilar.length
     ? t("kaynak_yazi", sayi(S.kaynaklar.filter(k=>k.acik).length), sayi(S.yazilar.length))
     : "";

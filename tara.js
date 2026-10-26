@@ -267,6 +267,12 @@ function ozetDuzelt(ozet, baslik, yazar) {
   let o = String(ozet || "").replace(/&nbsp;|\u00a0/gi, " ").replace(/\s+/g, " ").trim();
   const sade = x => String(x || "").normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
   const b = sade(baslik);
+  // 0) WordPress dipnotu: "The post <başlık> appeared first on <site>." (arşivde kırpılmış hâli dahil)
+  const wp = o.search(/\bThe post\s/);
+  if (wp >= 0) {
+    const kalan = o.slice(wp + 9), kb = sade(kalan.replace(/…$/, ""));
+    if (/appeared first on/i.test(kalan) || (kb.length >= 3 && b.startsWith(kb.slice(0, 24)))) o = o.slice(0, wp).trim();
+  }
   // 1) Özet başlığı tekrar ederek başlıyorsa başlığı özetten çıkar
   if (b && sade(o).startsWith(b)) {
     const hedef = b.replace(/ /g, "").length;
@@ -320,6 +326,21 @@ function yolElendi(link){
   catch(e){ return ELENEN_YOLLAR.test(link); }
 }
 
+/* Haber ajanslarında spor, magazin ve yaşam bölümleri akışa girmesin.
+   Yalnız "ajans" türündeki kaynaklara uygulanır; düşünce kuruluşu, dergi ve kültür-sanat kaynaklarına dokunmaz.
+   Üç işarete bakar: bağlantının yolu, beslemedeki kategori etiketi, başlığın sonundaki bölüm adı (" - Sports"). */
+const AJANS_YOL = /\/(sports?|spor|football|soccer|cricket|tennis|golf|rugby|formula-?(?:1|one)|motorsports?|basketball|boxing|athletics|olympics|entertainment|lifestyle|life-?style|showbiz|celebrit(?:y|ies)|fashion|horoscopes?|magazin|yasam|eglence)(?=\/|$|\?|-|_)/i;
+const AJANS_KATEGORI = /^(sports?|spor|football|soccer|cricket|tennis|golf|rugby|formula ?(?:1|one)|motorsports?|basketball|boxing|athletics|olympics|entertainment|lifestyle|life ?(?:&|and) ?style|showbiz|celebrit(?:y|ies)|fashion|horoscopes?|magazin|eğlence|yaşam)\b/i;
+const AJANS_BASLIK = /(?:\s[-–—|]\s*(?:sports?|spor|entertainment|lifestyle)\s*$)|(?:^(?:sports?|spor)\s*[:|]\s)/i;
+function ajansElenir(blok, link, baslik) {
+  let yol = ""; try { yol = new URL(link).pathname; } catch (e) { yol = String(link || ""); }
+  if (AJANS_YOL.test(yol) || AJANS_BASLIK.test(baslik || "")) return true;
+  const cdata = s => String(s).replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1");
+  const kat = [...blok.matchAll(/<category(?:\s[^>]*)?>([\s\S]*?)<\/category>/gi)].map(m => temiz(cdata(m[1])))
+    .concat([...blok.matchAll(/<category[^>]*\sterm=["']([^"']+)["']/gi)].map(m => m[1]));
+  return kat.some(c => AJANS_KATEGORI.test(c.trim()));
+}
+
 function gorselBul(b) {
   const aday = [
     /<media:content[^>]+url=["']([^"']+)["']/i,
@@ -350,10 +371,12 @@ function ayikla(xml, kaynakAd) {
   let bloklar = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
   if (!bloklar.length) bloklar = xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
   if (!bloklar.length) throw new Error("beslemede yazı yok");
+  const ajans = ((KAYNAKLAR.find(k => k.ad === kaynakAd) || {}).tur === "ajans");
 
   return bloklar.slice(0, 20).map(b => {
     const baslik = temiz(etiket(b, "title"));
     const link = baglanti(b);
+    if (ajans && ajansElenir(b, link, baslik)) return null;     // spor, magazin, yaşam
     const ozetHam = temiz(
       etiket(b, "description") || etiket(b, "summary") || etiket(b, "content")
     );
@@ -379,7 +402,7 @@ function ayikla(xml, kaynakAd) {
       link,
       tarih: temiz(etiket(b, "pubDate") || etiket(b, "published") || etiket(b, "updated"))
     };
-  }).filter(y => {
+  }).filter(Boolean).filter(y => {
     if (!y.baslik) return false;
     if (yolElendi(y.link)) return false;              // kisa haber / canli / video
     if (!y.tarih) return true;                       // tarihi yoksa eleme

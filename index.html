@@ -1494,51 +1494,25 @@ function cizSerit(){
     }).join("");
 }
 
-/* Harmanlama: günde onlarca haber giren ajanslar akışı boğmasın. Hiçbir yazı silinmez, yalnız sırası değişir.
-   Yazılar 24 saatlik dilimlere ayrılır (yeni dilim önce). Her dilimde kaynaklar sırayla birer yazı verir:
-   önce her kaynağın en yeni yazısı, sonra ikincisi... "Tümü"nde ayrıca haber ajansları üç kartta birden fazla yer almaz;
-   artanlar dilimin sonuna kalır. Tek kaynak seçiliyken ya da arama yapılırken düz kronolojik sıra kalır. */
+/* Kota: günde onlarca haber giren ajanslar ana sayfayı boğmasın — ama sıra hep kronolojik kalsın.
+   Yalnız düz "Tümü" görünümünde (Gözdeler, kategori, tek kaynak, konu ve arama dışında) her kaynak
+   24 saatlik her dilimde en fazla birkaç yazıyla görünür: haber ajansları 2, diğerleri 3.
+   Fazlası silinmez; o kaynağın kendi sayfasında ve aramada durur. */
 const zamanBellegi = new WeakMap();
 function yaziZamani(y){
   let z = zamanBellegi.get(y);
   if(z === undefined){ const d = tarihOku(y.tarih); z = d ? d.getTime() : -Infinity; zamanBellegi.set(y, z); }
   return z;
 }
-function harmanla(liste, ajansSiniri){
+function kotala(liste){
   const turu = new Map(S.kaynaklar.map(k => [k.ad, k.tur || "kurum"]));
-  const ajansMi = y => turu.get(y.kaynak) === "ajans";
-  const simdi = Date.now(), GUN = 86400000, dilimler = new Map();
-  for(const y of liste){
+  const simdi = Date.now(), GUN = 86400000, sayac = new Map();
+  return [...liste].sort((a,b) => yaziZamani(b) - yaziZamani(a)).filter(y => {
     const z = yaziZamani(y);
-    const d = z === -Infinity ? Infinity : Math.max(0, Math.floor((simdi - z) / GUN));
-    if(!dilimler.has(d)) dilimler.set(d, []);
-    dilimler.get(d).push(y);
-  }
-  const sonuc = [];
-  for(const d of [...dilimler.keys()].sort((a,b) => a - b)){
-    const kuyruk = new Map();
-    for(const y of dilimler.get(d).sort((a,b) => yaziZamani(b) - yaziZamani(a))){
-      if(!kuyruk.has(y.kaynak)) kuyruk.set(y.kaynak, []);
-      kuyruk.get(y.kaynak).push(y);
-    }
-    const sirali = [];
-    for(let tur = 0; ; tur++){
-      const bu = [];
-      for(const q of kuyruk.values()) if(q[tur]) bu.push(q[tur]);
-      if(!bu.length) break;
-      sirali.push(...bu.sort((a,b) => yaziZamani(b) - yaziZamani(a)));
-    }
-    if(!ajansSiniri){ sonuc.push(...sirali); continue; }
-    const cikti = [], bekleyen = [];
-    let sonAjans = -99;
-    const koy = y => { if(ajansMi(y)) sonAjans = cikti.length; cikti.push(y); };
-    for(const y of sirali){
-      if(ajansMi(y)) bekleyen.push(y); else koy(y);
-      if(bekleyen.length && cikti.length - sonAjans >= 3) koy(bekleyen.shift());
-    }
-    sonuc.push(...cikti, ...bekleyen);
-  }
-  return sonuc;
+    const anahtar = y.kaynak + "|" + (z === -Infinity ? "x" : Math.max(0, Math.floor((simdi - z) / GUN)));
+    const n = (sayac.get(anahtar) || 0) + 1; sayac.set(anahtar, n);
+    return n <= (turu.get(y.kaynak) === "ajans" ? 2 : 3);
+  });
 }
 
 function cizAkis(){
@@ -1568,7 +1542,7 @@ function cizAkis(){
       return kelimeler.every(w=>m.includes(w));
     });
   }
-  if(S.suzgec==="hepsi" && !S.ara.trim()) liste = harmanla(liste, S.kategori==="hepsi");
+  if(S.kategori==="hepsi" && S.suzgec==="hepsi" && !S.gozdeFiltre && !S.etiket && !S.ara.trim()) liste = kotala(liste);
   $("#count").textContent = S.yazilar.length
     ? t("kaynak_yazi", sayi(S.kaynaklar.filter(k=>k.acik).length), sayi(S.yazilar.length))
     : "";

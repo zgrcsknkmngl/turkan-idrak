@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -172,9 +172,19 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .kaynak-ozet{font-family:var(--serif);font-size:16.5px;line-height:1.55;color:var(--ozet);margin:4px 0 6px}
   .entry.okundu h2{color:var(--okundu1)}
   .entry.okundu .sum{color:var(--okundu2)}
-  .cubuk{display:flex;gap:9px;align-items:center;padding:12px 0 2px;flex-wrap:wrap}
+  .cubuk{display:flex;gap:7px;align-items:center;padding:12px 0 2px;flex-wrap:wrap}
   .mini{border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--dim)}
   .mini[disabled]{opacity:.5}
+  .zaman-kutu{position:relative;display:inline-flex}
+  .zaman-kutu .mini{display:inline-flex;align-items:center;gap:3px;padding-left:11px;padding-right:10px}
+  .zaman-kutu .mini svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+  .zaman-kutu .ok{font-size:10px;opacity:.8}
+  .zaman-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:25;min-width:156px;padding:5px;display:flex;flex-direction:column;
+    background:var(--raised);border:1px solid var(--rule);border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+  .zaman-menu[hidden]{display:none}
+  .zaman-menu button{text-align:start;padding:10px 12px;border-radius:8px;font-size:13px;color:var(--dim)}
+  .zaman-menu button[aria-checked="true"]{color:var(--vellum);background:color-mix(in srgb,var(--gold) 14%,transparent)}
+  .zaman-menu button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
   .uyari{font-size:12px;color:var(--uyari)}
   .daha{padding:22px 0 10px;text-align:center}
   .daha .son{font-size:12px;color:var(--sonuk)}
@@ -587,6 +597,8 @@ const SOZLUK = {
     hic_aciklama:"İnternet bağlantını kontrol edip biraz sonra yeniden dene.",
     yeniden_dene:"Yeniden dene",
     yenile:"yenile", yenileniyor:"yenileniyor…",
+    zaman:"zaman", zaman_1:"son 24 saat", zaman_7:"son 7 gün", zaman_30:"son 30 gün", zaman_0:"tümü", zaman_araligi:"zaman aralığı", zaman_k1:"24 saat", zaman_k7:"7 gün", zaman_k30:"30 gün",
+    zaman_bos:a=>`Bu seçimde ${a} içinde yayımlanmış yazı yok.`, zaman_genislet:a=>`aralığı genişlet: ${a}`,
     hepsini_cevir:n=>"hepsini çevir", ceviri_acik:"çeviri açık ✓ · özgün metinlere dön", cevriliyor_n:n=>"çevriliyor…",
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
@@ -640,6 +652,8 @@ const SOZLUK = {
     hic_aciklama:"Check your internet connection and try again in a moment.",
     yeniden_dene:"Try again",
     yenile:"refresh", yenileniyor:"refreshing…",
+    zaman:"time", zaman_1:"last 24 hours", zaman_7:"last 7 days", zaman_30:"last 30 days", zaman_0:"all", zaman_araligi:"time range", zaman_k1:"24 hours", zaman_k7:"7 days", zaman_k30:"30 days",
+    zaman_bos:a=>`Nothing in this selection from the ${a}.`, zaman_genislet:a=>`widen to the ${a}`,
     hepsini_cevir:n=>"translate all", ceviri_acik:"translation on ✓ · show originals", cevriliyor_n:n=>"translating…",
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
@@ -754,6 +768,7 @@ const S = {
   kayitli:   yukle("ti.kayitli", []),
   gozde:     new Set(yukle("ti.gozde", [])),
   gozdeFiltre: false,
+  zaman:     0,          // 0 = bütün akış; 1, 7, 30 = son gün sayısı (kayan pencere, hatırlanmaz)
   ceviri:    yukle("ti.ceviri", {}),
   bellek:    yukle("ti.bellek",{}),
   okunan:    yukle("ti.okunan",[]),
@@ -1485,6 +1500,10 @@ function cizAkis(){
   if(S.kategori!=="hepsi") liste = liste.filter(y=>turBul(y.kaynak)===S.kategori);
   if(S.suzgec!=="hepsi")   liste = liste.filter(y=>y.kaynak===S.suzgec);
   if(S.gozdeFiltre)        liste = liste.filter(y=>S.gozde.has(y.kaynak));
+  if(S.zaman){             // yayıncının verdiği yayın saatine göre; tarihi olmayan yazı yalnız bütün akışta
+    const sinir = Date.now() - S.zaman*86400000;
+    liste = liste.filter(y=>{ const d = tarihOku(y.tarih); return d && d.getTime() >= sinir; });
+  }
 
   if(S.etiket){
     const e = ETIKETLER.find(x=>x.kod===S.etiket);
@@ -1507,6 +1526,14 @@ function cizAkis(){
     : "";
 
   if(!liste.length){
+    if(S.zaman && S.yazilar.length){
+      const sonraki = S.zaman===1 ? 7 : S.zaman===7 ? 30 : 0;
+      $("#feed").innerHTML = `<div class="state">
+        <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+        <h3>${kac(t("zaman_bos", t("zaman_"+S.zaman)))}</h3>
+        <button class="go" data-zaman="${sonraki}">${sonraki ? kac(t("zaman_genislet", t("zaman_"+sonraki))) : t("tum_akisa_don")}</button></div>`;
+      return;
+    }
     if(S.gozdeFiltre){
       $("#feed").innerHTML = `<div class="state">
         <svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
@@ -1549,6 +1576,8 @@ function cizAkis(){
   const cevrilmis = parca.filter(y => trOf(y)).length;
   const cubuk = `<div class="cubuk">
       <button class="mini" data-yeni="1"${S.yukleniyor?" disabled":""}>${t(S.yukleniyor?"yenileniyor":"yenile")}</button>
+      <span class="zaman-kutu"><button class="mini${S.zaman?" secili":""}" data-zaman-ac="1" aria-haspopup="menu" aria-expanded="false"${S.zaman?"":` aria-label="${t("zaman_araligi")}" title="${t("zaman_araligi")}"`}>${S.zaman ? t("zaman_k"+S.zaman) : `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>`}${S.zaman ? "" : `<span class="ok" aria-hidden="true">▾</span>`}</button><div class="zaman-menu" role="menu" hidden>${
+        [1,7,30,0].map(g=>`<button role="menuitemradio" aria-checked="${S.zaman===g}" data-zaman="${g}">${t("zaman_"+g)}</button>`).join("")}</div></span>
       ${cevrilmemis ? `<button class="mini" data-toplu="1"${S.topluCeviri?" disabled":""}>${
           S.topluCeviri ? t("cevriliyor_n", S.topluKalan||0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>`
         : (cevrilmis ? `<button class="mini" data-orj-toplu="1">${t("ceviri_acik")}</button>` : "")}
@@ -1692,6 +1721,24 @@ document.addEventListener("click", e=>{
     S.kaynaklar.splice(+h.dataset.sil,1); yaz("ti.kaynaklar6",S.kaynaklar); ciz(); cek(); return;
   }
 });
+/* zaman aralığı: tek düğme, basınca seçenekler açılır */
+function zamanMenuKapat(){
+  const m = document.querySelector(".zaman-menu"); if(!m || m.hidden) return;
+  m.hidden = true; const d = document.querySelector("[data-zaman-ac]"); if(d) d.setAttribute("aria-expanded","false");
+}
+document.addEventListener("click", e=>{
+  const ac = e.target.closest("[data-zaman-ac]");
+  if(ac){
+    const m = ac.parentElement.querySelector(".zaman-menu"), acilacak = m.hidden;
+    m.hidden = !acilacak; ac.setAttribute("aria-expanded", String(acilacak));
+    if(acilacak){ const s = m.querySelector('[aria-checked="true"]'); if(s) s.focus({preventScroll:true}); }
+    return;
+  }
+  const z = e.target.closest("[data-zaman]");
+  if(z){ S.zaman = +z.dataset.zaman || 0; S.goster = 40; cizAkis(); scrollTo({top:0}); return; }
+  if(!e.target.closest(".zaman-kutu")) zamanMenuKapat();
+});
+document.addEventListener("keydown", e=>{ if(e.key === "Escape") zamanMenuKapat(); });
 document.addEventListener("change", e=>{
   if(e.target.id==="secDil") dilSec(e.target.value);
 });

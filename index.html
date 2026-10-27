@@ -12,29 +12,29 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
 </script>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0D2B3B">
+<meta name="theme-color" content="#0A1628">
 <script>
 /* tema, sayfa çizilmeden önce: varsayılan koyu */
 (function(){var t="koyu";try{t=localStorage.getItem("ti.tema")||"koyu"}catch(e){}
 document.documentElement.setAttribute("data-tema",t);
-if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#E8F2FA";}
+if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#F0F5FA";}
 try{if(localStorage.getItem("ti.acilisGun")!==new Date().toLocaleDateString("sv")&&!/[?&]y=/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
 document.documentElement.classList.add("acilis-var");}catch(e){}})();
 </script>
@@ -45,24 +45,28 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0D2B3B;
-    --raised:#133849;
-    --rule:#21495D;
-    --vellum:#ECF2F3;
-    --dim:#93B3C1;
-    --ember:#FF7B72;
-    --gold:#5CC3EC;
-    --siluet:#1D4B61;
-    --sonuk:#6C8F9F;
-    --okundu1:#A3BCC6;
-    --okundu2:#86A1AD;
+    --ink:#0A1628;
+    --raised:#13233E;
+    --rule:#1E3354;
+    --vellum:#EEF4FC;
+    --dim:#8FA5BF;
+    --ember:#F0475A;
+    --gold:#3CC6D0;
+    --siluet:#1A3354;
+    --sonuk:#6E87A4;
+    --okundu1:#8FA2BA;
+    --okundu2:#7489A4;
     --uyari:#F2A08D;
-    --yazar:#A6BFCA;
-    --ozet:#C9DBE1;
-    --kapak-yazi:#3F7188;
-    --kapak1:#174152;
-    --kapak2:#113242;
-    --sil:#58798A;
+    --yazar:#9DB2CB;
+    --ozet:#AABED6;
+    --kapak-yazi:#33507A;
+    --kapak1:#14264A;
+    --kapak2:#0F1E3A;
+    --kart:#111F38;
+    --turkuaz:#2EC4CF;
+    --nav-bg:rgba(10,22,40,.9);
+    --golge:0 8px 22px rgba(0,0,0,.28);
+    --sil:#4E6687;
     color-scheme:dark;
 
     --serif:"Newsreader",Georgia,serif;
@@ -73,24 +77,28 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     padding-bottom:env(safe-area-inset-bottom,0px);
   }
   :root[data-tema="acik"]{
-    --ink:#E8F2FA;
-    --raised:#FAFDFF;
-    --rule:#CADDEC;
-    --vellum:#13263D;
-    --dim:#4E6378;
-    --ember:#C1272F;
-    --gold:#1A62B2;
-    --siluet:#C1D8EB;
-    --sonuk:#7D91A6;
-    --okundu1:#6B7F94;
-    --okundu2:#8095AA;
+    --ink:#F0F5FA;
+    --raised:#F8FBFF;
+    --rule:#D6E3F0;
+    --vellum:#0B1E36;
+    --dim:#4C6582;
+    --ember:#C8102E;
+    --gold:#007780;
+    --siluet:#C9DBEC;
+    --sonuk:#7C93AD;
+    --okundu1:#6C819A;
+    --okundu2:#8297B0;
     --uyari:#AE3F2B;
-    --yazar:#4E6378;
-    --ozet:#24374C;
-    --kapak-yazi:#8AABCB;
-    --kapak1:#D9E9F6;
-    --kapak2:#CBE0F1;
-    --sil:#9CB2C6;
+    --yazar:#4C6582;
+    --ozet:#2C4460;
+    --kapak-yazi:#8BA9C9;
+    --kapak1:#E3EDF7;
+    --kapak2:#D5E3F1;
+    --kart:#FBFDFF;
+    --turkuaz:#00A6B4;
+    --nav-bg:rgba(244,248,253,.92);
+    --golge:0 1px 2px rgba(11,30,54,.05),0 8px 20px rgba(11,30,54,.07);
+    --sil:#9DB1C7;
     color-scheme:light;
   }
   *,*::before,*::after{box-sizing:inherit}
@@ -168,7 +176,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .etiketler{padding:9px 18px}
   .etiketler .chip{font-size:12.5px;padding:4px 11px}
   main{padding:0 18px}
-  .entry{padding:16px 0 14px;border-bottom:1px solid var(--rule)}
+  .entry{padding:14px 14px 8px;margin:0 0 14px;background:var(--kart);border:1px solid var(--rule);border-radius:16px;box-shadow:var(--golge)}
   .kaynak-ozet{font-family:var(--serif);font-size:16.5px;line-height:1.55;color:var(--ozet);margin:4px 0 6px}
   .entry.okundu h2{color:var(--okundu1)}
   .entry.okundu .sum{color:var(--okundu2)}
@@ -249,7 +257,8 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .note{font-size:13px;color:var(--dim);line-height:1.65;padding:18px 0 4px}
 
   nav{position:fixed;left:0;right:0;bottom:0;z-index:30;
-    background:var(--raised);border-top:1px solid var(--rule);padding-bottom:env(safe-area-inset-bottom,0px)}
+    background:var(--nav-bg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  nav::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--ember) 28%,var(--turkuaz) 72%,transparent)}
   nav .sekmeler{display:flex}
   nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
   /* Hakkında · İletişim · Gizlilik: her ekranda sekmelerin hemen altında */
@@ -277,10 +286,11 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .dugme.ana{background:var(--ember);border-color:var(--ember);color:#fff}
 
   /* Tefekkur */
-  .tef-giris{padding:22px 0 8px;border-bottom:1px solid var(--rule)}
-  .tef-giris h3{font-family:var(--serif);font-weight:500;font-size:23px;margin:0 0 8px}
+  .tef-giris{padding:24px 6px 6px;text-align:center}
+  .tef-giris h3{font-family:var(--serif);font-weight:500;font-size:32px;letter-spacing:.01em;margin:0 0 8px}
   .tef-giris p{font-family:var(--serif);font-size:15.5px;line-height:1.6;color:var(--ozet);margin:0 0 12px}
-  .tef-kart{display:block;padding:19px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit}
+  .tef-kart{display:block;position:relative;overflow:hidden;padding:17px 16px 15px 26px;margin:14px 0;background:var(--kart);border:1px solid var(--rule);border-radius:16px;box-shadow:var(--golge);text-decoration:none;color:inherit}
+  .tef-kart::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:linear-gradient(90deg,var(--ember) 0 50%,var(--turkuaz) 50% 100%)}
   /* Tefekkür yazısı uygulamanın içinde okunur: başlık, panorama ve kaydırma şeridi yerinde kalır */
   .tef-oku{padding:18px 0 8px}
   .tef-entry .yazi{cursor:pointer}
@@ -318,7 +328,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     background-image:image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"))}
   :root[data-tema="acik"] .manzara{background-image:url(dunya-gunduz.jpg);background-size:100% 100%;
     background-image:image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
-  .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
+  .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
   .siluet,.sayaclar{display:none!important}
   .masthead .wordmark{color:#F4EFE3;text-shadow:0 1px 6px rgba(0,10,30,.35)}
   .masthead .wordmark em{color:#8CC6FF}
@@ -349,7 +359,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .dil-dugme svg{width:15px;height:15px;flex:none}
   @keyframes dil-nabiz{0%,100%{box-shadow:0 0 0 0 rgba(63,145,228,0)}50%{box-shadow:0 0 0 7px rgba(63,145,228,.38)}}
   .dil-dugme.nabiz{animation:dil-nabiz 1.3s ease-in-out 4}
-  .dil-ipucu{position:fixed;z-index:1200;max-width:240px;padding:10px 13px;border-radius:12px;background:#EAF4FB;color:#0B1E2E;
+  .dil-ipucu{position:fixed;z-index:1200;max-width:240px;padding:10px 13px;border-radius:12px;background:#F8FBFF;color:#0B1E36;
     font:700 14px/1.35 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38);cursor:pointer;opacity:0;transform:translateY(-4px);
     transition:opacity .3s ease,transform .3s ease}
   .dil-ipucu.acik{opacity:1;transform:none}
@@ -363,7 +373,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .yukle-hap svg{width:20px;height:26px;flex:none}
   .yukle-hap .yk-kapat{width:28px;height:28px;border-radius:50%;border:0;background:transparent;color:var(--dim);font-size:18px;line-height:1;cursor:pointer}
   .yukle-ios{position:fixed;z-index:41;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 160px);max-width:420px;margin:0 auto;
-    padding:13px 15px;border-radius:12px;background:#EAF4FB;color:#0B1E2E;font:500 14px/1.5 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38)}
+    padding:13px 15px;border-radius:12px;background:#F8FBFF;color:#0B1E36;font:500 14px/1.5 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38)}
   .dil-ipucu small{display:block;margin-top:2px;font-weight:500;font-size:12px;opacity:.65}
   .dil-ipucu::before{content:"";position:absolute;top:-6px;right:var(--ok,18px);width:12px;height:12px;background:inherit;
     transform:rotate(45deg);border-radius:2px}
@@ -1179,7 +1189,7 @@ function acilanCiz(y){
 }
 
 /* ---------- Tema ---------- */
-const TEMA_RENK = {koyu:"#0D2B3B", acik:"#E8F2FA"};
+const TEMA_RENK = {koyu:"#0A1628", acik:"#F0F5FA"};
 function temaUygula(tm){
   document.documentElement.setAttribute("data-tema", tm);
   const m = document.querySelector('meta[name="theme-color"]'); if(m) m.content = TEMA_RENK[tm] || TEMA_RENK.koyu;

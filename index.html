@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -35,7 +35,7 @@
 (function(){var t="koyu";try{t=localStorage.getItem("ti.tema")||"koyu"}catch(e){}
 document.documentElement.setAttribute("data-tema",t);
 if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#E8F2FA";}
-try{if(!sessionStorage.getItem("ti.acilis")&&!/[?&]y=/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
+try{if(localStorage.getItem("ti.acilisGun")!==new Date().toLocaleDateString("sv")&&!/[?&]y=/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
 document.documentElement.classList.add("acilis-var");}catch(e){}})();
 </script>
 <link rel="icon" href="anka-192.png">
@@ -1930,13 +1930,13 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
 /* ---------- Açılış: acilis.mp4 (19 sn) ----------
    Video, kendi bulanık kopyasının önünde kırpılmadan oynar.
    Video yüklenirken de, oynatılamazsa da videonun bir karesi (acilis-kare.jpg) görünür; oynatılamazsa kısa bir an sonra uygulamaya geçilir.
-   Günün ilk açılışında "Atla" 4 sn sonra belirir; gün içindeki sonraki açılışlarda baştan hazırdır. Bitince yumuşakça uygulamaya geçer. */
+   Günde yalnız bir kez, günün ilk açılışında oynar; "Atla" 4 sn sonra belirir. Gün içinde geri tuşuyla çıkıp dönünce ya da yeniden açınca doğrudan uygulama gelir. Bitince yumuşakça uygulamaya geçer. */
 function acilisOynat(){
   const kok = document.documentElement, ac = document.getElementById("acilis");
   if(!ac) return;
   const bitir = () => { ac.remove(); kok.classList.remove("acilis-var"); setTimeout(dilIpucuGoster, 600); };
   if(!kok.classList.contains("acilis-var")){ bitir(); return; }
-  try{ sessionStorage.setItem("ti.acilis","1"); }catch(e){}
+  try{ localStorage.setItem("ti.acilisGun", new Date().toLocaleDateString("sv")); }catch(e){}   // günde bir kez
 
   const v = ac.querySelector(".ac-video"), tuval = ac.querySelector(".ac-tuval");
   const atla = ac.querySelector(".av-atla"), ses = ac.querySelector(".av-ses");

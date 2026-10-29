@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -198,7 +198,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .kaynak-liste button b{color:var(--gold)}
   #cubukYeri:empty{display:none}
   #cubukYeri .cubuk{padding:5px 18px 7px}
-  html{scroll-snap-type:y mandatory;scroll-padding-top:calc(var(--ust-y,0px) + 10px)}
+  html{scroll-snap-type:y mandatory;scroll-padding-top:calc(var(--ust-y,0px) + 10px);scroll-padding-bottom:calc(var(--alt-y,0px) + 12px)}
   /* Akış kartları: ekranda iki kart, kaydırınca ikişer ikişer */
   #feed .entry{height:var(--kart-y,auto);display:flex;flex-direction:column;overflow:hidden;padding:8px 8px 6px;margin:0 0 10px;position:relative}
   #feed > .entry:nth-of-type(2n+1){scroll-snap-align:start;scroll-snap-stop:always}
@@ -1550,7 +1550,7 @@ function yerlesimiOlc(){
   const ust = blok.getBoundingClientRect().height, alt = nav.getBoundingClientRect().height, ara = 10;
   const y = Math.max(200, Math.floor((window.innerHeight - ust - alt - ara * 3) / 2));
   const r = document.documentElement.style;
-  r.setProperty("--ust-y", ust + "px"); r.setProperty("--kart-y", y + "px");
+  r.setProperty("--ust-y", ust + "px"); r.setProperty("--alt-y", alt + "px"); r.setProperty("--kart-y", y + "px");
   kartlariSigdir();
 }
 addEventListener("resize", yerlesimiOlc);

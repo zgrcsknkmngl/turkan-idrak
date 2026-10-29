@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -306,8 +306,9 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   nav .sekmeler{display:flex}
   nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
   /* Hakkında · İletişim · Gizlilik: her ekranda sekmelerin hemen altında */
-  nav .nav-alt{display:flex;justify-content:center;align-items:center;padding:0 0 5px;font-size:11.5px;line-height:1;color:var(--sonuk)}
-  nav .nav-alt a{color:var(--dim);text-decoration:none;padding:6px 10px}
+  nav .nav-alt{display:grid;grid-template-columns:1fr 2fr 2fr 2fr 1fr;align-items:center;padding:0 0 5px;font-size:11.5px;line-height:1;color:var(--sonuk)}
+  nav .nav-alt a{color:var(--dim);text-decoration:none;padding:7px 8px;justify-self:center;white-space:nowrap}
+  nav .nav-alt a:nth-child(1){grid-column:2} nav .nav-alt a:nth-child(2){grid-column:3} nav .nav-alt a:nth-child(3){grid-column:4}
   nav .nav-alt a:active{color:var(--vellum)}
   nav button svg{width:21px;height:21px}
   nav button[aria-current="page"]{color:var(--vellum)}
@@ -574,7 +575,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5.5" cy="18.5" r="2.5"/><path d="M4 4.5c9.1 0 15.5 6.4 15.5 15.5M4 10.5c5.8 0 9.5 3.7 9.5 9.5"/></svg><span data-t="nav_kaynaklar">Kaynaklar</span>
   </button>
   </div>
-  <div class="nav-alt"><a href="hakkinda.html" data-t="hakkinda">Hakkında</a>·<a href="iletisim.html" data-t="iletisim">İletişim</a>·<a href="gizlilik.html" data-t="gizlilik">Gizlilik</a></div>
+  <div class="nav-alt"><a href="hakkinda.html" data-t="hakkinda">Hakkında</a><a href="iletisim.html" data-t="iletisim">İletişim</a><a href="gizlilik.html" data-t="gizlilik">Gizlilik</a></div>
 </nav>
 
 <script>
@@ -661,7 +662,7 @@ const SOZLUK = {
     zaman:"zaman", zaman_1:"son 24 saat", zaman_7:"son 7 gün", zaman_30:"son 30 gün", zaman_0:"tümü", zaman_araligi:"zaman aralığı", zaman_k1:"24 saat", zaman_k7:"7 gün", zaman_k30:"30 gün",
     zaman_bos:a=>`Bu seçimde ${a} içinde yayımlanmış yazı yok.`, zaman_genislet:a=>`aralığı genişlet: ${a}`,
     tum_kaynaklar:"Tüm kaynaklar", kaynak_sec:"Kaynak seç", kaynak_ara:"kaynak ara…", dugme_ipucu_tamam:"anladım",
-    hepsini_cevir:n=>"hepsini çevir", ceviri_acik:"çeviri açık ✓ · özgün metinlere dön", cevriliyor_n:n=>"çevriliyor…",
+    hepsini_cevir:n=>"çevir", ceviri_acik:"özgün", cevriliyor_n:n=>"çevriliyor…",
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
     kaydet:"kaydet", kayitli:"kayıtlı", cevir:"çevir", cevriliyor:"çevriliyor…", ceviri_kapali:"çeviri kapalı",
@@ -669,9 +670,9 @@ const SOZLUK = {
     kayit_yok:"Henüz kayıt yok",
     kayit_yok_aciklama:"İdrak’taki bir yazının altındaki <strong>kaydet</strong>’e dokun, burada birikir.",
     idrake_don:"İdrak’a dön",
-    kaynak_ozet:(n,l)=>`Türkan'da ${n} kaynak var: ${l}.`, ve:"ve",
+    kaynak_ozet:(n,l)=>`Dünyanın dört bir yanından ${n} ses: ${l}. Her biri kendi dilinde, kendi penceresinden konuşur; Türkan hepsini aynı mecliste dinler.`, ve:"ve",
     say_kurum:"düşünce kuruluşu", say_dergi:"dergi", say_ajans:"haber ajansı", say_kitap:"kültür sanat yayını", say_rapor:"rapor kaynağı",
-    son_tarama:z=>`Kaynaklar son olarak ${z} tarandı.`, henuz_taranmadi:"Kaynaklar henüz taranmadı.",
+    son_tarama:z=>`Son yoklama: ${z}.`, henuz_taranmadi:"Kaynaklar henüz taranmadı.",
     kapali:"kapalı", ulasilamadi:"ulaşılamadı", ulasilamadi_duruyor:n=>`ulaşılamadı · ${n} yazı duruyor`,
     kaynak_silinsin:a=>`${a} kaynağı silinsin mi?`,
     paylasilan_yazi:"Paylaşılan yazı", kapat:"kapat", kaynakta_oku:"Kaynakta oku", dilde_oku:d=>`${d} oku`,
@@ -717,7 +718,7 @@ const SOZLUK = {
     zaman:"time", zaman_1:"last 24 hours", zaman_7:"last 7 days", zaman_30:"last 30 days", zaman_0:"all", zaman_araligi:"time range", zaman_k1:"24 hours", zaman_k7:"7 days", zaman_k30:"30 days",
     zaman_bos:a=>`Nothing in this selection from the ${a}.`, zaman_genislet:a=>`widen to the ${a}`,
     tum_kaynaklar:"All sources", kaynak_sec:"Choose a source", kaynak_ara:"search sources…", dugme_ipucu_tamam:"got it",
-    hepsini_cevir:n=>"translate all", ceviri_acik:"translation on ✓ · show originals", cevriliyor_n:n=>"translating…",
+    hepsini_cevir:n=>"translate", ceviri_acik:"original", cevriliyor_n:n=>"translating…",
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
     kaydet:"save", kayitli:"saved", cevir:"translate", cevriliyor:"translating…", ceviri_kapali:"translation unavailable",
@@ -725,9 +726,9 @@ const SOZLUK = {
     kayit_yok:"Nothing saved yet",
     kayit_yok_aciklama:"Tap <strong>save</strong> under any article in İdrak and it will be kept here.",
     idrake_don:"Back to İdrak",
-    kaynak_ozet:(n,l)=>`Türkan brings together ${n} sources: ${l}.`, ve:"and",
+    kaynak_ozet:(n,l)=>`${n} voices from every corner of the world: ${l}. Each speaks in its own language, from its own window; Türkan listens to them all in one gathering.`, ve:"and",
     say_kurum:"think tanks", say_dergi:"magazines", say_ajans:"news agencies", say_kitap:"culture & arts outlets", say_rapor:"report sources",
-    son_tarama:z=>`Sources were last scanned on ${z}.`, henuz_taranmadi:"Sources have not been scanned yet.",
+    son_tarama:z=>`Last roll call: ${z}.`, henuz_taranmadi:"Sources have not been scanned yet.",
     kapali:"off", ulasilamadi:"unreachable", ulasilamadi_duruyor:n=>`unreachable · ${n} articles kept`,
     kaynak_silinsin:a=>`Remove ${a}?`,
     paylasilan_yazi:"Shared article", kapat:"close", kaynakta_oku:"Read at the source", dilde_oku:d=>`Read in ${d}`,

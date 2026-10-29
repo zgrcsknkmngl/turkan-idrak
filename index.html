@@ -183,7 +183,12 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .ust-serit{display:none!important}
   .kaynak-sec{font-weight:600;display:inline-flex;align-items:center;gap:6px}
   .kaynak-sec .ok{font-size:10px;opacity:.8}
-  .kaynak-temizle{padding-left:13px;padding-right:13px}
+  .kaynak-temizle,.kaynak-yildiz{padding-left:13px;padding-right:13px}
+  .kaynak-yildiz[aria-pressed="true"]{color:var(--gold)}
+  .dugme-ipucu{position:absolute;right:8px;bottom:50px;z-index:3;display:flex;align-items:center;gap:8px;padding:7px 12px;border:0;border-radius:12px;
+    background:rgba(8,16,30,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:600 12px var(--sans);white-space:nowrap;cursor:pointer}
+  .dugme-ipucu::after{content:"";position:absolute;right:26px;bottom:-6px;border:6px solid transparent;border-bottom:0;border-top-color:rgba(8,16,30,.82)}
+  .dugme-ipucu b{color:var(--gold);font-size:13px}
   .dil-liste.kaynak-liste{grid-template-columns:1fr}
   .kaynak-liste button.bos{opacity:.55}
   .kaynak-liste button b{color:var(--gold)}
@@ -655,7 +660,7 @@ const SOZLUK = {
     yenile:"yenile", yenileniyor:"yenileniyor…",
     zaman:"zaman", zaman_1:"son 24 saat", zaman_7:"son 7 gün", zaman_30:"son 30 gün", zaman_0:"tümü", zaman_araligi:"zaman aralığı", zaman_k1:"24 saat", zaman_k7:"7 gün", zaman_k30:"30 gün",
     zaman_bos:a=>`Bu seçimde ${a} içinde yayımlanmış yazı yok.`, zaman_genislet:a=>`aralığı genişlet: ${a}`,
-    tum_kaynaklar:"Tüm kaynaklar", kaynak_sec:"Kaynak seç", kaynak_ara:"kaynak ara…",
+    tum_kaynaklar:"Tüm kaynaklar", kaynak_sec:"Kaynak seç", kaynak_ara:"kaynak ara…", dugme_ipucu_tamam:"anladım",
     hepsini_cevir:n=>"hepsini çevir", ceviri_acik:"çeviri açık ✓ · özgün metinlere dön", cevriliyor_n:n=>"çevriliyor…",
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
@@ -711,7 +716,7 @@ const SOZLUK = {
     yenile:"refresh", yenileniyor:"refreshing…",
     zaman:"time", zaman_1:"last 24 hours", zaman_7:"last 7 days", zaman_30:"last 30 days", zaman_0:"all", zaman_araligi:"time range", zaman_k1:"24 hours", zaman_k7:"7 days", zaman_k30:"30 days",
     zaman_bos:a=>`Nothing in this selection from the ${a}.`, zaman_genislet:a=>`widen to the ${a}`,
-    tum_kaynaklar:"All sources", kaynak_sec:"Choose a source", kaynak_ara:"search sources…",
+    tum_kaynaklar:"All sources", kaynak_sec:"Choose a source", kaynak_ara:"search sources…", dugme_ipucu_tamam:"got it",
     hepsini_cevir:n=>"translate all", ceviri_acik:"translation on ✓ · show originals", cevriliyor_n:n=>"translating…",
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
@@ -1518,6 +1523,17 @@ function kartlariSigdir(){
     if (n < 1) s.style.display = "none"; else s.style.webkitLineClamp = String(Math.min(n, 6));
   }
 }
+/* Resmin üstündeki simgelerin ne işe yaradığını bir kez söyle; okur "✓"ye basınca bir daha çıkmaz. */
+function dugmeIpucu(){
+  try { if (localStorage.getItem("ti.dugmeIpucu")) return; } catch (e) { return; }
+  const serit = document.querySelector("#feed .entry .kapak-alan .acts");
+  if (!serit || document.querySelector(".dugme-ipucu")) return;
+  const d = document.createElement("button"); d.type = "button"; d.className = "dugme-ipucu";
+  d.innerHTML = `${kac(t("kaydet"))} · ${kac(t("cevir"))} · ${kac(t("kaynak"))} · ${kac(t("paylas"))}<b aria-hidden="true">✓</b>`;
+  d.setAttribute("aria-label", t("dugme_ipucu_tamam"));
+  d.addEventListener("click", e => { e.stopPropagation(); e.preventDefault(); try { localStorage.setItem("ti.dugmeIpucu", "1"); } catch (_) {} d.remove(); });
+  serit.parentElement.appendChild(d);
+}
 function yerlesimiOlc(){
   const blok = $("#ustBlok"), nav = document.querySelector("nav"); if (!blok || !nav) return;
   const ust = blok.getBoundingClientRect().height, alt = nav.getBoundingClientRect().height, ara = 10;
@@ -1566,9 +1582,18 @@ function cizKategoriler(){
   const sayKat = kod => kod==="hepsi"
     ? S.yazilar.length
     : S.yazilar.filter(y=>turBul(y.kaynak)===kod).length;
-  $("#katlar").innerHTML = KATEGORILER.map(kod=>
-    `<button class="chip" data-kat="${kod}" aria-pressed="${S.kategori===kod}">${
-      kac(t("kat_"+kod))}</button>`).join("");
+  const sec = S.suzgec !== "hepsi" ? S.suzgec : null;
+  $("#katlar").innerHTML = KATEGORILER.map(kod => {
+    if (S.kategori !== kod)
+      return `<button class="chip" data-kat="${kod}" aria-pressed="false">${kac(t("kat_"+kod))}</button>`;
+    // seçili kategori: dokununca o kategorinin kaynakları A'dan Z'ye açılır; kaynak seçiliyse onun adını taşır
+    const etiket = sec ? (S.gozde.has(sec) ? "★ " : "") + kaynakAdi(sec) : t("kat_"+kod);
+    return `<button class="chip kaynak-sec" data-kaynak-ac="1" aria-pressed="true" aria-haspopup="dialog">${kac(etiket)}<span class="ok" aria-hidden="true">▾</span></button>`
+      + (sec ? `<button class="chip kaynak-temizle" data-suz="hepsi" aria-label="${kac(t("tum_kaynaklar"))}">×</button>`
+             + `<button class="chip kaynak-yildiz" data-gozde-ekle="${kac(sec)}" aria-pressed="${S.gozde.has(sec)}" aria-label="${kac(t(S.gozde.has(sec)?"gozdede":"gozdeye_ekle"))}">${S.gozde.has(sec)?"★":"☆"}</button>` : "");
+  }).join("");
+  const a = document.querySelector("#katlar .kaynak-sec");
+  if (a && a.offsetLeft + a.offsetWidth > a.parentElement.clientWidth) a.parentElement.scrollLeft = a.offsetLeft - 18;
 }
 
 /* Kaynaklar yatay şerit yerine tek düğme: dokununca dil seçicideki gibi A'dan Z'ye, aranabilir bir liste açılır. */
@@ -1577,13 +1602,7 @@ function kaynakSecenekleri(){
     .filter(k=>k.acik && (S.kategori==="hepsi" || (k.tur||"kurum")===S.kategori))
     .slice().sort((a,b)=>kaynakAdi(a.ad).localeCompare(kaynakAdi(b.ad), S.arayuz, {sensitivity:"base", numeric:true}));
 }
-function cizSerit(){
-  const sec = S.suzgec !== "hepsi" ? S.suzgec : null;
-  const etiket = sec ? (S.gozde.has(sec) ? "★ " : "") + kaynakAdi(sec) : t("tum_kaynaklar");
-  $("#rail").innerHTML =
-    `<button class="chip kaynak-sec" data-kaynak-ac="1" aria-haspopup="dialog" aria-pressed="${!!sec}">${kac(etiket)}<span class="ok" aria-hidden="true">▾</span></button>`
-    + (sec ? `<button class="chip kaynak-temizle" data-suz="hepsi" aria-label="${kac(t("tum_kaynaklar"))}">×</button>` + `<button class="chip${S.gozde.has(S.suzgec)?" secili":""}" data-gozde-ekle="${kac(S.suzgec)}">${S.gozde.has(S.suzgec) ? "★ "+t("gozdede") : "☆ "+t("gozdeye_ekle")}</button>` : "");
-}
+function cizSerit(){ const r = $("#rail"); r.innerHTML = ""; r.classList.add("hide"); }   // kaynak seçici artık kategori çipinde
 function kaynakPenceresiAc(){
   let p = $("#kaynakPencere");
   if(!p){ p = document.createElement("div"); p.id = "kaynakPencere"; p.className = "dil-pencere"; document.body.appendChild(p);
@@ -1597,7 +1616,7 @@ function kaynakPenceresiAc(){
     <div class="dil-bas">${kac(t("kaynak_sec"))}</div>
     <input class="dil-ara" type="search" placeholder="${kac(t("kaynak_ara"))}" aria-label="${kac(t("kaynak_ara"))}" autocomplete="off">
     <div class="dil-grup"><div class="dil-liste kaynak-liste">${
-      dugme("hepsi", t("tum_kaynaklar"), "", false, false) +
+      dugme("hepsi", S.kategori==="hepsi" ? t("tum_kaynaklar") : t("tumu")+" · "+t("kat_"+S.kategori), "", false, false) +
       kaynakSecenekleri().map(k => dugme(k.ad, kaynakAdi(k.ad), ulke(k), S.gozde.has(k.ad), !var_(k.ad))).join("")
     }</div></div></div>`;
   p.hidden = false;
@@ -1730,7 +1749,7 @@ function cizAkis(){
     : (liste.length>40 ? `<div class="daha"><span class="son">${t("arsiv_sonu", sayi(liste.length))}</span></div>` : "");
   $("#cubukYeri").innerHTML = cubuk;
   $("#feed").innerHTML = parca.map(kart).join("") + dahaFazla + altBaglantilar();
-  requestAnimationFrame(kartlariSigdir);
+  requestAnimationFrame(() => { kartlariSigdir(); dugmeIpucu(); });
   if(S.otoCeviri && !S.topluCeviri && cevrilmemis) setTimeout(hepsiniCevir, 0);
 }
 

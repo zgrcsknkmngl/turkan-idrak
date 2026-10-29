@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -37,6 +37,10 @@ document.documentElement.setAttribute("data-tema",t);
 if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#F0F5FA";}
 try{if(localStorage.getItem("ti.acilisGun")!==new Date().toLocaleDateString("sv")&&!/[?&]y=/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
 document.documentElement.classList.add("acilis-var");}catch(e){}})();
+
+  /* Bayram panoraması: 23 Nisan, 19 Mayıs, 30 Ağustos, 29 Ekim ve 3 Kasım'da Galata ile Kız Kulesi bayrak ışığıyla aydınlanır; ertesi gün kendiliğinden eski hâline döner */
+  try{var bg=new Date(),ay=bg.getMonth()+1,gn=bg.getDate();
+    if((ay===4&&gn===23)||(ay===5&&gn===19)||(ay===8&&gn===30)||(ay===10&&gn===29)||(ay===11&&gn===3))document.documentElement.classList.add("bayram");}catch(e){}
 </script>
 <link rel="icon" href="anka-192.png">
 <link rel="apple-touch-icon" href="anka-192.png">
@@ -373,6 +377,12 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     background-image:image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"))}
   :root[data-tema="acik"] .manzara{background-image:url(dunya-gunduz.jpg);background-size:100% 100%;
     background-image:image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
+  :root.bayram .manzara{background-image:url(dunya-gece-bayram.jpg),url(dunya-gece.jpg);background-size:100% 100%;
+    background-image:image-set(url(dunya-gece-bayram.webp) type("image/webp"), url(dunya-gece-bayram.jpg) type("image/jpeg")),
+                     image-set(url(dunya-gece.webp) type("image/webp"), url(dunya-gece.jpg) type("image/jpeg"))}
+  :root.bayram[data-tema="acik"] .manzara{background-image:url(dunya-gunduz-bayram.jpg),url(dunya-gunduz.jpg);background-size:100% 100%;
+    background-image:image-set(url(dunya-gunduz-bayram.webp) type("image/webp"), url(dunya-gunduz-bayram.jpg) type("image/jpeg")),
+                     image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
   .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
   .siluet,.sayaclar{display:none!important}
   .masthead .wordmark{color:#F4EFE3;text-shadow:0 1px 6px rgba(0,10,30,.35)}

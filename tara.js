@@ -75,7 +75,7 @@ const KAYNAKLAR = [
   // --- Dergiler, G20 genişlemesi (24 Ekim 2026): ücretsiz, ciddi ve düzenli yayın yapan dergiler; yoksa The Conversation'ın o ülke baskısı ---
   { ad:"Aeon", ulke:"İngiltere", tur:"dergi", url:"https://aeon.co/feed.rss", yedek:"https://news.google.com/rss/search?q=site:aeon.co+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Le Grand Continent", ulke:"Fransa", tur:"dergi", url:"https://legrandcontinent.eu/fr/feed/", yedek:"https://news.google.com/rss/search?q=site:legrandcontinent.eu+when:30d&hl=fr&gl=FR&ceid=FR:fr" },
-  { ad:"IPG Journal", ulke:"Almanya", tur:"dergi", url:"https://news.google.com/rss/search?q=site:ipg-journal.io+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"IPG Journal", ulke:"Almanya", tur:"dergi", url:"https://www.ips-journal.eu/articles.rss", yedek:"https://news.google.com/rss/search?q=site:ips-journal.eu+when:60d&hl=en-US&gl=US&ceid=US:en" },   // ✓ 29 Ekim 2026: .io Rusça baskıydı ve Google Haberler'de neredeyse yoktu; Friedrich-Ebert-Stiftung'un İngilizce baskısının kendi beslemesine geçildi
   { ad:"Decode39", ulke:"İtalya", tur:"dergi", url:"https://decode39.com/feed/", yedek:"https://news.google.com/rss/search?q=site:decode39.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Social Europe", ulke:"Avrupa Birliği", tur:"dergi", url:"https://www.socialeurope.eu/feed", yedek:"https://news.google.com/rss/search?q=site:socialeurope.eu+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Russia in Global Affairs", ulke:"Rusya", tur:"dergi", url:"https://eng.globalaffairs.ru/feed/", yedek:"https://news.google.com/rss/search?q=site:eng.globalaffairs.ru+when:60d&hl=en-US&gl=US&ceid=US:en" },
@@ -471,7 +471,7 @@ function copMu(y, kaynakAd) {
         (unvansiz.length < kelimeler.length || VERILI_ADLAR.has(normAd(unvansiz[0])))) return true;   // kişi profili ("Koji Murata", "Dr. Lukas Schaupp")
   }
   // başlık yalnızca kurumun adından ibaretse ("- Real Instituto Elcano", "Asan Institute for Policy Studies, Inc.")
-  const genel = new Set("real royal instituto institute institut istituto institucion the of for de del la le el and y e et policy policies studies study inc ltd foundation fundacion fondation stiftung center centre centro council consejo forum kraliyet enstitusu vakfi merkezi".split(" "));
+  const genel = new Set("real royal instituto institute institut istituto institucion the of for de del la le el and y e et policy policies studies study inc ltd foundation fundacion fondation stiftung center centre centro council consejo forum kraliyet enstitusu vakfi merkezi pdf www io com org net eu info".split(" "));
   const kurum = new Set(sk.split(" "));
   if (sb.split(" ").every(w => kurum.has(w) || genel.has(w))) return true;
   return false;

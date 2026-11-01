@@ -131,6 +131,7 @@ const KAYNAKLAR = [
   { ad:"Dawn", ulke:"Pakistan", tur:"ajans", url:"https://www.dawn.com/feeds/home", yedek:"https://news.google.com/rss/search?q=site:dawn.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Yonhap", ulke:"Güney Kore", nitelik:"kamu", tur:"ajans", url:"https://en.yna.co.kr/RSS/news.xml", yedek:"https://news.google.com/rss/search?q=site:en.yna.co.kr+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Kyiv Independent", ulke:"Ukrayna", tur:"ajans", url:"https://kyivindependent.com/news-archive/rss/", yedek:"https://news.google.com/rss/search?q=site:kyivindependent.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"The Young Turks", ulke:"ABD", tur:"ajans", url:"https://www.youtube.com/feeds/videos.xml?channel_id=UC1yBKRuGpC1tSM73A0ZjYjQ" },   // Cenk Uygur; yazılı yayını ve açık beslemesi yok, YouTube kanalının kendi beslemesi
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
   // Raporlar ve endeksler (16 Ekim 2026)
@@ -380,6 +381,12 @@ function temizUrl(u) {
   return u.length > 400 ? "" : u;
 }
 
+/* YouTube: açıklamanın yalnızca ilk paragrafı; altındaki abonelik, bağış ve bağlantı satırları alınmaz */
+function ytAciklama(b) {
+  const m = b.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/i); if (!m) return "";
+  const ilk = m[1].split(/\r?\n/).map(s => s.trim()).find(s => s && !/https?:\/\//i.test(s)) || "";
+  return /^(subscribe|join|follow|watch|support|help support|become a member|\*{3}|☞)/i.test(ilk) ? "" : ilk;
+}
 function ayikla(xml, kaynakAd) {
   let bloklar = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
   if (!bloklar.length) bloklar = xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
@@ -391,7 +398,7 @@ function ayikla(xml, kaynakAd) {
     const link = baglanti(b);
     if (ajans && ajansElenir(b, link, baslik)) return null;     // spor, magazin, yaşam
     const ozetHam = temiz(
-      etiket(b, "description") || etiket(b, "summary") || etiket(b, "content")
+      etiket(b, "description") || etiket(b, "summary") || etiket(b, "content") || ytAciklama(b)
     );
     let yazar = temiz(etiket(b, "dc:creator") || etiket(b, "author") || etiket(b, "creator")
                    || etiket(b, "itunes:author") || etiket(b, "media:credit"));

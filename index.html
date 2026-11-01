@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -1540,7 +1540,8 @@ function kart(y){
 
 /* Ekranda her zaman iki kart: üst blok ve alt şerit ölçülür, kalan yükseklik ikiye bölünür.
    Kartta resim altın oranla (%61,8) büyük, başlık ve özet kalan %38,2'de; özet, kalan yere sığan satır kadar gösterilir. */
-/* Tanıtım videosu: arayüz Türkçeyse Türkçe, değilse İngilizce sürüm (dikey) */
+/* Tanıtım videosu: arayüz dilinde bir sürüm varsa o, yoksa İngilizce sürüm (dikey). Yeni dil eklendikçe listeye yazılır. */
+const TANITIM_DILLERI = ["tr", "en", "es"];
 function tanitimAc(){
   let p = $("#tanitimPencere");
   if (!p) {
@@ -1550,7 +1551,7 @@ function tanitimAc(){
     document.body.appendChild(p);
     p.addEventListener("click", e => { if (e.target === p || e.target.closest("[data-tanitim-kapat]")) tanitimKapat(); });
   }
-  const v = p.querySelector("video"); v.src = `tanitim-dikey-${S.arayuz === "tr" ? "tr" : "en"}.mp4`;
+  const v = p.querySelector("video"); v.src = `tanitim-dikey-${TANITIM_DILLERI.includes(S.arayuz) ? S.arayuz : "en"}.mp4`;
   p.setAttribute("aria-label", t("tanitim")); p.hidden = false;
   try { const s = v.play(); if (s && s.catch) s.catch(()=>{}); } catch (e) {}
 }

@@ -13,7 +13,7 @@
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
 <meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
-<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
@@ -218,7 +218,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   #feed .entry .kapak-alan{flex:0 0 61.8%;aspect-ratio:auto;height:auto;margin:0 0 6px;border-radius:11px}
   #feed .entry .meta{margin:0 2px 3px;font-size:11.5px;white-space:nowrap;overflow:hidden}
   #feed .entry .govde{flex:1 1 auto;min-height:0;overflow:hidden;padding:0 2px}
-  #feed .entry h2{font-size:16px;line-height:1.25;margin:0 0 3px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+  #feed .entry h2{font-size:16px;line-height:1.25;margin:0 0 3px}
   #feed .entry .orig{display:none}
   #feed .entry .sum{font-size:13.5px;line-height:1.42;margin:0}
   /* İşlem düğmeleri resmin üstünde, buzlu bir şeritte */
@@ -273,12 +273,11 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .kapak-alan .rozet{width:76px;height:76px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;
     box-shadow:0 8px 24px rgba(0,0,0,.28)}
   .kapak-alan .rozet img{width:54px;height:54px;object-fit:contain;border-radius:8px}
-  .entry h2{font-family:var(--serif);font-weight:500;font-size:19.5px;line-height:1.28;margin:0 0 6px;
-    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .entry h2{font-family:var(--serif);font-weight:500;font-size:19.5px;line-height:1.28;margin:0 0 6px}
   .orig{font-size:13px;color:var(--dim);font-style:italic;margin:0 0 8px}
-  .entry .orig{font-size:12.5px;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .entry .orig{font-size:12.5px;margin:0 0 6px}
   .sum{font-family:var(--serif);font-size:15px;line-height:1.55;color:var(--ozet);margin:0 0 12px}
-  .entry .sum{line-height:1.5;margin:0 0 10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+  .entry .sum{line-height:1.5;margin:0 0 10px}
   .acts{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
   .act{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:5px}
   .act svg{width:15px;height:15px;flex:none}
@@ -320,6 +319,10 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     background:var(--nav-bg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom,0px)}
   nav::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--ember) 28%,var(--turkuaz) 72%,transparent)}
   nav .sekmeler{display:flex}
+  @media (min-width:900px){
+    body{max-width:860px;margin-inline:auto}
+    nav{left:50%;right:auto;width:860px;transform:translateX(-50%)}
+  }
   nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
   /* Hakkında · İletişim · Gizlilik: her ekranda sekmelerin hemen altında */
   nav .nav-alt{display:grid;grid-template-columns:1fr 2fr 2fr 2fr 1fr;align-items:center;padding:0 0 5px;font-size:11.5px;line-height:1;color:var(--sonuk)}
@@ -1250,7 +1253,7 @@ function acilanCiz(y){
     <h2>${kac(c ? c.baslik : y.baslik)}</h2>
     ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
     ${y.yazar ? `<p class="yz">${kac(y.yazar)}</p>` : ""}
-    ${ozet ? `<p class="sum">${kac(ozet)}</p>` : ""}
+    ${tamOzet(ozet) ? `<p class="sum">${kac(tamOzet(ozet))}</p>` : ""}
     <div class="dugmeler">
       <a class="dugme ana" href="${kac(y.link)}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dis}<span>${t("kaynakta_oku")}</span></a>
       ${dildeOku ? `<a class="dugme" href="${kac(dildeOku)}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dil}<span>${kac(t("dilde_oku", dilAdi(S.ceviriDili)))}</span></a>` : ""}
@@ -1334,7 +1337,7 @@ function tefKart(y, listede){
   return `<article class="entry tef-entry"><div class="meta">${ust}</div>
     <div class="govde"><div class="yazi" data-tefac="${kac(y.tef)}" role="link" tabindex="0">
       <h2>${kac(c ? c.baslik : y.baslik)}</h2>${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
-      ${(c ? c.ozet : y.ozet) ? `<p class="sum">${kac(c ? c.ozet : y.ozet)}</p>` : ""}
+      ${tamOzet(c ? c.ozet : y.ozet) ? `<p class="sum">${kac(tamOzet(c ? c.ozet : y.ozet))}</p>` : ""}
     </div></div>
     <div class="acts">${tefDugmeleri(y)}</div></article>`;
 }
@@ -1533,7 +1536,7 @@ function kart(y){
       <div class="yazi">
         <h2>${kac(baslik)}</h2>
         ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
-        ${ozet ? `<p class="sum">${kac(ozet)}</p>` : ""}
+        ${tamOzet(ozet) ? `<p class="sum">${kac(tamOzet(ozet))}</p>` : ""}
       </div>
     </div></article>`;
 }
@@ -1564,13 +1567,45 @@ function tanitimKapat(){
 document.addEventListener("click", e => { if (e.target.closest("[data-tanitim]")) { e.preventDefault(); tanitimAc(); } });
 document.addEventListener("keydown", e => { if (e.key === "Escape") tanitimKapat(); });
 
+/* Kart metni: başlık her zaman tam; özet yalnızca tamamlanmış cümlelerle ve sığdığı kadar. Yarım cümle, üç nokta yok. */
+function cumleler(metin){
+  const m = String(metin || "").replace(/\s+/g, " ").trim(); const out = []; let bas = 0, x;
+  const re = /[.!?…؟।]+["'”’»)\]]*(?=\s+(\S))|[。！？]+["'”’」』)\]]*/gu;
+  while ((x = re.exec(m))) {
+    if (x[1] !== undefined && /\p{Ll}/u.test(x[1])) continue;   // arkasından küçük harf geliyorsa ("U.S. said") cümle bitmemiştir
+    const son = x.index + x[0].length; out.push(m.slice(bas, son).trim()); bas = son;
+  }
+  const kalan = m.slice(bas).trim();
+  if (kalan) {
+    const yarim = /(…|\.\.\.)$/.test(kalan);
+    if (!yarim && /[.!?؟।。！？]["'”’»)\]」』]*$/.test(kalan)) out.push(kalan);
+    else if (!out.length && !yarim) out.push(kalan);            // noktasız ama kesilmemiş tek ifade
+  }
+  return out.filter(Boolean);
+}
+function birlestir(a, b){ return a ? a + (/[。！？」』]$/.test(a) ? "" : " ") + b : b; }   // Çince ve Japoncada cümle arasına boşluk girmez
+function tamOzet(metin){ return cumleler(metin).reduce(birlestir, ""); }
 function kartlariSigdir(){
   for (const e of document.querySelectorAll("#feed .entry")) {
-    const s = e.querySelector(".sum"); if (!s) continue;
-    s.style.display = ""; s.style.webkitLineClamp = "";
-    const lh = parseFloat(getComputedStyle(s).lineHeight) || 17;
-    const n = Math.floor((e.getBoundingClientRect().bottom - 9 - s.getBoundingClientRect().top) / lh);
-    if (n < 1) s.style.display = "none"; else s.style.webkitLineClamp = String(Math.min(n, 6));
+    const s = e.querySelector(".sum"), k = e.querySelector(".kapak-alan"), h = e.querySelector("h2");
+    if (k) { k.style.height = ""; k.style.flex = ""; }
+    const alt = () => e.getBoundingClientRect().bottom - 9;
+    if (s) {
+      if (s.dataset.tam === undefined) s.dataset.tam = s.textContent;
+      s.style.display = ""; let ok = "";
+      const parca = cumleler(s.dataset.tam); let aday = "";
+      for (let i = 0; i < parca.length; i++) {
+        aday = birlestir(aday, parca[i]); s.textContent = aday;
+        if (s.getBoundingClientRect().bottom > alt() + 0.5) break;
+        // yazarın kendi üç noktasıyla biten bir cümlede durma; özetin sonu değilse bir sonrakine bak
+        if (i === parca.length - 1 || !/(…|\.\.\.)["'”’»)\]]*$/.test(aday)) ok = aday;
+      }
+      if (ok) s.textContent = ok; else s.style.display = "none";
+    }
+    if (h && k) {   // çok uzun bir başlık kesilmesin: resim alanı gerektiği kadar kısalır
+      const tas = h.getBoundingClientRect().bottom - alt();
+      if (tas > 0) { k.style.height = Math.max(60, k.getBoundingClientRect().height - tas - 2) + "px"; k.style.flex = "none"; }
+    }
   }
 }
 /* Resmin üstündeki simgelerin ne işe yaradığını bir kez söyle; okur "✓"ye basınca bir daha çıkmaz. */

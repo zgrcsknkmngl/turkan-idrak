@@ -206,6 +206,15 @@ const KAYNAKLAR = [
 ];
 
 const ARSIV_SINIRI = 70;
+/* Özet: tamamlanmış son cümlede kesilir; ilk cümle uzunsa onu bitirecek kadar ileri gidilir. Yarım cümle bırakılmaz. */
+function kisalt(o, sinir = 320){
+  if (!o || o.length <= sinir) return o;
+  const re = /[.!?…؟।]+["'”’»)\]]*(?=\s+\S)|[。！？]+/gu; let x, son = -1, ilk = -1;
+  while ((x = re.exec(o))) { const e = x.index + x[0].length; if (ilk < 0) ilk = e; if (e <= sinir) son = e; else break; }
+  if (son >= 80) return o.slice(0, son).trim();
+  if (ilk > 0 && ilk <= 600) return o.slice(0, ilk).trim();
+  return o.slice(0, sinir).replace(/\s+\S*$/, "") + "…";
+}
 const TARAYICI = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 
 /* ---------- site adresi ----------
@@ -400,7 +409,7 @@ function ayikla(xml, kaynakAd) {
       id: kimlik(link || bas),
       kaynak: kaynakAd,
       baslik: bas,
-      ozet: (o => o.length > 320 ? o.slice(0, 320) + "…" : o)(ozetDuzelt(ozetHam, bas, yazar)),
+      ozet: kisalt(ozetDuzelt(ozetHam, bas, yazar)),
       yazar,
       gorsel: gorselBul(b),
       link,
@@ -708,7 +717,7 @@ function paylasimSayfasi(y, bilgi) {
 <meta property="og:title" content="${kacis(baslik)}">
 <meta property="og:description" content="${kacis(aciklama)}">
 <meta property="og:url" content="${adres}">
-<meta property="og:image" content="${TABAN}paylas.jpg">
+<meta property="og:image" content="${TABAN}paylas2.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0B1420">
@@ -878,7 +887,7 @@ async function simgeleriHazirla() {
       for (const y of eksik) {
         if (y._sayfaOzeti && sayac.get(y._sayfaOzeti) === 1) {
           const o = ozetDuzelt(y._sayfaOzeti, y.baslik, y.yazar);
-          y.ozet = o.length > 320 ? o.slice(0, 320) + "…" : o;
+          y.ozet = kisalt(o);
         }
         delete y._sayfaOzeti;
       }

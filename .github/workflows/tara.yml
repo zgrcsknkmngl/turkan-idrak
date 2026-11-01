@@ -2,7 +2,13 @@ name: Kaynaklari tara
 
 on:
   schedule:
-    - cron: '7 * * * *'
+    # Saat başının kalabalığından uzak iki dakika: biri düşerse öteki yakalar
+    - cron: '23,53 * * * *'
+  push:
+    # tara.js ya da bu dosya yüklenince tarama hemen kendiliğinden çalışır
+    paths:
+      - 'tara.js'
+      - '.github/workflows/tara.yml'
   workflow_dispatch:
 
 permissions:

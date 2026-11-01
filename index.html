@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -185,6 +185,18 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .ust-blok{position:sticky;top:0;z-index:26;background:var(--ink)}
   .ust-blok .rail{position:static}
   .ust-serit{display:none!important}
+  /* Tanıtım videosu: logonun altındaki küçük oynat düğmesi ve açılan pencere */
+  .mark-kutu{position:relative;flex:none;line-height:0}
+  .tanitim-dugme{position:absolute;left:50%;top:calc(100% + 5px);transform:translateX(-50%);z-index:4;width:26px;height:26px;padding:0;border-radius:50%;
+    display:grid;place-items:center;color:#fff;cursor:pointer;border:1px solid rgba(255,255,255,.45);
+    background:rgba(8,16,30,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:tanitimNabiz 2.4s ease-out 1s 3}
+  .tanitim-dugme svg{width:13px;height:13px;margin-left:2px}
+  @keyframes tanitimNabiz{0%{box-shadow:0 0 0 0 rgba(60,198,208,.55)}70%{box-shadow:0 0 0 10px rgba(60,198,208,0)}100%{box-shadow:0 0 0 0 rgba(60,198,208,0)}}
+  .tanitim-pencere{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;background:rgba(3,8,18,.94);padding:14px}
+  .tanitim-pencere[hidden]{display:none}
+  .tanitim-pencere video{display:block;height:min(88vh,calc((100vw - 28px)*16/9));width:auto;border-radius:14px;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+  .tanitim-kapat{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;width:40px;height:40px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;font-size:24px;line-height:1;cursor:pointer}
   .kaynak-sec{font-weight:600;display:inline-flex;align-items:center;gap:6px}
   .kaynak-sec .ok{font-size:10px;opacity:.8}
   .kaynak-temizle,.kaynak-yildiz{padding-left:13px;padding-right:13px}
@@ -533,7 +545,10 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
 <div class="ust-blok" id="ustBlok">
 <header class="masthead">
   <div class="bas">
-    <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+    <div class="mark-kutu">
+      <img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+      <button class="tanitim-dugme" data-tanitim="1" aria-label="Tanıtım videosu" title="Tanıtım videosu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6.2v11.6L18 12z" fill="currentColor"/></svg></button>
+    </div>
     <div class="marka">
       <div class="wordmark">Türkan <em>İdrak</em> <i class="tef">Tefekkür</i></div>
       <div class="alan-adi">turkanidrak.com</div>
@@ -668,11 +683,11 @@ const SOZLUK = {
     kategori_bos_aciklama:"Kaynaklar her saat taranıyor; yeni yazılar geldikçe burada görünecek.",
     hic_aciklama:"İnternet bağlantını kontrol edip biraz sonra yeniden dene.",
     yeniden_dene:"Yeniden dene",
-    yenile:"yenile", yenileniyor:"yenileniyor…",
+    yenile:"Yenile", yenileniyor:"Yenileniyor…",
     zaman:"zaman", zaman_1:"son 24 saat", zaman_7:"son 7 gün", zaman_30:"son 30 gün", zaman_0:"tümü", zaman_araligi:"zaman aralığı", zaman_k1:"24 saat", zaman_k7:"7 gün", zaman_k30:"30 gün",
     zaman_bos:a=>`Bu seçimde ${a} içinde yayımlanmış yazı yok.`, zaman_genislet:a=>`aralığı genişlet: ${a}`,
-    tum_kaynaklar:"Tüm kaynaklar", kaynak_sec:"Kaynak seç", kaynak_ara:"kaynak ara…", dugme_ipucu_tamam:"anladım",
-    hepsini_cevir:n=>"çevir", ceviri_acik:"özgün", cevriliyor_n:n=>"çevriliyor…",
+    tanitim:"Tanıtım videosu", tum_kaynaklar:"Tüm kaynaklar", kaynak_sec:"Kaynak seç", kaynak_ara:"kaynak ara…", dugme_ipucu_tamam:"anladım",
+    hepsini_cevir:n=>"Çevir", ceviri_acik:"Özgün", cevriliyor_n:n=>"Çevriliyor…",
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
     kaydet:"kaydet", kayitli:"kayıtlı", cevir:"çevir", cevriliyor:"çevriliyor…", ceviri_kapali:"çeviri kapalı",
@@ -724,11 +739,11 @@ const SOZLUK = {
     kategori_bos_aciklama:"Sources are scanned every hour; new articles will appear here as they arrive.",
     hic_aciklama:"Check your internet connection and try again in a moment.",
     yeniden_dene:"Try again",
-    yenile:"refresh", yenileniyor:"refreshing…",
+    yenile:"Refresh", yenileniyor:"Refreshing…",
     zaman:"time", zaman_1:"last 24 hours", zaman_7:"last 7 days", zaman_30:"last 30 days", zaman_0:"all", zaman_araligi:"time range", zaman_k1:"24 hours", zaman_k7:"7 days", zaman_k30:"30 days",
     zaman_bos:a=>`Nothing in this selection from the ${a}.`, zaman_genislet:a=>`widen to the ${a}`,
-    tum_kaynaklar:"All sources", kaynak_sec:"Choose a source", kaynak_ara:"search sources…", dugme_ipucu_tamam:"got it",
-    hepsini_cevir:n=>"translate", ceviri_acik:"original", cevriliyor_n:n=>"translating…",
+    tanitim:"Intro video", tum_kaynaklar:"All sources", kaynak_sec:"Choose a source", kaynak_ara:"search sources…", dugme_ipucu_tamam:"got it",
+    hepsini_cevir:n=>"Translate", ceviri_acik:"Original", cevriliyor_n:n=>"Translating…",
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
     kaydet:"save", kayitli:"saved", cevir:"translate", cevriliyor:"translating…", ceviri_kapali:"translation unavailable",
@@ -1525,6 +1540,28 @@ function kart(y){
 
 /* Ekranda her zaman iki kart: üst blok ve alt şerit ölçülür, kalan yükseklik ikiye bölünür.
    Kartta resim altın oranla (%61,8) büyük, başlık ve özet kalan %38,2'de; özet, kalan yere sığan satır kadar gösterilir. */
+/* Tanıtım videosu: arayüz Türkçeyse Türkçe, değilse İngilizce sürüm (dikey) */
+function tanitimAc(){
+  let p = $("#tanitimPencere");
+  if (!p) {
+    p = document.createElement("div"); p.id = "tanitimPencere"; p.className = "tanitim-pencere";
+    p.setAttribute("role","dialog"); p.setAttribute("aria-modal","true");
+    p.innerHTML = `<button class="tanitim-kapat" data-tanitim-kapat="1" aria-label="${kac(t("kapat"))}">×</button><video controls playsinline preload="auto"></video>`;
+    document.body.appendChild(p);
+    p.addEventListener("click", e => { if (e.target === p || e.target.closest("[data-tanitim-kapat]")) tanitimKapat(); });
+  }
+  const v = p.querySelector("video"); v.src = `tanitim-dikey-${S.arayuz === "tr" ? "tr" : "en"}.mp4`;
+  p.setAttribute("aria-label", t("tanitim")); p.hidden = false;
+  try { const s = v.play(); if (s && s.catch) s.catch(()=>{}); } catch (e) {}
+}
+function tanitimKapat(){
+  const p = $("#tanitimPencere"); if (!p) return;
+  const v = p.querySelector("video"); try { v.pause(); } catch (e) {}
+  v.removeAttribute("src"); v.load(); p.hidden = true;
+}
+document.addEventListener("click", e => { if (e.target.closest("[data-tanitim]")) { e.preventDefault(); tanitimAc(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") tanitimKapat(); });
+
 function kartlariSigdir(){
   for (const e of document.querySelectorAll("#feed .entry")) {
     const s = e.querySelector(".sum"); if (!s) continue;

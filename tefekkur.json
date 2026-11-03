@@ -1,9 +1,16 @@
 [
-  {
-    "baslik": "Bir Merhaba, Bir İdrak, Bir Hakikat Yolculuğu!",
-    "yazar": "H. Celaleddin Özgür",
-    "tarih": "2026-10-19",
-    "ozet": "Bilginin çoğaldığı, fakat anlamın azaldığı; seslerin yükseldiği, fakat hakikatin çoğu zaman duyulmadığı bir çağda merhaba!",
-    "yol": "tefekkur-merhaba.html"
-  }
+ {
+  "baslik": "Hoş Geldin, Safalar Getirdin Türkan İdrak Tefekkür!",
+  "yazar": "Özgür Coşkun Akmanoğlu",
+  "tarih": "2026-11-03T13:25:00+03:00",
+  "ozet": "Dünyanın sesleri, renkliliği ve çeşitliliğiyle tek mecliste.",
+  "yol": "tefekkur-hosgeldin.html"
+ },
+ {
+  "baslik": "Bir Merhaba, Bir İdrak, Bir Hakikat Yolculuğu!",
+  "yazar": "H. Celaleddin Özgür",
+  "tarih": "2026-10-19",
+  "ozet": "Bilginin çoğaldığı, fakat anlamın azaldığı; seslerin yükseldiği, fakat hakikatin çoğu zaman duyulmadığı bir çağda merhaba!",
+  "yol": "tefekkur-merhaba.html"
+ }
 ]

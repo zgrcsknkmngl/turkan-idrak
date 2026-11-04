@@ -745,27 +745,33 @@ function paylasimSayfasi(y, bilgi) {
 }
 
 function paylasimSayfalariniYaz(sonuc) {
-  let yeni = 0, guncel = 0, ertelenen = 0;
-  // Tasarım değişince binlerce sayfa birden değişir; GitHub bu büyüklükte bir gönderiyi reddedebiliyor.
-  // Her taramada en fazla bu kadarı yenilenir, gerisi sonraki taramalara kalır (yeni sayfalar her zaman yazılır).
-  const GUNCELLEME_SINIRI = 800;
+  let yeni = 0, guncel = 0, ertelenen = 0, eskiKaldi = 0;
+  // Tasarım değişince binlerce sayfa birden değişir; GitHub böyle büyük bir gönderiyi reddediyor.
+  // Bu yüzden: yeni sayfalar her zaman yazılır; var olan sayfalar en yeniden başlayarak her taramada
+  // en fazla GUNCELLEME_SINIRI kadar yenilenir. Yarım saatte bir taramayla arşivin tamamı yaklaşık bir günde yenilenir.
+  const GUNCELLEME_SINIRI = 150, YENILEME_GUNU = Infinity, simdi = Date.now();
+  const hepsi = [];
   for (const k of Object.values(sonuc.kaynaklar)) {
     const bilgi = { ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "", tur: k.tur || "" };
-    for (const y of k.yazilar) {
-      if (!y.pay || !y.link) continue;
-      const klasor = "y/" + y.pay;
-      const dosya = klasor + "/index.html";
-      const icerik = paylasimSayfasi(y, bilgi);
-      let eski = null;
-      try { eski = fs.readFileSync(dosya, "utf8"); } catch (e) { /* yeni */ }
-      if (eski === icerik) continue;
-      if (eski !== null && guncel >= GUNCELLEME_SINIRI) { ertelenen++; continue; }
-      fs.mkdirSync(klasor, { recursive: true });
-      fs.writeFileSync(dosya, icerik);
-      if (eski === null) yeni++; else guncel++;
-    }
+    for (const y of k.yazilar) if (y.pay && y.link) hepsi.push([y, bilgi]);
   }
-  console.log(`paylaşım sayfaları: ${yeni} yeni, ${guncel} güncellendi${ertelenen ? `, ${ertelenen} sonraki taramalara kaldı` : ""}`);
+  hepsi.sort((a, b) => (Date.parse(b[0].tarih) || 0) - (Date.parse(a[0].tarih) || 0));
+  for (const [y, bilgi] of hepsi) {
+    const klasor = "y/" + y.pay;
+    const dosya = klasor + "/index.html";
+    const icerik = paylasimSayfasi(y, bilgi);
+    let eski = null;
+    try { eski = fs.readFileSync(dosya, "utf8"); } catch (e) { /* yeni */ }
+    if (eski === icerik) continue;
+    if (eski !== null) {
+      if (simdi - (Date.parse(y.tarih) || 0) > YENILEME_GUNU) { eskiKaldi++; continue; }
+      if (guncel >= GUNCELLEME_SINIRI) { ertelenen++; continue; }
+    }
+    fs.mkdirSync(klasor, { recursive: true });
+    fs.writeFileSync(dosya, icerik);
+    if (eski === null) yeni++; else guncel++;
+  }
+  console.log(`paylaşım sayfaları: ${yeni} yeni, ${guncel} güncellendi${ertelenen ? `, ${ertelenen} sonraki taramalara kaldı` : ""}${eskiKaldi ? `, ${eskiKaldi} eski sayfa olduğu gibi bırakıldı` : ""}`);
 }
 
 /* ---------- site dosyaları ---------- */

@@ -1,0 +1,64 @@
+name: Kaynaklari tara
+
+on:
+  schedule:
+    # GitHub zamanlanmis isleri cogu zaman dusuruyor: sik dene, gereksiz olani ilk adimda atla
+    - cron: '*/10 * * * *'
+  push:
+    # tara.js ya da bu dosya yuklenince tarama hemen kendiliginden calisir
+    paths:
+      - 'tara.js'
+      - '.github/workflows/tara.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tara
+  cancel-in-progress: false
+
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Son taramadan bu yana gecen sure
+        id: taze
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "gerek=evet" >> "$GITHUB_OUTPUT"; exit 0; fi
+          son=$(gh api "repos/${{ github.repository }}/commits?path=akis.json&per_page=1" --jq '.[0].commit.committer.date' 2>/dev/null || true)
+          if [ -z "$son" ]; then echo "gerek=evet" >> "$GITHUB_OUTPUT"; exit 0; fi
+          dk=$(( ( $(date +%s) - $(date -d "$son" +%s) ) / 60 ))
+          echo "akis en son $dk dakika once guncellendi"
+          if [ "$dk" -ge 25 ]; then echo "gerek=evet" >> "$GITHUB_OUTPUT"; else echo "gerek=hayir" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/checkout@v5
+        if: steps.taze.outputs.gerek == 'evet'
+      - uses: actions/setup-node@v5
+        if: steps.taze.outputs.gerek == 'evet'
+        with:
+          node-version: '24'
+      - name: Kaynaklari tara
+        if: steps.taze.outputs.gerek == 'evet'
+        run: node tara.js
+      - name: Git ayarla
+        if: steps.taze.outputs.gerek == 'evet'
+        run: git config user.name "Turkan Idrak" && git config user.email "actions@users.noreply.github.com"
+      - name: Kaydet ve gonder
+        if: steps.taze.outputs.gerek == 'evet'
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "degisiklik yok"
+          else
+            git commit -q -m "Akis guncellendi"
+            # GitHub ara sira gecici "Internal Server Error" veriyor: uc kez, araya bekleme koyarak dene
+            for i in 1 2 3; do
+              git pull -q --rebase || git rebase --abort || true
+              if git push; then exit 0; fi
+              echo "gonderilemedi (deneme $i); 30 sn sonra yeniden"; sleep 30
+            done
+            exit 1
+          fi

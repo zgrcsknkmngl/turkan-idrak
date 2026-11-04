@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -730,7 +730,7 @@ const SOZLUK = {
     gozde_yok:"Henüz gözde kaynağın yok",
     gozde_bos:"Gözde kaynaklarında şu an yazı yok",
     gozde_nasil:"Bir kaynağı seçip ☆ Gözdelere ekle'ye dokun ya da Kaynaklar ekranında yıldızlara dokun. Diğer kaynaklar akışta kalmaya devam eder.",
-    tum_akisa_don:"Bütün akışa dön"
+    tum_akisa_don:"Bütün akışa dön", tum_gozdeler:"Tüm gözdeler"
   },
   en: {
     nav_idrak:"İdrak", nav_tefekkur:"Tefekkür", nav_kayitli:"Saved", nav_kaynaklar:"Sources",
@@ -786,7 +786,7 @@ const SOZLUK = {
     gozde_yok:"No favorite sources yet",
     gozde_bos:"No articles from your favorite sources right now",
     gozde_nasil:"Pick a source and tap ☆ Add to favorites, or tap the stars on the Sources screen. Other sources stay in the feed.",
-    tum_akisa_don:"Back to the full feed"
+    tum_akisa_don:"Back to the full feed", tum_gozdeler:"All favorites"
   }
 };
 
@@ -1699,7 +1699,7 @@ function kaynakSecenekleri(){
     .slice().sort((a,b)=>kaynakAdi(a.ad).localeCompare(kaynakAdi(b.ad), S.arayuz, {sensitivity:"base", numeric:true}));
 }
 function cizSerit(){ const r = $("#rail"); r.innerHTML = ""; r.classList.add("hide"); }   // kaynak seçici artık kategori çipinde
-function kaynakPenceresiAc(){
+function kaynakPenceresiAc(gozdeKipi = false){
   let p = $("#kaynakPencere");
   if(!p){ p = document.createElement("div"); p.id = "kaynakPencere"; p.className = "dil-pencere"; document.body.appendChild(p);
     p.addEventListener("click", e => { if(e.target === p) p.hidden = true; }); }
@@ -1708,12 +1708,18 @@ function kaynakPenceresiAc(){
   const dugme = (suz, ad, alt, yildiz, bos) =>
     `<button data-suz="${kac(suz)}" data-ara="${kac((ad+" "+suz+" "+(alt||"")).toLocaleLowerCase("tr"))}" class="${S.suzgec===suz?"secili":""}${bos?" bos":""}"${S.suzgec===suz?' aria-current="true"':""}>`
     + `<b>${yildiz?"★":""}</b><span>${kac(ad)}${alt?`<small>${kac(alt)}</small>`:""}</span></button>`;
-  p.innerHTML = `<div class="dil-kutu" role="dialog" aria-modal="true" aria-label="${kac(t("kaynak_sec"))}">
-    <div class="dil-bas">${kac(t("kaynak_sec"))}</div>
+  const liste = gozdeKipi
+    ? S.kaynaklar.filter(k => S.gozde.has(k.ad)).slice().sort((a,b)=>kaynakAdi(a.ad).localeCompare(kaynakAdi(b.ad), S.arayuz, {sensitivity:"base", numeric:true}))
+    : kaynakSecenekleri();
+  const baslikMetni = gozdeKipi ? "★ " + t("gozdeler") : t("kaynak_sec");
+  p.dataset.gozde = gozdeKipi ? "1" : "";
+  p.innerHTML = `<div class="dil-kutu" role="dialog" aria-modal="true" aria-label="${kac(baslikMetni)}">
+    <div class="dil-bas">${kac(baslikMetni)}</div>
     <input class="dil-ara" type="search" placeholder="${kac(t("kaynak_ara"))}" aria-label="${kac(t("kaynak_ara"))}" autocomplete="off">
     <div class="dil-grup"><div class="dil-liste kaynak-liste">${
-      dugme("hepsi", S.kategori==="hepsi" ? t("tum_kaynaklar") : t("tumu")+" · "+t("kat_"+S.kategori), "", false, false) +
-      kaynakSecenekleri().map(k => dugme(k.ad, kaynakAdi(k.ad), ulke(k), S.gozde.has(k.ad), !var_(k.ad))).join("")
+      dugme("hepsi", gozdeKipi ? t("tum_gozdeler") : (S.kategori==="hepsi" ? t("tum_kaynaklar") : t("tumu")+" · "+t("kat_"+S.kategori)), "", false, false) +
+      liste.map(k => dugme(k.ad, kaynakAdi(k.ad), ulke(k), S.gozde.has(k.ad), !var_(k.ad))).join("") +
+      (gozdeKipi ? `<button data-gozde-filtre="1"><b></b><span>${kac(t("tum_akisa_don"))}</span></button>` : "")
     }</div></div></div>`;
   p.hidden = false;
   const ara = p.querySelector(".dil-ara");
@@ -1723,9 +1729,15 @@ function kaynakPenceresiAc(){
 }
 document.addEventListener("click", e => {
   if (e.target.closest("[data-kaynak-ac]")) { kaynakPenceresiAc(); return; }
-  if (e.target.closest("#kaynakPencere [data-suz]")) { const p = $("#kaynakPencere"); if (p) p.hidden = true; }
+  if (e.target.closest("[data-gozde-ac]")) { kaynakPenceresiAc(true); return; }
+  if (e.target.closest("#kaynakPencere [data-suz], #kaynakPencere [data-gozde-filtre]")) { const p = $("#kaynakPencere"); if (p) p.hidden = true; }
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { const p = $("#kaynakPencere"); if (p) p.hidden = true; } });
+document.addEventListener("click", e => {
+  const p = $("#kaynakPencere"); if (!p || p.dataset.gozde !== "1") return;
+  if (e.target.closest("#kaynakPencere [data-suz]")) { S.kategori = "hepsi"; S.gozdeFiltre = true; }
+  else if (e.target.closest("#kaynakPencere [data-gozde-filtre]")) { S.suzgec = "hepsi"; }
+}, true);
 
 /* Kota: günde onlarca haber giren ajanslar ana sayfayı boğmasın — ama sıra hep kronolojik kalsın.
    Yalnız düz "Tümü" görünümünde (Gözdeler, kategori, tek kaynak, konu ve arama dışında) her kaynak
@@ -1836,7 +1848,9 @@ function cizAkis(){
       ${cevrilmemis ? `<button class="mini" data-toplu="1"${S.topluCeviri?" disabled":""}>${
           S.topluCeviri ? t("cevriliyor_n", S.topluKalan||0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>`
         : (cevrilmis ? `<button class="mini" data-orj-toplu="1">${t("ceviri_acik")}</button>` : "")}
-      <button class="mini${S.gozdeFiltre?" secili":""}" data-gozde-filtre="1" aria-pressed="${S.gozdeFiltre}">★ ${t("gozdeler")}${S.gozde.size ? " ("+sayi(S.gozde.size)+")" : ""}</button>
+      ${S.gozdeFiltre
+        ? `<button class="mini secili kaynak-sec" data-gozde-ac="1" aria-pressed="true" aria-haspopup="dialog"><span class="etk">★ ${S.suzgec!=="hepsi" ? kac(kaynakAdi(S.suzgec)) : t("gozdeler")+(S.gozde.size ? " ("+sayi(S.gozde.size)+")" : "")}</span><span class="ok" aria-hidden="true">▾</span></button>`
+        : `<button class="mini" data-gozde-filtre="1" aria-pressed="false">★ ${t("gozdeler")}${S.gozde.size ? " ("+sayi(S.gozde.size)+")" : ""}</button>`}
       ${S.dolu ? `<span class="uyari">${t("depo_doldu")}</span>` : ""}
     </div>`;
   const kalan = liste.length - parca.length;

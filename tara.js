@@ -134,6 +134,8 @@ const KAYNAKLAR = [
   { ad:"The Young Turks", ulke:"ABD", tur:"ajans", url:"https://www.youtube.com/feeds/videos.xml?channel_id=UC1yBKRuGpC1tSM73A0ZjYjQ" },   // Cenk Uygur; yazılı yayını ve açık beslemesi yok, YouTube kanalının kendi beslemesi
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
+  { ad:"BirGün", ulke:"Türkiye", tur:"ajans", url:"https://news.google.com/rss/search?q=site:birgun.net+when:3d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"soL Haber", ulke:"Türkiye", tur:"ajans", url:"https://news.google.com/rss/search?q=site:sol.org.tr+when:3d&hl=tr&gl=TR&ceid=TR:tr" },
   // Raporlar ve endeksler (16 Ekim 2026)
   { ad:"Heritage", ulke:"ABD", tur:"kurum", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:heritage.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   // --- G20 genişlemesi (24 Ekim 2026): Suudi Arabistan dahil bütün G20 ülkelerinden düşünce kuruluşu ---
@@ -697,7 +699,7 @@ async function cekYedekli(k) {
 function kacis(x) {
   return String(x || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
-function kisalt(x, n) {
+function kirp(x, n) {
   x = String(x || "").replace(/\s+/g, " ").trim();
   if (x.length <= n) return x;
   return x.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
@@ -708,7 +710,9 @@ function paylasimSayfasi(y, bilgi) {
   const ozet = y.ozet || "";
   const adres = TABAN + "y/" + y.pay + "/";
   const kimlikSatiri = bilgi.ulke || "";
-  const aciklama = kisalt(y.kaynak + " · " + AD + (ozet ? " — " + ozet : ""), 200);
+  const ozetKisa = ozet ? kisalt(ozet, 180) : "";
+  const aciklama = kirp(y.kaynak + " · " + AD + (ozetKisa && !/^[\s.…]*$/.test(ozetKisa) ? " — " + ozetKisa : ""), 300);
+  const resim = /^https?:\/\//.test(y.gorsel || "") ? y.gorsel : "";
   // Yazi akistan dustugunde de uygulamanin gosterebilmesi icin kisa kopya
   const kopya = { id: y.id, pay: y.pay, kaynak: y.kaynak, baslik: y.baslik, ozet: ozet, yazar: y.yazar || "",
                   gorsel: y.gorsel || "", link: y.link, tarih: y.tarih || "", kb: bilgi };
@@ -724,8 +728,8 @@ function paylasimSayfasi(y, bilgi) {
 <meta property="og:title" content="${kacis(baslik)}">
 <meta property="og:description" content="${kacis(aciklama)}">
 <meta property="og:url" content="${adres}">
-<meta property="og:image" content="${TABAN}paylas2.jpg">
-<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image" content="${kacis(resim || TABAN + "paylas2.jpg")}">${resim ? "" : `
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">`}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0B1420">
 <style>body{margin:0;background:#0B1420;color:#E9E1D0;font:17px/1.5 Georgia,serif}main{max-width:640px;margin:0 auto;padding:44px 22px}p{margin:0 0 12px}.k{font:600 12px sans-serif;letter-spacing:.06em;color:#E0343A}h1{font-weight:500;font-size:24px;line-height:1.3;margin:0 0 20px}a{color:#3F91E4}</style>
@@ -845,6 +849,8 @@ async function simgeleriHazirla() {
   let onceki = { kaynaklar: {} };
   try {
     onceki = JSON.parse(fs.readFileSync("akis.json", "utf8"));
+    for (const k of Object.values(onceki.kaynaklar || {})) for (const y of (k.yazilar || []))
+      if (y.ozet && /^[\s.…]*$/.test(y.ozet)) { y.ozet = ""; delete y.zng; }
     adlariTopla(onceki);
     if (!onceki.kaynaklar) onceki = { kaynaklar: {} };
   } catch (e) { /* ilk çalışma */ }

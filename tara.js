@@ -745,7 +745,10 @@ function paylasimSayfasi(y, bilgi) {
 }
 
 function paylasimSayfalariniYaz(sonuc) {
-  let yeni = 0, guncel = 0;
+  let yeni = 0, guncel = 0, ertelenen = 0;
+  // Tasarım değişince binlerce sayfa birden değişir; GitHub bu büyüklükte bir gönderiyi reddedebiliyor.
+  // Her taramada en fazla bu kadarı yenilenir, gerisi sonraki taramalara kalır (yeni sayfalar her zaman yazılır).
+  const GUNCELLEME_SINIRI = 800;
   for (const k of Object.values(sonuc.kaynaklar)) {
     const bilgi = { ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "", tur: k.tur || "" };
     for (const y of k.yazilar) {
@@ -756,12 +759,13 @@ function paylasimSayfalariniYaz(sonuc) {
       let eski = null;
       try { eski = fs.readFileSync(dosya, "utf8"); } catch (e) { /* yeni */ }
       if (eski === icerik) continue;
+      if (eski !== null && guncel >= GUNCELLEME_SINIRI) { ertelenen++; continue; }
       fs.mkdirSync(klasor, { recursive: true });
       fs.writeFileSync(dosya, icerik);
       if (eski === null) yeni++; else guncel++;
     }
   }
-  console.log(`paylaşım sayfaları: ${yeni} yeni, ${guncel} güncellendi`);
+  console.log(`paylaşım sayfaları: ${yeni} yeni, ${guncel} güncellendi${ertelenen ? `, ${ertelenen} sonraki taramalara kaldı` : ""}`);
 }
 
 /* ---------- site dosyaları ---------- */

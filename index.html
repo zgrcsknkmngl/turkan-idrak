@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -327,7 +327,12 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   @media (min-width:900px) and (orientation:landscape){
     body{max-width:1240px}
     nav{width:1240px}
-    .manzara{aspect-ratio:auto!important;height:max(90px,calc(33.3vh - 175px));background-size:cover!important;background-position:center 62%!important}
+    /* manzara kırpılmaz: bütün resim, ayrılan yüksekliğe sığacak boyda ortada durur; yanları yumuşakça karanlığa karışır */
+    .manzara{--pano-h:max(96px,calc(33.3vh - 175px));--pano-w:calc(var(--pano-h) * 4.03);
+      aspect-ratio:auto!important;height:var(--pano-h);
+      background-size:auto 100%!important;background-position:center bottom!important;background-repeat:no-repeat!important;
+      -webkit-mask-image:linear-gradient(90deg,transparent calc(50% - var(--pano-w) / 2),#000 calc(50% - var(--pano-w) / 2 + 56px),#000 calc(50% + var(--pano-w) / 2 - 56px),transparent calc(50% + var(--pano-w) / 2));
+              mask-image:linear-gradient(90deg,transparent calc(50% - var(--pano-w) / 2),#000 calc(50% - var(--pano-w) / 2 + 56px),#000 calc(50% + var(--pano-w) / 2 - 56px),transparent calc(50% + var(--pano-w) / 2))}
     #feed{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
     #feed > :not(.entry){grid-column:1 / -1}
     #feed .entry{margin:0 0 14px}

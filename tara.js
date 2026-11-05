@@ -895,7 +895,9 @@ function paylasimSayfalariniYaz(sonuc) {
   // Tasarım değişince binlerce sayfa birden değişir; GitHub böyle büyük bir gönderiyi reddediyor.
   // Bu yüzden: yeni sayfalar her zaman yazılır; var olan sayfalar en yeniden başlayarak her taramada
   // en fazla GUNCELLEME_SINIRI kadar yenilenir. Yarım saatte bir taramayla arşivin tamamı yaklaşık bir günde yenilenir.
-  const GUNCELLEME_SINIRI = 150, YENILEME_GUNU = Infinity, simdi = Date.now();
+  // Yeni kaynak eklenince binlerce yeni sayfa birden doğar; GitHub büyük gönderiyi reddettiği için yeni sayfalar da
+  // en yeniden başlayarak her taramada en fazla YENI_SINIRI kadar yazılır (tek gönderide en çok ~300 dosya).
+  const GUNCELLEME_SINIRI = 100, YENI_SINIRI = 200, YENILEME_GUNU = Infinity, simdi = Date.now();
   const hepsi = [];
   for (const k of Object.values(sonuc.kaynaklar)) {
     const bilgi = { ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "", tur: k.tur || "" };
@@ -912,7 +914,7 @@ function paylasimSayfalariniYaz(sonuc) {
     if (eski !== null) {
       if (simdi - (Date.parse(y.tarih) || 0) > YENILEME_GUNU) { eskiKaldi++; continue; }
       if (guncel >= GUNCELLEME_SINIRI) { ertelenen++; continue; }
-    }
+    } else if (yeni >= YENI_SINIRI) { ertelenen++; continue; }
     fs.mkdirSync(klasor, { recursive: true });
     fs.writeFileSync(dosya, icerik);
     if (eski === null) yeni++; else guncel++;

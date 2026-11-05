@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -1099,18 +1099,31 @@ async function cek(){
 }
 
 /* ---------- Çeviri: okurun seçtiği dile, yalnızca istenince ---------- */
-const trOf = y => { const c = S.ceviri[y.id]; return (c && (c.dil||"tr")===S.ceviriDili && !c.ayni) ? c : null; };
+const trOf = y => { const c = S.ceviri[y.id]; if (!(c && (c.dil||"tr")===S.ceviriDili && !c.ayni)) return null;
+  return {...c, baslik: ceviriDuzelt(c.baslik, y.baslik, c.dil||S.ceviriDili), ozet: ceviriDuzelt(c.ozet, y.ozet, c.dil||S.ceviriDili)}; };   // eski kayıtlı çeviriler de düzelir
 const cevrilmeli = y => { const c = S.ceviri[y.id]; return !(c && (c.dil||"tr")===S.ceviriDili); };
 S.orjIstek = new Set();   // bu oturumda okurun tek tek "orijinali" dediği yazılar: toplu ve kendiliğinden çeviri bunlara dokunmaz
 const topluCevrilmeli = y => cevrilmeli(y) && !S.orjIstek.has(y.id);
 
+/* Makine çevirisinin bilinen yanlışları, kaynağın kendi sözüne bakılarak düzeltilir (şimdilik Türkçe):
+   "midterm elections" → ara sınav değil ara seçim; "swing state" → salıncak değil kararsız eyalet. */
+function ceviriDuzelt(metin, kaynak, hedef){
+  if (!metin || !/^tr/i.test(hedef || "")) return metin;
+  const k = String(kaynak || "");
+  const uyum = e => e.replace(/a/g,"e").replace(/ı/g,"i").replace(/u/g,"ü").replace(/o/g,"ö");
+  if (/\bmidterms?\b/i.test(k) && !/\bexams?\b|\bstudents?\b|\bschools?\b/i.test(k)) metin = metin.replace(/(^|[^\p{L}])([Aa]ra[\s-]+)([Ss])ınav(\p{L}*)/gu,
+    (t, on, ara, s, ek) => on + ara + (s === "S" ? "Seçim" : "seçim") + uyum(ek));
+  if (/swing[\s-]+states?/i.test(k)) metin = metin.replace(/([Ss])alıncak\s+(eyalet\p{L}*|devlet\p{L}*)/gu,
+    (t, s, e) => (s === "S" ? "Kararsız " : "kararsız ") + (e.startsWith("devlet") ? "eyalet" + e.slice(6) : e));
+  return metin;
+}
 async function cevir(m){
   if(!m) return {metin:"", dil:""};
   const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="
     + encodeURIComponent(S.ceviriDili) + "&dt=t&q=" + encodeURIComponent(m));
   if(!r.ok) throw new Error("çeviri "+r.status);
   const j = await r.json();
-  return {metin:(j[0]||[]).map(p=>(p&&p[0])||"").join(""), dil:String(j[2]||"")};
+  return {metin:ceviriDuzelt((j[0]||[]).map(p=>(p&&p[0])||"").join(""), m, S.ceviriDili), dil:String(j[2]||"")};
 }
 async function ikisiniCevir(y){
   const hedef = S.ceviriDili;

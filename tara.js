@@ -154,6 +154,8 @@ const KAYNAKLAR = [
   { ad:"CEBRI", ulke:"Brezilya", tur:"kurum", url:"https://news.google.com/rss/search?q=site:cebri.org+when:60d&hl=pt-BR&gl=BR&ceid=BR:pt-419" },
   { ad:"Instituto Igarapé", ulke:"Brezilya", tur:"kurum", url:"https://igarape.org.br/en/feed/", yedek:"https://news.google.com/rss/search?q=site:igarape.org.br+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"CIPPEC", ulke:"Arjantin", tur:"kurum", url:"https://www.cippec.org/feed/", yedek:"https://news.google.com/rss/search?q=site:cippec.org+when:60d&hl=es-419&gl=MX&ceid=MX:es-419" },
+  { ad:"Ember", ulke:"İngiltere", tur:"kurum", url:"https://ember-energy.org/feed/", yedek:"https://news.google.com/rss/search?q=site:ember-energy.org+when:60d&hl=en-US&gl=US&ceid=US:en" },   // On Think Tanks, İzlenecek 55 Düşünce Kuruluşu 2026
+  { ad:"Dejusticia", ulke:"Kolombiya", tur:"kurum", url:"https://www.dejusticia.org/feed/", yedek:"https://news.google.com/rss/search?q=site:dejusticia.org+when:60d&hl=es-419&gl=CO&ceid=CO:es-419" },   // On Think Tanks, İzlenecek 55 Düşünce Kuruluşu 2026
   { ad:"COMEXI", ulke:"Meksika", tur:"kurum", url:"https://news.google.com/rss/search?q=site:consejomexicano.org+when:90d&hl=es-419&gl=MX&ceid=MX:es-419" },
   { ad:"IMCO", ulke:"Meksika", tur:"kurum", url:"https://imco.org.mx/feed/", yedek:"https://news.google.com/rss/search?q=site:imco.org.mx+when:60d&hl=es-419&gl=MX&ceid=MX:es-419" },
   { ad:"Lowy Institute", ulke:"Avustralya", tur:"kurum", url:"https://www.lowyinstitute.org/the-interpreter/rss.xml", yedek:"https://news.google.com/rss/search?q=site:lowyinstitute.org+when:14d&hl=en-US&gl=US&ceid=US:en" },

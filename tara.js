@@ -743,7 +743,7 @@ async function gnSirasi() {
 async function cek(kaynak, deneme = 0) {
   const gn = kaynak.url.includes("news.google.com");
   if (gn) await gnSirasi();
-  const dur = AbortSignal.timeout(25000);
+  const dur = AbortSignal.timeout(kaynak.yedek ? 15000 : 25000);
   const c = await fetch(kaynak.url, {
     signal: dur,
     redirect: "follow",
@@ -819,19 +819,65 @@ async function gnCoz(url) {
 }
 
 /* Kaynağın kendi adresi düşerse (403 vb.) yedek adresi dene */
-async function cekYedekli(k) {
-  try {
-    const y = await cek(k);
-    // Adres açılıyor ama son üç aydan hiç yazı gelmiyorsa besleme bayatlamıştır (site yenilenmiş olabilir): yedek yolu dene
-    if (!y.length && k.yedek) throw new Error("beslemede son " + EN_ESKI_GUN + " günden yazı yok");
-    return { yazilar: y, yol: "asıl", dil: y.dil };
-  } catch (e) {
-    if (!k.yedek) throw e;
+/* Besleme keşfi: kendi adresi de yedek yolu da sonuç vermeyen kaynağın ana sayfasındaki
+   <link rel="alternate" type="application/rss+xml"> etiketinden asıl besleme bulunur.
+   Bulunan adres kesifler.json'a yazılır, sonraki taramalarda önce o denenir; bulunamayan bir hafta yeniden yoklanmaz. */
+const KESIF_DOSYA = "kesifler.json";
+let KESIFLER = {};
+try { KESIFLER = JSON.parse(fs.readFileSync(KESIF_DOSYA, "utf8")) || {}; } catch (e) { KESIFLER = {}; }
+let KESIF_HAKKI = 25;   // bir taramada en çok bu kadar ana sayfa yoklanır
+async function beslemeKesfet(alan) {
+  const kayit = KESIFLER[alan], haftaOnce = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
+  if (kayit && kayit.tarih > haftaOnce) return kayit.url || "";
+  if (KESIF_HAKKI <= 0) return "";
+  KESIF_HAKKI--;
+  let bulunan = "";
+  for (const kok of [`https://${alan}/`, `https://www.${alan}/`]) {
     try {
-      const y = await cek({ ...k, url: k.yedek }); return { yazilar: y, yol: "yedek", dil: y.dil };
-    } catch (e2) {
-      throw new Error(e.message + " · yedek yol: " + e2.message);
+      const c = await fetch(kok, { redirect: "follow", signal: AbortSignal.timeout(15000), headers: {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8", "accept-language": "en-US,en;q=0.9" } });
+      if (!c.ok) continue;
+      const html = (await c.text()).slice(0, 250000);
+      for (const l of html.match(/<link\b[^>]*>/gi) || []) {
+        if (!/rel\s*=\s*["']?alternate/i.test(l) || !/type\s*=\s*["']?application\/(rss|atom)\+xml/i.test(l)) continue;
+        const h = (l.match(/href\s*=\s*["']([^"']+)["']/i) || [])[1];
+        if (!h || /comments?\/feed|\/comments\b|wp-json/i.test(h)) continue;
+        bulunan = new URL(coz(h), c.url || kok).href; break;
+      }
+      if (bulunan) break;
+    } catch (e) { /* bu kök açılmadı, sıradakini dene */ }
+  }
+  KESIFLER[alan] = { url: bulunan, tarih: new Date().toISOString().slice(0, 10) };
+  return bulunan;
+}
+async function cekYedekli(k) {
+  const alan = alanBul(k), kesif = alan && KESIFLER[alan] && KESIFLER[alan].url;
+  if (kesif && kesif !== k.url) {   // daha önce keşfedilmiş besleme önce
+    try { const y = await cek({ ...k, url: kesif, yedek: k.yedek || "kesif" }); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil }; } catch (e) { /* asıl yola dön */ }
+  }
+  try {
+    try {
+      const y = await cek(k);
+      // Adres açılıyor ama son üç aydan hiç yazı gelmiyorsa besleme bayatlamıştır (site yenilenmiş olabilir): yedek yolu dene
+      if (!y.length && k.yedek) throw new Error("beslemede son " + EN_ESKI_GUN + " günden yazı yok");
+      return { yazilar: y, yol: "asıl", dil: y.dil };
+    } catch (e) {
+      if (!k.yedek) throw e;
+      try {
+        const y = await cek({ ...k, url: k.yedek }); return { yazilar: y, yol: "yedek", dil: y.dil };
+      } catch (e2) {
+        throw new Error(e.message + " · yedek yol: " + e2.message);
+      }
     }
+  } catch (son) {
+    if (alan && !kesif) {   // son çare: sitenin ana sayfasından beslemeyi keşfet
+      const u = await beslemeKesfet(alan);
+      if (u && u !== k.url && u !== k.yedek) {
+        try { const y = await cek({ ...k, url: u, yedek: "kesif" }); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil }; } catch (e3) { /* keşif de olmadı */ }
+      }
+    }
+    throw son;
   }
 }
 
@@ -960,6 +1006,9 @@ function siteDosyalari(oncekiTaban) {
   degistiyseYaz("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${TABAN}sitemap.xml\n`);
 }
 
+// Bir taramada yazı sayfalarına en fazla bu kadar gidilir; yeni kaynak eklenince ilk tarama saatler sürmesin
+let SAYFA_HAKKI = 150;
+
 /* ---------- kaynak simgeleri ---------- */
 const SIMGE_KLASORU = "simge";
 function alanBul(k) {
@@ -970,7 +1019,7 @@ function alanBul(k) {
 }
 async function simgeIndir(adres) {
   try {
-    const c = await fetch(adres, { headers: { "user-agent": "Mozilla/5.0 (TurkanIdrak simge)" }, redirect: "follow", signal: AbortSignal.timeout(12000) });
+    const c = await fetch(adres, { headers: { "user-agent": "Mozilla/5.0 (TurkanIdrak simge)" }, redirect: "follow", signal: AbortSignal.timeout(6000) });
     const tip = (c.headers.get("content-type") || "").toLowerCase();
     if (!c.ok || !/^image\/(png|x-icon|vnd\.microsoft\.icon|jpeg|webp)/.test(tip)) return null;
     const veri = Buffer.from(await c.arrayBuffer());
@@ -981,21 +1030,29 @@ async function simgeleriHazirla() {
   if (!fs.existsSync(SIMGE_KLASORU)) fs.mkdirSync(SIMGE_KLASORU);
   const sonuc = {};
   let yeni = 0;
+  const YOK_DOSYA = `${SIMGE_KLASORU}/bulunamayan.json`, bugun = new Date().toISOString().slice(0, 10);
+  let yok = {}; try { yok = JSON.parse(fs.readFileSync(YOK_DOSYA, "utf8")); } catch (e) { yok = {}; }
+  const haftaOnce = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
+  const denenecek = [];
   for (const k of KAYNAKLAR) {
     const alan = alanBul(k);
     if (!alan) continue;
     const dosya = `${SIMGE_KLASORU}/${alan}.png`;
-    if (!fs.existsSync(dosya)) {
-      const veri = await simgeIndir(`https://${alan}/apple-touch-icon.png`)
-                || await simgeIndir(`https://www.${alan}/apple-touch-icon.png`)
-                || await simgeIndir(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(alan)}&sz=128`)
-                || await simgeIndir(`https://icons.duckduckgo.com/ip3/${alan}.ico`)
-                || await simgeIndir(`https://${alan}/favicon.ico`)
-                || await simgeIndir(`https://www.${alan}/favicon.ico`);
-      if (veri) { fs.writeFileSync(dosya, veri); yeni++; }
-    }
-    if (fs.existsSync(dosya)) sonuc[k.ad] = dosya;
+    if (!fs.existsSync(dosya) && !(yok[alan] && yok[alan] > haftaOnce) && !denenecek.some(d => d.alan === alan)) denenecek.push({ alan, dosya });
   }
+  const liste = denenecek.slice(0, 40);
+  let sira = 0;
+  await Promise.all(Array.from({ length: 6 }, async () => {
+    while (sira < liste.length) {
+      const { alan, dosya } = liste[sira++];
+      const veri = await simgeIndir(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(alan)}&sz=128`)
+                || await simgeIndir(`https://${alan}/apple-touch-icon.png`)
+                || await simgeIndir(`https://icons.duckduckgo.com/ip3/${alan}.ico`);
+      if (veri) { fs.writeFileSync(dosya, veri); yeni++; delete yok[alan]; } else yok[alan] = bugun;
+    }
+  }));
+  try { fs.writeFileSync(YOK_DOSYA, JSON.stringify(yok, null, 1)); } catch (e) {}
+  for (const k of KAYNAKLAR) { const dosya = `${SIMGE_KLASORU}/${alanBul(k)}.png`; if (fs.existsSync(dosya)) sonuc[k.ad] = dosya; }
   const eksik = KAYNAKLAR.filter(k => !sonuc[k.ad]).map(k => `${k.ad} (${alanBul(k)})`);
   console.log(`Kaynak simgeleri: ${Object.keys(sonuc).length} hazır${yeni ? `, ${yeni} yeni indirildi` : ""}${eksik.length ? ` · bulunamayan: ${eksik.join(", ")}` : ""}`);
   return sonuc;
@@ -1043,7 +1100,8 @@ async function simgeleriHazirla() {
 
       // beslemede özet ya da görsel yoksa yazının kendi sayfasından tamamla (her yazı için bir kez; Google Haberler sayfasını yorma)
       // özeti olmayanlar bir kez daha denenir (zng2): artık sayfanın ilk paragrafına da bakılıyor
-      const eksik = yeni.filter(y => ((!y.gorsel && !y.zng) || (!y.ozet && !y.zng2)) && y.link && !gnMi(y.link)).slice(0, 12);
+      const eksik = yeni.filter(y => ((!y.gorsel && !y.zng) || (!y.ozet && !y.zng2)) && y.link && !gnMi(y.link)).slice(0, Math.max(0, Math.min(12, SAYFA_HAKKI)));
+      SAYFA_HAKKI -= eksik.length;
       for (let i = 0; i < eksik.length; i += 4) {
         await Promise.all(eksik.slice(i, i + 4).map(async y => {
           const b = await sayfaBilgisi(y.link);
@@ -1093,9 +1151,13 @@ async function simgeleriHazirla() {
     }
   }
 
-  for (let i = 0; i < KAYNAKLAR.length; i += 8) {
-    await Promise.all(KAYNAKLAR.slice(i, i + 8).map(tek));
-  }
+  let sira = 0;
+  await Promise.all(Array.from({ length: 8 }, async () => {
+    while (sira < KAYNAKLAR.length) { const k = KAYNAKLAR[sira++]; await tek(k); }
+  }));
+  try { fs.writeFileSync(KESIF_DOSYA, JSON.stringify(KESIFLER, null, 1)); } catch (e) {}
+  const kesfedilen = Object.entries(KESIFLER).filter(([, v]) => v && v.url);
+  if (kesfedilen.length) console.log(`Besleme keşfi: ${kesfedilen.length} sitenin beslemesi ana sayfasından bulundu`);
 
   // Uc aydan eski yazilar arsivden de cikar (tarihi olmayanlar kalir)
   let cikan = 0;

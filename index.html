@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -1564,7 +1564,12 @@ function yazarAdi(y, ad){
   for (const k of [sade(ad), sade(y.kaynak)]) if (k && sa && (sa === k || sa.includes(k) || k.includes(sa))) return "";
   if (!sa || /@|https?:|www\./i.test(a)) return "";
   if (/\b(admin|administrator|editor|editors|editör|editörler|staff|desk|newsroom|redaksiyon|redaksiyonu|haber merkezi|team|ekibi|press|communications|webmaster|web|guest|contributors?|correspondents?|bureau|agency|ajans)\b/i.test(a)) return "";
-  const adlar = a.split(/\s*(?:,|;|&|\band\b|\bve\b|\bund\b|\bet\b|\by\b)\s*/).filter(Boolean);
+  // "Alan MacEachern, Professor of History, Western University" → yalnızca ad; unvan ve kurum parçaları ad sayılmaz
+  const UNVAN = /\b(professor|prof|lecturer|reader|researcher|research|fellow|director|universit\w*|college|institut\w*|school|centre|center|candidate|ph\.?\s?d|dr|senior|associate|assistant|chair|dean|scientist|student|editor|analyst|economist|adjunct|emeritus|department|faculty|programm?e|manager|head|lead|founder|president|ceo|correspondent|reporter|journalist)\b/i;
+  const adlar = a.split(/\s*(?:,|;|&|\band\b|\bve\b|\bund\b|\bet\b|\by\b)\s*/)
+    .map(x => x.replace(/^(?:(?:prof(?:essor)?|dr|doç|doc|assoc|mr|mrs|ms|sir)\.?\s+)+/i, "").trim())   // "Dr. Ayşe Kaya" → "Ayşe Kaya"
+    .filter(x => x && !/^[a-zçğıöşü]/.test(x) && !UNVAN.test(x) && !/(üniversite|universidad|université|universität|universita|enstitü|instituto|institut |fakülte|vakfı|derneği|merkezi)/i.test(x));
+  if (!adlar.length) return "";
   a = adlar.length > 2 ? adlar.slice(0, 2).join(", ") + " +" + (adlar.length - 2) : adlar.join(", ");   // dilden bağımsız: "Ad Soyad, Ad Soyad +2"
   return a.length > 70 ? "" : a;
 }
@@ -1665,6 +1670,15 @@ function kartlariSigdirAsil(){
         if (s.getBoundingClientRect().bottom > alt() + 0.5) break;
         // yazarın kendi üç noktasıyla biten bir cümlede durma; özetin sonu değilse bir sonrakine bak
         if (i === parca.length - 1 || !/(…|\.\.\.)["'”’»)\]]*$/.test(aday)) ok = aday;
+      }
+      if (!ok && k && parca.length) {
+        // İlk tam cümle bile sığmıyorsa resim, kartın en az %35'i kalacak kadar kısalır; özet yarım cümleyle değil tam cümleyle görünür
+        let ilk = "";
+        for (let i = 0; i < parca.length; i++) { ilk = birlestir(ilk, parca[i]); if (i === parca.length - 1 || !/(…|\.\.\.)["'”’»)\]]*$/.test(ilk)) break; }
+        s.textContent = ilk; s.style.display = "";
+        const kh = k.getBoundingClientRect().height, enAz = e.getBoundingClientRect().height * 0.35;
+        const asim = s.getBoundingClientRect().bottom - alt();
+        if (asim > 0 && kh - asim - 2 >= enAz) { k.style.height = (kh - asim - 2) + "px"; k.style.flex = "none"; ok = ilk; }
       }
       if (ok) s.textContent = ok; else s.style.display = "none";
     }
@@ -1967,7 +1981,7 @@ function cizKaynaklar(){
         <div class="sinfo">
           <div class="nm">${kac(kaynakAdi(k.ad))}</div>
           <div class="durum${bozuk?" kirik":""}">${
-            !k.acik ? t("kapali") : bozuk ? (arsiv(k.ad)? t("ulasilamadi_duruyor", sayi(arsiv(k.ad))) : t("ulasilamadi")) : (n?t("yazi_sayisi", sayi(n)):"—")
+            !k.acik ? t("kapali") : bozuk ? (arsiv(k.ad)? t("ulasilamadi_duruyor", sayi(arsiv(k.ad))) : t("ulasilamadi")) : t("yazi_sayisi", sayi(n||0))
           }${kim?`<span class="alan">${kac(kim)}</span>`:""}</div>
         </div>
         <button class="yildiz-dugme" data-gozde-ekle="${kac(k.ad)}" aria-pressed="${S.gozde.has(k.ad)}" aria-label="${kac(t("gozdeye_ekle"))}">${S.gozde.has(k.ad)?"★":"☆"}</button>

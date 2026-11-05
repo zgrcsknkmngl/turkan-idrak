@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -212,15 +212,16 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   #cubukYeri .cubuk{padding:5px 18px 7px}
   html{scroll-snap-type:y mandatory;scroll-padding-top:calc(var(--ust-y,0px) + 10px);scroll-padding-bottom:calc(var(--alt-y,0px) + 12px)}
   /* Akış kartları: ekranda iki kart, kaydırınca ikişer ikişer */
-  #feed .entry{height:var(--kart-y,auto);display:flex;flex-direction:column;overflow:hidden;padding:8px 8px 6px;margin:0 0 10px;position:relative}
-  #feed > .entry:nth-of-type(2n+1){scroll-snap-align:start;scroll-snap-stop:always}
-  #feed > :last-child{scroll-snap-align:end}
-  #feed .entry .kapak-alan{flex:0 0 61.8%;aspect-ratio:auto;height:auto;margin:0 0 6px;border-radius:11px}
-  #feed .entry .meta{margin:0 2px 3px;font-size:11.5px;white-space:nowrap;overflow:hidden}
-  #feed .entry .govde{flex:1 1 auto;min-height:0;overflow:hidden;padding:0 2px}
-  #feed .entry h2{font-size:16px;line-height:1.25;margin:0 0 3px}
-  #feed .entry .orig{display:none}
-  #feed .entry .sum{font-size:13.5px;line-height:1.42;margin:0}
+  :is(#feed,#saved) .entry{height:var(--kart-y,auto);display:flex;flex-direction:column;overflow:hidden;padding:8px 8px 6px;margin:0 0 10px;position:relative}
+  :is(#feed,#saved) > .entry:nth-of-type(2n+1){scroll-snap-align:start;scroll-snap-stop:always}
+  :is(#feed,#saved) > :last-child{scroll-snap-align:end}
+  :is(#feed,#saved) .entry .kapak-alan{flex:0 0 61.8%;aspect-ratio:auto;height:auto;margin:0 0 6px;border-radius:11px}
+  :is(#feed,#saved) .entry .meta{margin:0 2px 3px;font-size:11.5px;white-space:nowrap;overflow:hidden}
+  :is(#feed,#saved) .entry .govde{flex:1 1 auto;min-height:0;overflow:hidden;padding:0 2px}
+  :is(#feed,#saved) .entry h2{font-size:16px;line-height:1.25;margin:0 0 3px}
+  :is(#feed,#saved) .entry .orig{display:none}
+  .entry .kyz{font:italic 12.5px/1.3 var(--sans);color:var(--yazar);margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  :is(#feed,#saved) .entry .sum{font-size:13.5px;line-height:1.42;margin:0}
   /* İşlem düğmeleri resmin üstünde, buzlu bir şeritte */
   .kapak-alan .acts{position:absolute;right:8px;bottom:8px;z-index:2;display:flex;gap:2px;padding:3px;border-radius:999px;
     background:rgba(8,16,30,.58);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
@@ -235,7 +236,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .kapak-alan .meta .yazar{display:none}
   .kapak-alan .meta .when{color:rgba(255,255,255,.86);flex:none}
   .ust-blok .rail{padding-top:7px;padding-bottom:7px}
-  #feed{padding-top:10px}
+  :is(#feed,#saved){padding-top:10px}
   .kapak-alan .act:active{background:rgba(255,255,255,.16)}
   .kaynak-ozet{font-family:var(--serif);font-size:16.5px;line-height:1.55;color:var(--ozet);margin:4px 0 6px}
   .entry.okundu h2{color:var(--okundu1)}
@@ -334,11 +335,11 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     .manzara{aspect-ratio:2064/512!important;height:auto;margin:0 -18px!important;background-size:100% 100%!important}
     .manzara::before{content:"";position:absolute;left:0;right:0;top:0;height:42%;z-index:1;
       background:linear-gradient(color-mix(in srgb,var(--ink) 72%,transparent),transparent)}
-    #katlar{position:relative;z-index:3;margin-top:-58px;border-bottom:none;
+    #katlar{position:relative;z-index:3;margin-top:-58px;min-height:58px;box-sizing:border-box;border-bottom:none;
       background:linear-gradient(color-mix(in srgb,var(--ink) 0%,transparent),color-mix(in srgb,var(--ink) 88%,transparent))}
-    #feed{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
-    #feed > :not(.entry){grid-column:1 / -1}
-    #feed .entry{margin:0 0 14px}
+    :is(#feed,#saved){display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
+    :is(#feed,#saved) > :not(.entry){grid-column:1 / -1}
+    :is(#feed,#saved) .entry{margin:0 0 14px}
   }
   nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
   /* Hakkında · İletişim · Gizlilik: her ekranda sekmelerin hemen altında */
@@ -1282,7 +1283,7 @@ function acilanCiz(y){
     ${y.gorsel ? `<img class="buyuk" src="${kac(y.gorsel)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}
     <h2>${kac(c ? c.baslik : y.baslik)}</h2>
     ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
-    ${y.yazar ? `<p class="yz">${kac(y.yazar)}</p>` : ""}
+    ${yazarAdi(y, kaynakAdi(y.kaynak)) ? `<p class="yz">${kac(yazarAdi(y, kaynakAdi(y.kaynak)))}</p>` : ""}
     ${tamOzet(ozet) ? `<p class="sum">${kac(tamOzet(ozet))}</p>` : ""}
     <div class="dugmeler">
       <a class="dugme ana" href="${kac(y.link)}" target="_blank" rel="noopener" data-oku="${y.id}">${I.dis}<span>${t("kaynakta_oku")}</span></a>
@@ -1545,6 +1546,23 @@ function kapakAlani(y, ad, ek){
   return `<div class="kapak-alan">${zemin}${gorsel}${ek || ""}</div>`;
 }
 
+/* Yazarın adı: kaynağın kendi adı, kurum hesabı ya da genel bir imzaysa gösterilmez */
+function yazarAdi(y, ad){
+  let a = String((y && y.yazar) || "").replace(/^\s*(by|von|par|por|di|door|av)\s+/i, "").trim();
+  if (!a || y.tef || /youtube\.com|youtu\.be/i.test(y.link || "")) return "";   // video kanalının adı kaynağın kendisi
+  if (/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(a)) {   // kullanıcı adı: jon.wallace → Jon Wallace; tek parçalı (thilton.drupal, sfarrell) ad sayılmaz
+    const p = a.replace(/[._-]drupa\w*$/i, "").split(/[._-]+/).filter(x => x && !/^\d+$/.test(x));
+    a = p.length >= 2 ? p.map(x => x[0].toUpperCase() + x.slice(1)).join(" ") : "";
+  }
+  const sade = s => String(s || "").toLocaleLowerCase("tr").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const sa = sade(a);
+  for (const k of [sade(ad), sade(y.kaynak)]) if (k && sa && (sa === k || sa.includes(k) || k.includes(sa))) return "";
+  if (!sa || /@|https?:|www\./i.test(a)) return "";
+  if (/\b(admin|administrator|editor|editors|editör|editörler|staff|desk|newsroom|redaksiyon|redaksiyonu|haber merkezi|team|ekibi|press|communications|webmaster|web|guest|contributors?|correspondents?|bureau|agency|ajans)\b/i.test(a)) return "";
+  const adlar = a.split(/\s*(?:,|;|&|\band\b|\bve\b|\bund\b|\bet\b|\by\b)\s*/).filter(Boolean);
+  a = adlar.length > 2 ? adlar.slice(0, 2).join(", ") + " +" + (adlar.length - 2) : adlar.join(", ");   // dilden bağımsız: "Ad Soyad, Ad Soyad +2"
+  return a.length > 70 ? "" : a;
+}
 function kart(y){
   const c = trOf(y);
   const k = kayitliMi(y.id);
@@ -1565,6 +1583,7 @@ function kart(y){
     <div class="govde">
       <div class="yazi">
         <h2>${kac(baslik)}</h2>
+        ${yazarAdi(y, ad) ? `<p class="kyz">${kac(yazarAdi(y, ad))}</p>` : ""}
         ${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
         ${tamOzet(ozet) ? `<p class="sum">${kac(tamOzet(ozet))}</p>` : ""}
       </div>
@@ -1615,11 +1634,23 @@ function cumleler(metin){
 }
 function birlestir(a, b){ return a ? a + (/[。！？」』]$/.test(a) ? "" : " ") + b : b; }   // Çince ve Japoncada cümle arasına boşluk girmez
 function tamOzet(metin){ return cumleler(metin).reduce(birlestir, ""); }
+let sigdirGozcu = null, sigdirSirada = 0;
+function sigdirmaPlanla(){ if (sigdirSirada) return; sigdirSirada = requestAnimationFrame(() => { sigdirSirada = 0; kartlariSigdir(); }); }
 function kartlariSigdir(){
-  for (const e of document.querySelectorAll("#feed .entry")) {
-    const s = e.querySelector(".sum"), k = e.querySelector(".kapak-alan"), h = e.querySelector("h2");
+  if (sigdirGozcu) sigdirGozcu.disconnect();
+  try { kartlariSigdirAsil(); } finally {
+    try {
+      if (!sigdirGozcu) sigdirGozcu = new MutationObserver(sigdirmaPlanla);
+      for (const id of ["feed", "saved"]) { const el = document.getElementById(id); if (el) sigdirGozcu.observe(el, { childList: true, subtree: true }); }
+    } catch (e) {}
+  }
+}
+function kartlariSigdirAsil(){
+  for (const e of document.querySelectorAll(":is(#feed,#saved) .entry")) {
+    const s = e.querySelector(".sum"), k = e.querySelector(".kapak-alan"), h = e.querySelector(".kyz") || e.querySelector("h2");
     if (k) { k.style.height = ""; k.style.flex = ""; }
-    const alt = () => e.getBoundingClientRect().bottom - 9;
+    const g = e.querySelector(".govde");
+    const alt = () => Math.min(e.getBoundingClientRect().bottom - 9, g ? g.getBoundingClientRect().bottom : Infinity);
     if (s) {
       if (s.dataset.tam === undefined) s.dataset.tam = s.textContent;
       s.style.display = ""; let ok = "";

@@ -276,6 +276,16 @@ function coz(x) {
 
 /* Google Haberler yoluyla gelen yazilarda "ozet", basligin tekrari ve kaynak
    adindan ibaret. Ozet basligi tekrar ediyorsa bos sayilir. */
+/* Bazı kurumların beslemesi özete künye koyar: "Expert comment jon.wallace 5 November 2026 …" (Chatham House).
+   Künye özetten çıkarılır; içindeki kullanıcı adı yazarın adı olur (jon.wallace → Jon Wallace). */
+const AYLAR_EN = "January|February|March|April|May|June|July|August|September|October|November|December";
+const ONEK_KALIBI = new RegExp("^[\\s?•·-]*(?:[A-Z][a-z]+(?:\\s+[a-z]+){0,2})\\s+([a-z][a-z0-9]*[._-][a-z0-9._-]*…?)\\s+\\d{1,2}\\s+(?:" + AYLAR_EN + ")\\s+\\d{4}\\s+");
+function onEkYazar(ozet) {   // yalnızca "ad.soyad" biçimi ada çevrilir; "sfarrell" gibi tek parçalı kullanıcı adı ad sayılmaz
+  const m = String(ozet || "").match(ONEK_KALIBI);
+  if (!m) return "";
+  const p = m[1].replace(/…$/, "").replace(/[._-]drupa\w*$/i, "").split(/[._-]+/).filter(x => x && !/^\d+$/.test(x));
+  return p.length >= 2 ? p.map(x => x[0].toUpperCase() + x.slice(1)).join(" ") : "";
+}
 function ozetDuzelt(ozet, baslik, yazar) {
   let o = String(ozet || "").replace(/&nbsp;|\u00a0/gi, " ").replace(/\s+/g, " ").trim();
   const sade = x => String(x || "").normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
@@ -298,7 +308,8 @@ function ozetDuzelt(ozet, baslik, yazar) {
     for (; i < o.length && say < hedef; i++) if (/[\p{L}\p{N}]/u.test(o[i])) say++;
     o = o.slice(i).replace(/^[\s:|·•,.\-–—]+/, "").trim();
   }
-  // 2) Künye kalıpları: "Submitted by X on Thu, 10/22/2026 - 06:57", "By X", "Published ... 06:57"
+  // 2) Künye kalıpları: "Expert comment jon.wallace 5 November 2026", "Submitted by X on Thu, 10/22/2026 - 06:57", "By X", "Published ... 06:57"
+  o = o.replace(ONEK_KALIBI, "");
   o = o.replace(/^(?:submitted\s+)?by\s+[^,.]{2,80}?\s+on\s+\w{3,9},?\s+\d{1,2}\/\d{1,2}\/\d{2,4}\s*-\s*\d{1,2}:\d{2}\s*/i, "");
   const ya = String(yazar || "").trim();
   if (ya) {
@@ -410,6 +421,7 @@ function ayikla(xml, kaynakAd) {
     if (ad) yazar = temiz(ad[1]);
     yazar = yazar.replace(/\s*\([^)]*\)\s*$/, "").replace(/^[^@\s]+@[^\s]+\s*/, "").trim();
     if (yazar.length > 70) yazar = "";
+    if (!yazar) yazar = onEkYazar(ozetHam);
     // Google Haberler basliga " - Yayin Adi" ekler; kaynak zaten gosterildigi icin temizle
     const kaynakEt = temiz(etiket(b, "source"));
     let bas = baslik;
@@ -538,7 +550,16 @@ function sayfaMetasi(bas, url) {
     const c = etiket[0].match(/content=["']([^"']*)["']/i);
     return c ? c[1] : "";
   };
-  const aciklama = temiz(coz(meta("og:description") || meta("twitter:description") || meta("description")));
+  let aciklama = temiz(coz(meta("og:description") || meta("twitter:description") || meta("description")));
+  // paylaşım etiketinde açıklama yoksa yazının ilk dolgun paragrafı (çerez, abonelik ve telif satırları sayılmaz)
+  if (!aciklama) {
+    const govde = (bas.match(/<article[\s\S]*?<\/article>/i) || bas.match(/<main[\s\S]*?<\/main>/i) || [bas])[0];
+    for (const p of govde.match(/<p[^>]*>[\s\S]*?<\/p>/gi) || []) {
+      const metin = temiz(coz(p.replace(/<[^>]+>/g, " ")));
+      if (metin.length >= 120 && metin.length <= 1500 &&
+          !/cookie|çerez|javascript|subscribe|abone ol|newsletter|bülten|©|all rights reserved|tüm hakları/i.test(metin)) { aciklama = metin; break; }
+    }
+  }
   let gorsel = meta("og:image") || meta("og:image:url") || meta("twitter:image") || meta("twitter:image:src");
   if (!gorsel) { const l = bas.match(/<link[^>]+rel=["']image_src["'][^>]*href=["']([^"']+)["']/i); if (l) gorsel = l[1]; }
   if (gorsel) { try { gorsel = temizUrl(new URL(coz(gorsel), url).href) || ""; } catch (e) { gorsel = ""; } }
@@ -890,12 +911,14 @@ async function simgeleriHazirla() {
         if (!y.gorsel && e.gorsel) y.gorsel = e.gorsel;
         if (!y.ozet && e.ozet) y.ozet = e.ozet;
         if (e.zng) y.zng = 1;
+        if (e.zng2) y.zng2 = 1;
         if (gnMi(y.link) && e.link && !gnMi(e.link)) y.link = e.link;
         if (e.pay && !y.pay) y.pay = e.pay;
       }
 
       // beslemede özet ya da görsel yoksa yazının kendi sayfasından tamamla (her yazı için bir kez; Google Haberler sayfasını yorma)
-      const eksik = yeni.filter(y => (!y.gorsel || !y.ozet) && !y.zng && y.link && !gnMi(y.link)).slice(0, 12);
+      // özeti olmayanlar bir kez daha denenir (zng2): artık sayfanın ilk paragrafına da bakılıyor
+      const eksik = yeni.filter(y => ((!y.gorsel && !y.zng) || (!y.ozet && !y.zng2)) && y.link && !gnMi(y.link)).slice(0, 12);
       for (let i = 0; i < eksik.length; i += 4) {
         await Promise.all(eksik.slice(i, i + 4).map(async y => {
           const b = await sayfaBilgisi(y.link);
@@ -903,7 +926,7 @@ async function simgeleriHazirla() {
             if (!y.gorsel && b.gorsel) y.gorsel = b.gorsel;
             if (!y.ozet && b.aciklama) y._sayfaOzeti = b.aciklama;
           }
-          y.zng = 1;
+          y.zng = 1; y.zng2 = 1;
         }));
       }
       // sitenin her sayfada aynı olan genel tanıtım cümlesi yazının özeti sayılmaz
@@ -922,7 +945,7 @@ async function simgeleriHazirla() {
       const basliklar = new Set(yeni.map(y => y.baslik.toLocaleLowerCase("tr")));
       const birlesik = yeni.concat(eskiKayit.yazilar.filter(y =>
         !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr")) && !copMu(y, k.ad)));
-      for (const y of birlesik) { if (!y.pay) y.pay = payKodu(y); y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
+      for (const y of birlesik) { if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
       birlesik.length = 0; birlesik.push(...tekil);
@@ -934,7 +957,7 @@ async function simgeleriHazirla() {
       }, yol === "yedek" ? { yol: "yedek" } : {}, (dil || eskiKayit.dil) ? { dil: dil || eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}${yol === "yedek" ? " (yedek yoldan)" : ""}`);
     } catch (e) {
-      for (const y of eskiKayit.yazilar) { if (!y.pay) y.pay = payKodu(y); y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
+      for (const y of eskiKayit.yazilar) { if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: ortakOzetleriAyikla(profilKumesiniAyikla(eskiKayit.yazilar, k.ad).filter(y => !copMu(y, k.ad) && (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)))),

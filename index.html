@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -1153,8 +1153,11 @@ function kartiYenile(id){
     for(const s of [".yazi",".acts"]){ const a=eski.querySelector(s), c=yeni.querySelector(s); if(a&&c) a.innerHTML=c.innerHTML; }
   });
 }
-const ekrandakiler = () => [...document.querySelectorAll("#feed article.entry [data-kay]")]
-  .map(b=>S.yazilar.find(y=>y.id===b.dataset.kay)).filter(Boolean);
+const ekrandakiler = () => {   // açık ekrandaki kartlar: İdrak'ta akış, Kayıtlı'da kaydedilenler
+  const kayit = S.ekran === "saved", havuz = kayit ? S.kayitli : S.yazilar;
+  return [...document.querySelectorAll((kayit ? "#saved" : "#feed") + " article.entry [data-kay]")]
+    .map(b=>havuz.find(y=>y.id===b.dataset.kay)).filter(Boolean);
+};
 function topluDugmesi(){
   const d = document.querySelector("[data-toplu]"); if(!d) return;
   const kalan = ekrandakiler().filter(topluCevrilmeli).length;
@@ -1568,7 +1571,9 @@ function yazarAdi(y, ad){
   const UNVAN = /\b(professor|prof|lecturer|reader|researcher|research|fellow|director|universit\w*|college|institut\w*|school|centre|center|candidate|ph\.?\s?d|dr|senior|associate|assistant|chair|dean|scientist|student|editor|analyst|economist|adjunct|emeritus|department|faculty|programm?e|manager|head|lead|founder|president|ceo|correspondent|reporter|journalist)\b/i;
   const adlar = a.split(/\s*(?:,|;|&|\band\b|\bve\b|\bund\b|\bet\b|\by\b)\s*/)
     .map(x => x.replace(/^(?:(?:prof(?:essor)?|dr|doç|doc|assoc|mr|mrs|ms|sir)\.?\s+)+/i, "").trim())   // "Dr. Ayşe Kaya" → "Ayşe Kaya"
-    .filter(x => x && !/^[a-zçğıöşü]/.test(x) && !UNVAN.test(x) && !/(üniversite|universidad|université|universität|universita|enstitü|instituto|institut |fakülte|vakfı|derneği|merkezi)/i.test(x));
+    .filter(x => x && !/^[a-zçğıöşü]/.test(x) && !UNVAN.test(x) && !/(üniversite|universidad|université|universität|universita|enstitü|instituto|institut |fakülte|vakfı|derneği|merkezi)/i.test(x))
+    // bir ad en az iki sözcüktür ve bilim dalı adı değildir ("History", "Environmental Studies" gibi parçalar düşer)
+    .filter(x => /\S\s+\S/.test(x) && !/\b(studies|science|sciences|policy|policies|economics|history|geography|law|politics|relations|affairs|engineering|medicine|health|education|sociology|anthropology|philosophy|literature|languages?|mathematics|physics|chemistry|biology|management|business|humanities|arts?)\b/i.test(x));
   if (!adlar.length) return "";
   a = adlar.length > 2 ? adlar.slice(0, 2).join(", ") + " +" + (adlar.length - 2) : adlar.join(", ");   // dilden bağımsız: "Ad Soyad, Ad Soyad +2"
   return a.length > 70 ? "" : a;
@@ -1718,7 +1723,7 @@ addEventListener("DOMContentLoaded", () => {
 
 function ciz(){
   $("#acilanAlan").innerHTML = (S.ekran==="feed" && S.acilan) ? acilanCiz(S.acilan) : "";
-  $("#katlar").classList.toggle("hide", S.ekran!=="feed");
+  $("#katlar").classList.toggle("hide", S.ekran!=="feed" && S.ekran!=="saved");   // Kayıtlı'da da kategori satırı
   $("#rail").classList.toggle("hide", S.ekran!=="feed");
   $("#arama").classList.toggle("hide", S.ekran!=="feed" || !S.aramaAcik);
   $("#etiketler").classList.add("hide");
@@ -1728,7 +1733,7 @@ function ciz(){
   $("#saved").classList.toggle("hide", S.ekran!=="saved");
   $("#sources").classList.toggle("hide", S.ekran!=="sources");
   ["feed","tefekkur","saved","sources"].forEach(e=>$("#nav-"+e).setAttribute("aria-current", S.ekran===e?"page":"false"));
-  if(S.ekran!=="feed") $("#cubukYeri").innerHTML = "";
+  if(S.ekran!=="feed" && S.ekran!=="saved") $("#cubukYeri").innerHTML = "";
   if(S.ekran==="feed") cizAkis();
   if(S.ekran==="tefekkur"){ cizTefekkur(); tefekkuruCek(); }
   if(S.ekran==="saved") cizKayitli();
@@ -1935,8 +1940,21 @@ function cizAkis(){
 }
 
 function cizKayitli(){
+  // Kategori satırı: yalnızca kayıtlı yazısı olan kategoriler (Tefekkür yazıları "Tümü"nde durur)
+  const katSay = kod => kod === "hepsi" ? S.kayitli.length : S.kayitli.filter(y => !y.tef && turBul(y.kaynak) === kod).length;
+  let sec = S.kayitKat || "hepsi";
+  if (sec !== "hepsi" && !katSay(sec)) sec = S.kayitKat = "hepsi";
+  $("#katlar").innerHTML = S.kayitli.length ? KATEGORILER.filter(kod => kod === "hepsi" || katSay(kod) > 0).map(kod =>
+    `<button class="chip" data-kkat="${kod}" aria-pressed="${sec === kod}">${kac(t("kat_" + kod))}</button>`).join("") : "";
+  const liste = sec === "hepsi" ? S.kayitli : S.kayitli.filter(y => !y.tef && turBul(y.kaynak) === sec);
+  // Araç satırı: kaydedilen yazıları tek dokunuşla çevir ya da özgün hâline döndür
+  const cevrilmemis = liste.filter(topluCevrilmeli).length, cevrilmis = liste.filter(y => trOf(y)).length;
+  $("#cubukYeri").innerHTML = (cevrilmemis || cevrilmis) ? `<div class="cubuk">${cevrilmemis
+      ? `<button class="mini" data-toplu="1"${S.topluCeviri ? " disabled" : ""}>${S.topluCeviri ? t("cevriliyor_n", S.topluKalan || 0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>`
+      : `<button class="mini" data-orj-toplu="1">${t("ceviri_acik")}</button>`}</div>` : "";
+  if (S.otoCeviri && !S.topluCeviri && cevrilmemis) setTimeout(hepsiniCevir, 0);
   $("#count").textContent = S.kayitli.length ? t("kayit_sayisi", sayi(S.kayitli.length)) : "";
-  $("#saved").innerHTML = (S.kayitli.length ? S.kayitli.map(y => y.tef ? tefKart(y, false) : kart(y)).join("")
+  $("#saved").innerHTML = (S.kayitli.length ? liste.map(y => y.tef ? tefKart(y, false) : kart(y)).join("")
     : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
        <h3>${t("kayit_yok")}</h3>
        <p>${t("kayit_yok_aciklama")}</p>
@@ -1999,7 +2017,7 @@ document.addEventListener("click", e=>{
   const tc = e.target.closest("[data-tefcevir]");
   if(tc){ tefYaziyiCevir(tc.dataset.tefcevir); return; }
   if(e.target.closest("[data-tefgeri]")){ tefKapat(); return; }
-  const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-orj-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kapat],#tema");
+  const h = e.target.closest("#aramaAc,[data-gozde-filtre],[data-gozde-ekle],[data-kay],[data-cev],[data-orj],[data-suz],[data-git],[data-ac],[data-sil],[data-yeni],[data-oku],[data-toplu],[data-orj-toplu],[data-daha],[data-etiket],[data-sifirla],[data-pay],[data-kat],[data-kkat],[data-kapat],#tema");
   if(!h) return;
   if(h.dataset.oku){
     okunduIsaretle(h.dataset.oku); const en=h.closest(".entry"); if(en) en.classList.add("okundu");
@@ -2049,6 +2067,7 @@ document.addEventListener("click", e=>{
     S.kategori=h.dataset.kat; S.suzgec="hepsi"; S.goster=40;
     ciz(); scrollTo({top:0}); return;
   }
+  if(h.dataset.kkat){ S.kayitKat = h.dataset.kkat; ciz(); scrollTo({top:0}); return; }   // Kayıtlı'nın kendi kategorisi
   if(h.dataset.suz){ S.suzgec=h.dataset.suz; S.goster=40; ciz(); scrollTo({top:0}); return; }
   if(h.dataset.git){ S.ekran=h.dataset.git; ciz(); return; }
   if(h.dataset.ac !== undefined){

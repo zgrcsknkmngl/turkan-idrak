@@ -14,7 +14,8 @@ const KAYNAKLAR = [
      G = kurum besleme vermiyor, Google Haberler üzerinden                      */
 
   // -- Kuzey Amerika --
-  // 23 Ekim 2026: yazısını açınca ücret ya da abonelik isteyen kaynaklar çıkarıldı (Türkan'da yalnızca serbestçe okunabilen kaynaklar):
+  // 23 Ekim 2026: yazısını açınca ücret ya da abonelik isteyen kaynaklar çıkarılmıştı; 7 Kasım 2026'da bu karar geri alındı, hepsi
+  // dosyanın sonundaki ABONELİKLİ KÖKLÜ KAYNAKLAR bölümüne geri döndü. O gün çıkarılanlar:
   // Le Monde, SCMP, The Hindu, Japan Times, Christian Sci. Monitor, Haaretz, The New York Times, The Wall Street Journal, Financial Times, Reuters, The Brazilian Report, The East African, The Jakarta Post, Foreign Affairs, Foreign Policy, World Politics Review, MIT Teknoloji, The Diplomat, The Economist, Le Monde Diplomatique, Caixin, Nikkei Asia, Bloomberg Opinion, Project Syndicate, London Review of Books, Times Literary Supplement, New York Review of Books, The Bookseller, Le Monde des Livres, El País Babelia, Cahiers du Cinéma
   { ad:"RAND", ulke:"ABD",               tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://www.rand.org/pubs/new.xml" },                        // ✓
   { ad:"FPRI", ulke:"ABD",               tur:"kurum", ulke:"ABD", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:fpri.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                               // ✓
@@ -106,7 +107,7 @@ const KAYNAKLAR = [
   { ad:"The Guardian", ulke:"İngiltere",       tur:"ajans", ulke:"İngiltere", kimlik:"vakıf", url:"https://www.theguardian.com/world/rss" },                    // ✓
   { ad:"IPS Küresel Güney", ulke:"Küresel",  tur:"ajans", ulke:"Uluslararası", kimlik:"bağımsız", url:"https://www.ipsnews.net/news/regional-categories/global/feed/" }, // ✓
   { ad:"Telesur", ulke:"Venezuela", nitelik:"devlet",            tur:"ajans", ulke:"Venezuela", kimlik:"devlet", url:"https://news.google.com/rss/search?q=site:telesurenglish.net+when:120d&hl=en-US&gl=US&ceid=US:en" },                       // ✓
-  { ad:"MercoPress", ulke:"Uruguay",         tur:"ajans", ulke:"Uruguay", kimlik:"özel", url:"https://en.mercopress.com/rss/" },                           // ✓
+  { ad:"MercoPress", ulke:"Uruguay",         tur:"ajans", ulke:"Uruguay", kimlik:"özel", url:"https://en.mercopress.com/rss/", yedek:"https://news.google.com/rss/search?q=site:en.mercopress.com+when:30d&hl=en-US&gl=US&ceid=US:en" },                           // ✓
   { ad:"Colombia Reports", ulke:"Kolombiya",   tur:"ajans", ulke:"Kolombiya", kimlik:"bağımsız", url:"https://colombiareports.com/feed/" },                        // ✓
   { ad:"Daily Maverick", ulke:"Güney Afrika",     tur:"ajans", ulke:"Güney Afrika", kimlik:"bağımsız", url:"https://www.dailymaverick.co.za/rss" },                      // ✓
   { ad:"Morocco World News", ulke:"Fas", tur:"ajans", ulke:"Fas", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:moroccoworldnews.com+when:120d&hl=en-US&gl=US&ceid=US:en" },     // ✓
@@ -122,7 +123,7 @@ const KAYNAKLAR = [
   { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
   { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://www.politico.com/rss/politicopicks.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", url:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // 27 Ekim 2026: okurun isteğiyle geri alındı (23 Ekim'de ücretliler arasında çıkarılmıştı)
+  { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", ucretli:true, url:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // 27 Ekim 2026: okurun isteğiyle geri alındı (23 Ekim'de ücretliler arasında çıkarılmıştı)
   { ad:"Tehran Times", ulke:"İran", nitelik:"devlet bağlantılı", tur:"ajans", url:"https://news.google.com/rss/search?q=site:tehrantimes.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Prensa Latina", ulke:"Küba", nitelik:"devlet", tur:"ajans", url:"https://news.google.com/rss/search?q=site:plenglish.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Mexico News Daily", ulke:"Meksika", tur:"ajans", url:"https://mexiconewsdaily.com/feed/", yedek:"https://news.google.com/rss/search?q=site:mexiconewsdaily.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -321,6 +322,47 @@ const KAYNAKLAR = [
   { ad:"IMF", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:imf.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"OECD", ulke:"Uluslararası", tur:"rapor", nitelik:"çok taraflı", url:"https://news.google.com/rss/search?q=site:oecd.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"McKinsey Global Institute", ulke:"ABD", tur:"rapor", kimlik:"özel", url:"https://news.google.com/rss/search?q=site:mckinsey.com+%22McKinsey+Global+Institute%22+when:120d&hl=en-US&gl=US&ceid=US:en" },
+
+  /* ===================== ABONELİKLİ KÖKLÜ KAYNAKLAR =====================
+     7 Kasım 2026: 23 Ekim kararı geri alındı. Yazısını açınca abonelik isteyen köklü ve yön verici kaynaklar
+     yeniden listede; okur en azından başlığı ve özeti görür. ucretli:true bu kaynakları işaretler.          */
+  { ad:"The New York Times", ulke:"ABD", tur:"ajans", ucretli:true, url:"https://rss.nytimes.com/services/xml/rss/nyt/World.xml", yedek:"https://news.google.com/rss/search?q=site:nytimes.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Wall Street Journal", ulke:"ABD", tur:"ajans", ucretli:true, url:"https://feeds.content.dowjones.io/public/rss/RSSWorldNews", yedek:"https://news.google.com/rss/search?q=site:wsj.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Financial Times", ulke:"İngiltere", tur:"ajans", ucretli:true, url:"https://www.ft.com/world?format=rss", yedek:"https://news.google.com/rss/search?q=site:ft.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Reuters", ulke:"İngiltere", tur:"ajans", ucretli:true, url:"https://news.google.com/rss/search?q=site:reuters.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Le Monde", ulke:"Fransa", tur:"ajans", ucretli:true, url:"https://www.lemonde.fr/en/international/rss_full.xml", yedek:"https://news.google.com/rss/search?q=site:lemonde.fr/en+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"SCMP", ulke:"Hong Kong", tur:"ajans", ucretli:true, url:"https://www.scmp.com/rss/91/feed/", yedek:"https://news.google.com/rss/search?q=site:scmp.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Hindu", ulke:"Hindistan", tur:"ajans", ucretli:true, url:"https://www.thehindu.com/news/international/feeder/default.rss", yedek:"https://news.google.com/rss/search?q=site:thehindu.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Japan Times", ulke:"Japonya", tur:"ajans", ucretli:true, url:"https://www.japantimes.co.jp/feed/", yedek:"https://news.google.com/rss/search?q=site:japantimes.co.jp+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Christian Sci. Monitor", ulke:"ABD", tur:"ajans", ucretli:true, url:"https://rss.csmonitor.com/feeds/world", yedek:"https://news.google.com/rss/search?q=site:csmonitor.com+when:14d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Brazilian Report", ulke:"Brezilya", tur:"ajans", ucretli:true, url:"https://news.google.com/rss/search?q=site:newsletters.brazilian.report+when:30d&hl=en-US&gl=US&ceid=US:en", yedek:"https://news.google.com/rss/search?q=site:brazilian.report+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The East African", ulke:"Kenya", tur:"ajans", ucretli:true, url:"https://news.google.com/rss/search?q=site:theeastafrican.co.ke+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Jakarta Post", ulke:"Endonezya", tur:"ajans", ucretli:true, url:"https://news.google.com/rss/search?q=site:thejakartapost.com+when:7d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Foreign Affairs", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://www.foreignaffairs.com/rss.xml", yedek:"https://news.google.com/rss/search?q=site:foreignaffairs.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Foreign Policy", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://foreignpolicy.com/feed/", yedek:"https://news.google.com/rss/search?q=site:foreignpolicy.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"World Politics Review", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://www.worldpoliticsreview.com/feed/", yedek:"https://news.google.com/rss/search?q=site:worldpoliticsreview.com+when:60d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"MIT Teknoloji", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://www.technologyreview.com/feed", yedek:"https://news.google.com/rss/search?q=site:technologyreview.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Diplomat", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://thediplomat.com/feed/", yedek:"https://news.google.com/rss/search?q=site:thediplomat.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Economist", ulke:"İngiltere", tur:"dergi", ucretli:true, url:"https://www.economist.com/latest/rss.xml", yedek:"https://news.google.com/rss/search?q=site:economist.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // ✓ son 300 yazı; geri alındı
+  { ad:"Le Monde Diplomatique", ulke:"Fransa", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:mondediplo.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Caixin", ulke:"Çin", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:caixinglobal.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Nikkei Asia", ulke:"Japonya", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:asia.nikkei.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Bloomberg Opinion", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://www.bloomberg.com/feeds/bview/news.rss", yedek:"https://news.google.com/rss/search?q=site:bloomberg.com/opinion+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Project Syndicate", ulke:"Çekya", tur:"dergi", kimlik:"bağımsız", ucretli:true, url:"https://news.google.com/rss/search?q=site:project-syndicate.org+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"London Review of Books", ulke:"İngiltere", tur:"kitap", ucretli:true, url:"https://www.lrb.co.uk/feeds/rss", yedek:"https://news.google.com/rss/search?q=site:lrb.co.uk+when:60d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Times Literary Supplement", ulke:"İngiltere", tur:"kitap", ucretli:true, url:"https://www.the-tls.com/feed/", yedek:"https://news.google.com/rss/search?q=site:the-tls.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"New York Review of Books", ulke:"ABD", tur:"kitap", ucretli:true, url:"https://www.nybooks.com/feed/", yedek:"https://news.google.com/rss/search?q=site:nybooks.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"The Bookseller", ulke:"İngiltere", tur:"kitap", ucretli:true, url:"https://www.thebookseller.com/rss/news", yedek:"https://news.google.com/rss/search?q=site:thebookseller.com+when:14d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Le Monde des Livres", ulke:"Fransa", tur:"kitap", ucretli:true, url:"https://www.lemonde.fr/livres/rss_full.xml", yedek:"https://news.google.com/rss/search?q=site:lemonde.fr+livres+when:14d&hl=fr&gl=FR&ceid=FR:fr" },   // geri alındı
+  { ad:"El País Babelia", ulke:"İspanya", tur:"kitap", ucretli:true, url:"https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/babelia/portada", yedek:"https://news.google.com/rss/search?q=site:elpais.com+Babelia+when:30d&hl=es&gl=ES&ceid=ES:es" },   // geri alındı
+  { ad:"Cahiers du Cinéma", ulke:"Fransa", tur:"kitap", ucretli:true, url:"https://www.cahiersducinema.com/feed/", yedek:"https://news.google.com/rss/search?q=site:cahiersducinema.com+when:60d&hl=fr&gl=FR&ceid=FR:fr" },   // geri alındı
+  { ad:"Time", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://time.com/feed/", yedek:"https://news.google.com/rss/search?q=site:time.com+when:14d&hl=en-US&gl=US&ceid=US:en" },   // yeni; kendi beslemesi açılmazsa yedek yol
+  { ad:"Bloomberg", ulke:"ABD", tur:"ajans", ucretli:true, url:"https://feeds.bloomberg.com/politics/news.rss", yedek:"https://news.google.com/rss/search?q=site:bloomberg.com/news+when:7d&hl=en-US&gl=US&ceid=US:en" },   // ✓ yeni; siyaset beslemesi
+  { ad:"Fayn", ulke:"Türkiye", tur:"dergi", ucretli:true, url:"https://www.fayn.press/rss/", yedek:"https://news.google.com/rss/search?q=site:fayn.press+when:30d&hl=tr&gl=TR&ceid=TR:tr" },   // ✓ yeni; Ghost beslemesi, yazıların bir kısmı abonelere özel
+
+  // -- Türkiye'den kültür ve edebiyat dergileri (7 Kasım 2026) --
+  { ad:"Ot Dergi", ulke:"Türkiye", tur:"kitap", url:"https://www.otdergi.com/feed/", yedek:"https://news.google.com/rss/search?q=site:otdergi.com+when:120d&hl=tr&gl=TR&ceid=TR:tr" },   // ? yeni; basılı dergi, sitesi doğrulanamadı — ilk taramalarda ulaşılamazsa çıkarılacak
+  { ad:"KafkaOkur", ulke:"Türkiye", tur:"kitap", url:"https://www.kafkaokur.com/feed/", yedek:"https://news.google.com/rss/search?q=site:kafkaokur.com+when:120d&hl=tr&gl=TR&ceid=TR:tr" },   // ? yeni; basılı dergi, sitesi doğrulanamadı — ilk taramalarda ulaşılamazsa çıkarılacak
 ];
 
 const ARSIV_SINIRI = 70;
@@ -1066,7 +1108,8 @@ async function simgeleriHazirla() {
   async function tek(k){
     const eskiKayit = onceki.kaynaklar[k.ad] || { yazilar: [] };
     const kimlikBilgisi = Object.assign({ tur: k.tur, ulke: k.ulke || "", nitelik: k.nitelik || "", kimlik: k.kimlik || "" },
-                                        simgeler[k.ad] ? { simge: simgeler[k.ad] } : {});
+                                        simgeler[k.ad] ? { simge: simgeler[k.ad] } : {},
+                                        k.ucretli ? { ucretli: true } : {});
     try {
       const { yazilar: gelen, yol, dil } = await cekYedekli(k);
       const tekBaslik = new Set();

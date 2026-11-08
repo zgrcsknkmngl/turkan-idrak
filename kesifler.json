@@ -90,5 +90,9 @@
  "kafkaokur.com": {
   "url": "",
   "tarih": "2026-11-07"
+ },
+ "primeinstitute.org": {
+  "url": "https://primeinstitute.org/feed/",
+  "tarih": "2026-11-08"
  }
 }

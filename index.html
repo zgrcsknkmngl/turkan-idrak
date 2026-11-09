@@ -215,6 +215,8 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   :is(#feed,#saved) .entry{height:var(--kart-y,auto);display:flex;flex-direction:column;overflow:hidden;padding:8px 8px 6px;margin:0 0 10px;position:relative}
   :is(#feed,#saved) > .entry:nth-of-type(2n+1){scroll-snap-align:start;scroll-snap-stop:always}
   :is(#feed,#saved) > :last-child{scroll-snap-align:end}
+  /* Paylaşılan yazı kutusu da bir durak: yoksa sayfa açılışta ilk akış kartına kayıp kutuyu başlığın altına gizliyor */
+  #acilanAlan > .acilan{scroll-snap-align:start;scroll-snap-stop:always}
   :is(#feed,#saved) .entry .kapak-alan{flex:0 0 61.8%;aspect-ratio:auto;height:auto;margin:0 0 6px;border-radius:11px}
   :is(#feed,#saved) .entry .meta{margin:0 2px 3px;font-size:11.5px;white-space:nowrap;overflow:hidden}
   :is(#feed,#saved) .entry .govde{flex:1 1 auto;min-height:0;overflow:hidden;padding:0 2px}

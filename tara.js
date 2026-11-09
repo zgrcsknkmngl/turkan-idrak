@@ -135,7 +135,7 @@ const KAYNAKLAR = [
   { ad:"The Young Turks", ulke:"ABD", tur:"ajans", url:"https://www.youtube.com/feeds/videos.xml?channel_id=UC1yBKRuGpC1tSM73A0ZjYjQ" },   // Cenk Uygur; yazılı yayını ve açık beslemesi yok, YouTube kanalının kendi beslemesi
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
-  { ad:"BirGün", ulke:"Türkiye", tur:"ajans", url:"https://news.google.com/rss/search?q=site:birgun.net+when:3d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"BirGün", ulke:"Türkiye", tur:"ajans", url:"https://www.birgun.net/rss/home", yedek:"https://news.google.com/rss/search?q=site:birgun.net+when:1d&hl=tr&gl=TR&ceid=TR:tr" },
   { ad:"soL Haber", ulke:"Türkiye", tur:"ajans", url:"https://news.google.com/rss/search?q=site:sol.org.tr+when:3d&hl=tr&gl=TR&ceid=TR:tr" },
   // Raporlar ve endeksler (16 Ekim 2026)
   { ad:"Heritage", ulke:"ABD", tur:"kurum", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:heritage.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -883,6 +883,25 @@ async function beslemeKesfet(alan) {
   KESIFLER[alan] = { url: bulunan, tarih: new Date().toISOString().slice(0, 10) };
   return bulunan;
 }
+/* Google Haberler araması en fazla 100 sonuç döndürür ve bunları yeniliğe göre değil ilgiye göre seçer.
+   Günde onlarca haber yayımlayan bir kaynakta "son 120 gün" araması en yeni haberleri dışarıda bırakabiliyor
+   (ör. BirGün, Gazete Oksijen). Bu yüzden önce dar bir pencere sorulur: haber ajanslarında son 1 gün,
+   diğerlerinde son 30 gün. O pencere boş dönerse asıl (geniş) adres kullanılır. Eski yazılar zaten arşivde. */
+function tazePencere(url, tur) {
+  if (!/news\.google\.com\/rss\/search/.test(url || "")) return null;
+  const m = /when:(\d+)d/.exec(url);
+  if (!m) return null;
+  const hedef = tur === "ajans" ? 1 : 30;
+  return +m[1] > hedef ? url.replace(/when:\d+d/, "when:" + hedef + "d") : null;
+}
+async function tazeCek(k, url) {
+  const taze = tazePencere(url, k.tur);
+  if (taze) {
+    try { const y = await cek({ ...k, url: taze }); if (y.length) return y; } catch (e) { /* geniş pencereye dön */ }
+  }
+  return cek({ ...k, url });
+}
+
 async function cekYedekli(k) {
   const alan = alanBul(k), kesif = alan && KESIFLER[alan] && KESIFLER[alan].url;
   if (kesif && kesif !== k.url) {   // daha önce keşfedilmiş besleme önce
@@ -890,14 +909,14 @@ async function cekYedekli(k) {
   }
   try {
     try {
-      const y = await cek(k);
+      const y = await tazeCek(k, k.url);
       // Adres açılıyor ama son üç aydan hiç yazı gelmiyorsa besleme bayatlamıştır (site yenilenmiş olabilir): yedek yolu dene
       if (!y.length && k.yedek) throw new Error("beslemede son " + EN_ESKI_GUN + " günden yazı yok");
       return { yazilar: y, yol: "asıl", dil: y.dil };
     } catch (e) {
       if (!k.yedek) throw e;
       try {
-        const y = await cek({ ...k, url: k.yedek }); return { yazilar: y, yol: "yedek", dil: y.dil };
+        const y = await tazeCek(k, k.yedek); return { yazilar: y, yol: "yedek", dil: y.dil };
       } catch (e2) {
         throw new Error(e.message + " · yedek yol: " + e2.message);
       }

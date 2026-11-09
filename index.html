@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -547,6 +547,9 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   #acilis .av-dugme.gorunur{opacity:1;pointer-events:auto}
   #acilis .av-atla{right:18px}
   #acilis .av-ses{left:18px;padding:9px 11px;line-height:0}
+.zaman-menu .sayi{opacity:.6;font-size:.85em;margin-inline-start:6px}
+.zaman-menu button[disabled]{opacity:.4;cursor:default}
+.kayit-cubuk .zaman-menu button{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -716,6 +719,7 @@ const SOZLUK = {
     kayit_yok:"Henüz kayıt yok",
     kayit_yok_aciklama:"İdrak’taki bir yazının altındaki <strong>kaydet</strong>’e dokun, burada birikir.",
     idrake_don:"İdrak’a dön",
+    bolum_sec:"Bölüm seç", kayit_suzgec_bos:"Bu süzgeçlerle kayıtlı yazı yok", suzgecleri_temizle:"Süzgeçleri temizle",
     kaynak_ozet:(n,l)=>`Dünyanın dört bir yanından ${n} ses: ${l}. Her biri kendi dilinde, kendi penceresinden konuşur; Türkan hepsini aynı mecliste dinler.`, ve:"ve",
     say_kurum:"düşünce kuruluşu", say_dergi:"dergi", say_ajans:"haber ajansı", say_kitap:"kültür sanat yayını", say_rapor:"rapor kaynağı",
     son_tarama:z=>`Son yoklama: ${z}.`, henuz_taranmadi:"Kaynaklar henüz taranmadı.",
@@ -772,6 +776,7 @@ const SOZLUK = {
     kayit_yok:"Nothing saved yet",
     kayit_yok_aciklama:"Tap <strong>save</strong> under any article in İdrak and it will be kept here.",
     idrake_don:"Back to İdrak",
+    bolum_sec:"Choose section", kayit_suzgec_bos:"No saved articles match these filters", suzgecleri_temizle:"Clear filters",
     kaynak_ozet:(n,l)=>`${n} voices from every corner of the world: ${l}. Each speaks in its own language, from its own window; Türkan listens to them all in one gathering.`, ve:"and",
     say_kurum:"think tanks", say_dergi:"magazines", say_ajans:"news agencies", say_kitap:"culture & arts outlets", say_rapor:"report sources",
     son_tarama:z=>`Last roll call: ${z}.`, henuz_taranmadi:"Sources have not been scanned yet.",
@@ -1100,6 +1105,7 @@ async function cek(){
   } else if(ACILIS && !S.acilanKapandi){
     const y = paylasilaniBul(ACILIS);
     if(y){ yaziyiAc(y); return; }
+    paylasilaniGetir(ACILIS).then(v => { if(v && !S.acilan && !S.acilanKapandi) yaziyiAc(v); });
   }
   ciz();
 }
@@ -1261,6 +1267,22 @@ function paylasilaniBul(kod){
     if(v && (v.pay===kod || v.id===kod)){ if(v.kb && !S.bilgi[v.kaynak]) S.bilgi[v.kaynak]=v.kb; return v; }
   }catch(e){}
   return null;
+}
+/* Bağlantı uygulamanın başka bir penceresinde açıldıysa (ör. telefonda yüklü Türkan uygulaması) tarayıcı belleği
+   boş gelir; yazı akıştan da düşmüş olabilir. O zaman yazının paylaşım sayfasındaki kopyası okunur. */
+async function paylasilaniGetir(kod){
+  if(!/^[0-9a-f]{12}$/.test(kod || "")) return null;
+  try{
+    const r = await fetch(new URL("y/" + kod + "/", location.href).href, {cache:"no-store"});
+    if(!r.ok) return null;
+    const m = (await r.text()).match(/<script type="application\/json" id="veri">([\s\S]*?)<\/script>/);
+    if(!m) return null;
+    const v = JSON.parse(m[1]);
+    if(!v || v.pay !== kod) return null;
+    try{ sessionStorage.setItem("ti.paylasilan", JSON.stringify(v)); }catch(e){}
+    if(v.kb && !S.bilgi[v.kaynak]) S.bilgi[v.kaynak] = v.kb;
+    return v;
+  }catch(e){ return null; }
 }
 function yaziyiAc(y){
   S.acilan = y; S.ekran = "feed";
@@ -1731,7 +1753,7 @@ addEventListener("DOMContentLoaded", () => {
 
 function ciz(){
   $("#acilanAlan").innerHTML = (S.ekran==="feed" && S.acilan) ? acilanCiz(S.acilan) : "";
-  $("#katlar").classList.toggle("hide", S.ekran!=="feed" && S.ekran!=="saved");   // Kayıtlı'da da kategori satırı
+  $("#katlar").classList.toggle("hide", S.ekran!=="feed");   // Kayıtlı'nın bölüm seçimi kendi araç satırında
   $("#rail").classList.toggle("hide", S.ekran!=="feed");
   $("#arama").classList.toggle("hide", S.ekran!=="feed" || !S.aramaAcik);
   $("#etiketler").classList.add("hide");
@@ -1948,25 +1970,46 @@ function cizAkis(){
 }
 
 function cizKayitli(){
-  // Kategori satırı: yalnızca kayıtlı yazısı olan kategoriler (Tefekkür yazıları "Tümü"nde durur)
-  const katSay = kod => kod === "hepsi" ? S.kayitli.length : S.kayitli.filter(y => !y.tef && turBul(y.kaynak) === kod).length;
+  // Kayıtlı'nın kendi süzgeçleri: bölüm, zaman, gözdeler (İdrak'ın ayarlarından bağımsız)
+  const KAT = KATEGORILER.filter(k => k !== "hepsi");
+  const katSay = kod => S.kayitli.filter(y => !y.tef && turBul(y.kaynak) === kod).length;
   let sec = S.kayitKat || "hepsi";
   if (sec !== "hepsi" && !katSay(sec)) sec = S.kayitKat = "hepsi";
-  $("#katlar").innerHTML = S.kayitli.length ? KATEGORILER.filter(kod => kod === "hepsi" || katSay(kod) > 0).map(kod =>
-    `<button class="chip" data-kkat="${kod}" aria-pressed="${sec === kod}">${kac(t("kat_" + kod))}</button>`).join("") : "";
-  const liste = sec === "hepsi" ? S.kayitli : S.kayitli.filter(y => !y.tef && turBul(y.kaynak) === sec);
-  // Araç satırı: kaydedilen yazıları tek dokunuşla çevir ya da özgün hâline döndür
+  const zaman = S.kayitZaman || 0, gozdeMod = !!S.kayitGozde;
+  let liste = sec === "hepsi" ? S.kayitli : S.kayitli.filter(y => !y.tef && turBul(y.kaynak) === sec);
+  if (zaman) { const sinir = Date.now() - zaman * 86400000;
+    liste = liste.filter(y => { const d = tarihOku(y.tarih); return d && d.getTime() >= sinir; }); }
+  const gozdeSay = S.kayitli.filter(y => !y.tef && S.gozde.has(y.kaynak)).length;
+  if (gozdeMod) liste = liste.filter(y => !y.tef && S.gozde.has(y.kaynak));
   const cevrilmemis = liste.filter(topluCevrilmeli).length, cevrilmis = liste.filter(y => trOf(y)).length;
-  $("#cubukYeri").innerHTML = (cevrilmemis || cevrilmis) ? `<div class="cubuk">${cevrilmemis
-      ? `<button class="mini" data-toplu="1"${S.topluCeviri ? " disabled" : ""}>${S.topluCeviri ? t("cevriliyor_n", S.topluKalan || 0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>`
-      : `<button class="mini" data-orj-toplu="1">${t("ceviri_acik")}</button>`}</div>` : "";
+  const ok = `<span class="ok" aria-hidden="true">▾</span>`;
+  $("#cubukYeri").innerHTML = S.kayitli.length ? `<div class="cubuk kayit-cubuk">
+      <span class="zaman-kutu"><button class="mini${sec !== "hepsi" ? " secili" : ""}" data-zaman-ac="1" aria-haspopup="menu" aria-expanded="false" aria-label="${kac(t("bolum_sec"))}">${kac(t("kat_" + sec))}${ok}</button><div class="zaman-menu" role="menu" hidden>${
+        ["hepsi", ...KAT].map(kod => { const n = kod === "hepsi" ? S.kayitli.length : katSay(kod);
+          return `<button role="menuitemradio" aria-checked="${sec === kod}" data-kkat="${kod}"${n ? "" : " disabled"}>${kac(t("kat_" + kod))} <span class="sayi">${sayi(n)}</span></button>`; }).join("")}</div></span>
+      <span class="zaman-kutu"><button class="mini${zaman ? " secili" : ""}" data-zaman-ac="1" aria-haspopup="menu" aria-expanded="false"${zaman ? "" : ` aria-label="${t("zaman_araligi")}" title="${t("zaman_araligi")}"`}>${zaman ? t("zaman_k" + zaman) : `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${ok}`}</button><div class="zaman-menu" role="menu" hidden>${
+        [1, 7, 30, 0].map(g => `<button role="menuitemradio" aria-checked="${zaman === g}" data-kzaman="${g}">${t("zaman_" + g)}</button>`).join("")}</div></span>
+      ${cevrilmemis ? `<button class="mini" data-toplu="1"${S.topluCeviri ? " disabled" : ""}>${S.topluCeviri ? t("cevriliyor_n", S.topluKalan || 0) : t("hepsini_cevir", sayi(cevrilmemis))}</button>`
+        : (cevrilmis ? `<button class="mini" data-orj-toplu="1">${t("ceviri_acik")}</button>` : "")}
+      <button class="mini${gozdeMod ? " secili" : ""}" data-kgozde="1" aria-pressed="${gozdeMod}">★ ${t("gozdeler")}${gozdeSay ? " (" + sayi(gozdeSay) + ")" : ""}</button>
+    </div>` : "";
   if (S.otoCeviri && !S.topluCeviri && cevrilmemis) setTimeout(hepsiniCevir, 0);
   $("#count").textContent = S.kayitli.length ? t("kayit_sayisi", sayi(S.kayitli.length)) : "";
-  $("#saved").innerHTML = (S.kayitli.length ? liste.map(y => y.tef ? tefKart(y, false) : kart(y)).join("")
-    : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+  let govde;
+  if (!S.kayitli.length) govde = `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
        <h3>${t("kayit_yok")}</h3>
        <p>${t("kayit_yok_aciklama")}</p>
-       <button class="go" data-git="feed">${t("idrake_don")}</button></div>`) + altBaglantilar();
+       <button class="go" data-git="feed">${t("idrake_don")}</button></div>`;
+  else if (!liste.length) govde = (gozdeMod && !S.gozde.size)
+     ? `<div class="state"><svg class="mark" aria-hidden="true"><use href="#anka"/></svg>
+       <h3>${t("gozde_yok")}</h3><p>${t("gozde_nasil")}</p>
+       <button class="go" data-ksifirla="1">${t("suzgecleri_temizle")}</button></div>`
+     : `<div class="state"><img class="mark" src="logo-seffaf.png" alt="" aria-hidden="true">
+       <h3>${t("kayit_suzgec_bos")}</h3>
+       <button class="go" data-ksifirla="1">${t("suzgecleri_temizle")}</button></div>`;
+  else govde = liste.map(y => y.tef ? tefKart(y, false) : kart(y)).join("");
+  $("#saved").innerHTML = govde + altBaglantilar();
+  if (liste.length) requestAnimationFrame(kartlariSigdir);
 }
 
 function kaynakOzeti(){
@@ -2090,18 +2133,23 @@ document.addEventListener("click", e=>{
   }
 });
 /* zaman aralığı: tek düğme, basınca seçenekler açılır */
-function zamanMenuKapat(){
-  const m = document.querySelector(".zaman-menu"); if(!m || m.hidden) return;
-  m.hidden = true; const d = document.querySelector("[data-zaman-ac]"); if(d) d.setAttribute("aria-expanded","false");
+function zamanMenuKapat(haric){
+  document.querySelectorAll(".zaman-menu").forEach(m => { if(m === haric || m.hidden) return;
+    m.hidden = true; const d = m.parentElement.querySelector("[data-zaman-ac]"); if(d) d.setAttribute("aria-expanded","false"); });
 }
 document.addEventListener("click", e=>{
   const ac = e.target.closest("[data-zaman-ac]");
   if(ac){
     const m = ac.parentElement.querySelector(".zaman-menu"), acilacak = m.hidden;
+    zamanMenuKapat(m);
     m.hidden = !acilacak; ac.setAttribute("aria-expanded", String(acilacak));
     if(acilacak){ const s = m.querySelector('[aria-checked="true"]'); if(s) s.focus({preventScroll:true}); }
     return;
   }
+  const kz = e.target.closest("[data-kzaman]");   // Kayıtlı'nın zaman süzgeci
+  if(kz){ S.kayitZaman = +kz.dataset.kzaman || 0; cizKayitli(); scrollTo({top:0}); return; }
+  if(e.target.closest("[data-kgozde]")){ S.kayitGozde = !S.kayitGozde; cizKayitli(); scrollTo({top:0}); return; }
+  if(e.target.closest("[data-ksifirla]")){ S.kayitKat = "hepsi"; S.kayitZaman = 0; S.kayitGozde = false; cizKayitli(); scrollTo({top:0}); return; }
   const z = e.target.closest("[data-zaman]");
   if(z){ S.zaman = +z.dataset.zaman || 0; S.goster = 40; cizAkis(); scrollTo({top:0}); return; }
   if(!e.target.closest(".zaman-kutu")) zamanMenuKapat();
@@ -2369,6 +2417,22 @@ cek().then(() => { if(donus && !ACILIS && !okurDokundu) scrollTo(0, donus.y || 0
 addEventListener("pageshow", e => { if(e.persisted) try{ sessionStorage.removeItem("ti.donus"); }catch(_){} });
 /* Doğrudan bir Tefekkür yazısının adresiyle gelinirse (#tefekkur-...) yazı uygulamanın içinde açılır */
 { const h = location.hash.slice(1); if(/^tefekkur-[\w-]+$/.test(h)) tefAc(h + ".html", false); }
+
+/* Uygulama zaten açıkken bir paylaşım bağlantısına dokunulursa bazı tarayıcılar sayfayı yeniden yüklemeden
+   bağlantıyı buraya iletir: yazıyı ya da Tefekkür yazısını hemen aç */
+if("launchQueue" in window){
+  try{ launchQueue.setConsumer(p => {
+    if(!p || !p.targetURL) return;
+    let u; try{ u = new URL(p.targetURL); }catch(e){ return; }
+    const tefYol = (u.hash.match(/^#(tefekkur-[\w-]+)$/) || [])[1] || (u.pathname.match(/\/(tefekkur-[\w-]+)\.html$/) || [])[1];
+    if(tefYol){ tefAc(tefYol + ".html", false); return; }
+    const kod = u.searchParams.get("y") || (u.pathname.match(/\/y\/([0-9a-f]{12})\/?$/) || [])[1];
+    if(!kod) return;
+    const y = paylasilaniBul(kod);
+    if(y){ S.acilanKapandi = false; yaziyiAc(y); return; }
+    paylasilaniGetir(kod).then(v => { if(v){ S.acilanKapandi = false; yaziyiAc(v); } });
+  }); }catch(e){}
+}
 
 /* cevrimdisi acilis ve uygulama paketi icin */
 if("serviceWorker" in navigator && !YEREL){

@@ -218,5 +218,9 @@
  "france24.com": {
   "url": "",
   "tarih": "2026-11-09"
+ },
+ "zenizeni.com": {
+  "url": "https://www.zenizeni.com/blog-feed.xml",
+  "tarih": "2026-11-10"
  }
 }

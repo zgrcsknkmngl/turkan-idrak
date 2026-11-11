@@ -361,8 +361,6 @@ const KAYNAKLAR = [
   { ad:"Fayn", ulke:"Türkiye", tur:"dergi", ucretli:true, url:"https://www.fayn.press/rss/", yedek:"https://news.google.com/rss/search?q=site:fayn.press+when:30d&hl=tr&gl=TR&ceid=TR:tr" },   // ✓ yeni; Ghost beslemesi, yazıların bir kısmı abonelere özel
 
   // -- Türkiye'den kültür ve edebiyat dergileri (7 Kasım 2026) --
-  { ad:"Ot Dergi", ulke:"Türkiye", tur:"kitap", url:"https://www.otdergi.com/feed/", yedek:"https://news.google.com/rss/search?q=site:otdergi.com+when:120d&hl=tr&gl=TR&ceid=TR:tr" },   // ? yeni; basılı dergi, sitesi doğrulanamadı — ilk taramalarda ulaşılamazsa çıkarılacak
-  { ad:"KafkaOkur", ulke:"Türkiye", tur:"kitap", url:"https://www.kafkaokur.com/feed/", yedek:"https://news.google.com/rss/search?q=site:kafkaokur.com+when:120d&hl=tr&gl=TR&ceid=TR:tr" },   // ? yeni; basılı dergi, sitesi doğrulanamadı — ilk taramalarda ulaşılamazsa çıkarılacak
 ];
 
 const ARSIV_SINIRI = 70;

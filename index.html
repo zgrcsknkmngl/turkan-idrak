@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -332,7 +332,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   @media (min-width:900px) and (orientation:landscape){
     /* Manzara kırpılmadan, tam genişlikte ve kendi oranında. Yer kazanmak için başlık satırı manzaranın göğüne,
        kategori satırı sudaki yansımanın üstüne biner. */
-    .masthead{position:relative;padding-top:0}
+    .masthead{position:relative;padding-top:0!important}   /* manzaranın üstünde mavi şerit kalmasın */
     .masthead .bas{position:absolute;left:0;right:0;top:0;z-index:2;padding:10px 18px 0}
     .manzara{aspect-ratio:2064/512!important;height:auto;margin:0 -18px!important;background-size:100% 100%!important}
     .manzara::before{content:"";position:absolute;left:0;right:0;top:0;height:42%;z-index:1;
@@ -343,10 +343,8 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     :is(#feed,#saved) > :not(.entry){grid-column:1 / -1}
     :is(#feed,#saved) .entry{margin:0 0 14px}
   }
-  /* Geniş ekranda manzara bütün genişliği kaplar ama ekranın üçte birinden fazlasını yemez;
-     taşan kısmı alttaki yansımadan kırpılır, siluet olduğu gibi kalır. Kartlar üç sütun olur. */
+  /* Geniş ekranda kartlar üç sütun olur; manzara kırpılmadan tam hâliyle kalır */
   @media (min-width:1500px) and (orientation:landscape){
-    .manzara{aspect-ratio:auto!important;height:min(calc(100vw * 512 / 2064), 34vh)!important;background-size:cover!important;background-position:center 30%!important}
     :is(#feed,#saved){grid-template-columns:1fr 1fr 1fr}
   }
   nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
@@ -358,6 +356,14 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   nav button svg{width:21px;height:21px}
   nav button[aria-current="page"]{color:var(--vellum)}
   nav button[aria-current="page"] svg{color:var(--ember)}
+  /* Yatay geniş ekranda alt çubuk tek ince satır: sekmelerde simge ile ad yan yana, Hakkında · İletişim · Gizlilik sağda */
+  @media (min-width:900px) and (orientation:landscape){
+    nav{display:flex;align-items:center}
+    nav .sekmeler{flex:3}
+    nav button{flex-direction:row;justify-content:center;gap:7px;padding:8px 0;font-size:12.5px}
+    nav button svg{width:18px;height:18px}
+    nav .nav-alt{display:flex;flex:1.3;justify-content:flex-end;gap:2px;padding:0 12px 0 0}
+  }
 
   /* paylasilan yazi */
   .acilan{margin:14px 0 4px;padding:15px 16px 14px;border:1px solid var(--rule);border-radius:12px;background:var(--raised)}

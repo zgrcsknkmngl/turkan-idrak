@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -327,14 +327,9 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     background:var(--nav-bg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom,0px)}
   nav::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--ember) 28%,var(--turkuaz) 72%,transparent)}
   nav .sekmeler{display:flex}
-  @media (min-width:900px){
-    body{max-width:860px;margin-inline:auto}
-    nav{left:50%;right:auto;width:860px;transform:translateX(-50%)}
-  }
+  /* Tablet ve bilgisayarda da ekranın tamamı kullanılır (eskiden ortada 860/1240 piksellik bir sütundu) */
   /* Bilgisayar (yatay ekran): ekran üçe bölünür; üstte manzara ve başlık, altta yan yana iki kart */
   @media (min-width:900px) and (orientation:landscape){
-    body{max-width:1240px}
-    nav{width:1240px}
     /* Manzara kırpılmadan, tam genişlikte ve kendi oranında. Yer kazanmak için başlık satırı manzaranın göğüne,
        kategori satırı sudaki yansımanın üstüne biner. */
     .masthead{position:relative;padding-top:0}
@@ -347,6 +342,12 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     :is(#feed,#saved){display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
     :is(#feed,#saved) > :not(.entry){grid-column:1 / -1}
     :is(#feed,#saved) .entry{margin:0 0 14px}
+  }
+  /* Geniş ekranda manzara bütün genişliği kaplar ama ekranın üçte birinden fazlasını yemez;
+     taşan kısmı alttaki yansımadan kırpılır, siluet olduğu gibi kalır. Kartlar üç sütun olur. */
+  @media (min-width:1500px) and (orientation:landscape){
+    .manzara{aspect-ratio:auto!important;height:min(calc(100vw * 512 / 2064), 34vh)!important;background-size:cover!important;background-position:center 30%!important}
+    :is(#feed,#saved){grid-template-columns:1fr 1fr 1fr}
   }
   nav button{flex:1;padding:10px 0 5px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--dim);font-size:11px}
   /* Hakkında · İletişim · Gizlilik: her ekranda sekmelerin hemen altında */

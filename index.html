@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -663,41 +663,59 @@ function yaz(k,v){
 
 /* ---------- Diller ---------- */
 const ARAYUZ_DILLERI = [["tr","Türkçe"],["en","English"]];
-/* 66 dil, bölgelere göre: her dil kendi adıyla listelenir, herkes kendininkini tanır */
+/* 95 dil (bölge başlıkları yalnızca kodun iç düzeni; dil penceresi alfabetik sıralar): her dil kendi adıyla listelenir, herkes kendininkini tanır */
 const DIL_GRUPLARI = [
   ["turk",   [["tr","Türkçe"],["az","Azərbaycanca"],["kk","Қазақша"],["uz","Oʻzbekcha"],["ky","Кыргызча"],["tk","Türkmençe"],
-              ["tt","Татарча"],["ug","ئۇيغۇرچە"],["crh","Qırımtatarca"]]],
-  ["ortadogu",[["ar","العربية"],["fa","فارسی"],["he","עברית"],["ku","Kurdî (Kurmancî)"],["ckb","کوردی (سۆرانی)"],["ps","پښتو"],
+              ["tt","Татарча"],["ug","ئۇيغۇرچە"],["crh","Qırımtatarca"],
+              ["ba","Башҡортса"],["cv","Чӑвашла"],["sah","Саха тыла"],["tyv","Тыва дыл"]]],
+  ["ortadogu",[["ar","العربية"],["fa","فارسی"],["fa-AF","دری"],["he","עברית"],["ku","Kurdî (Kurmancî)"],["ckb","کوردی (سۆرانی)"],["ps","پښتو"],
               ["ka","ქართული"],["hy","Հայերեն"]]],
   ["guneyasya",[["ur","اردو"],["hi","हिन्दी"],["bn","বাংলা"],["pa","ਪੰਜਾਬੀ"],["ta","தமிழ்"],["te","తెలుగు"],
-              ["mr","मराठी"],["gu","ગુજરાતી"],["ne","नेपाली"]]],
-  ["asya",   [["zh-CN","中文"],["ja","日本語"],["ko","한국어"],["mn","Монгол"],["tg","Тоҷикӣ"],["id","Bahasa Indonesia"],
-              ["ms","Bahasa Melayu"],["vi","Tiếng Việt"],["th","ไทย"],["tl","Filipino"],["my","မြန်မာ"]]],
+              ["mr","मराठी"],["gu","ગુજરાતી"],["ne","नेपाली"],
+              ["ml","മലയാളം"],["kn","ಕನ್ನಡ"],["si","සිංහල"],["sa","संस्कृतम्"]]],
+  ["asya",   [["zh-CN","简体中文"],["zh-TW","繁體中文"],["yue","粵語"],["ja","日本語"],["ko","한국어"],["mn","Монгол"],["tg","Тоҷикӣ"],["id","Bahasa Indonesia"],
+              ["ms","Bahasa Melayu"],["vi","Tiếng Việt"],["th","ไทย"],["tl","Filipino"],["my","မြန်မာ"],["km","ខ្មែរ"],["lo","ລາວ"]]],
   ["avrupa", [["en","English"],["ru","Русский"],["uk","Українська"],["de","Deutsch"],["fr","Français"],["es","Español"],
               ["pt","Português"],["it","Italiano"],["nl","Nederlands"],["pl","Polski"],["el","Ελληνικά"],["ro","Română"],
               ["hu","Magyar"],["bg","Български"],["sr","Српски"],["mk","Македонски"],["bs","Bosanski"],["sq","Shqip"],
-              ["cs","Čeština"],["sv","Svenska"],["fi","Suomi"]]],
+              ["cs","Čeština"],["sv","Svenska"],["fi","Suomi"],
+              ["hr","Hrvatski"],["sk","Slovenčina"],["sl","Slovenščina"],["da","Dansk"],["no","Norsk"],["lt","Lietuvių"],
+              ["lv","Latviešu"],["et","Eesti"],["be","Беларуская"],["ca","Català"],["la","Latina"]]],
   ["afrika", [["sw","Kiswahili"],["ha","Hausa"],["am","አማርኛ"],["so","Soomaali"],["yo","Yorùbá"],["om","Afaan Oromoo"],
-              ["zu","isiZulu"],["ig","Igbo"]]]
+              ["zu","isiZulu"],["ig","Igbo"],
+              ["ber-Latn","Tamaziɣt"],["wo","Wolof"],["ti","ትግርኛ"],["rw","Kinyarwanda"],["af","Afrikaans"]]]
 ];
 const CEVIRI_DILLERI = DIL_GRUPLARI.flatMap(([,d]) => d);
 /* Türkçe adlar: dil penceresinde ikinci satır ve aramada ("alman", "kırım" yazan bulsun) */
 const DIL_TR = {tr:"Türkçe", az:"Azerbaycan Türkçesi", kk:"Kazakça", uz:"Özbekçe", ky:"Kırgızca", tk:"Türkmence", tt:"Tatarca",
   ug:"Uygurca", crh:"Kırım Tatarcası", ar:"Arapça", fa:"Farsça", ku:"Kürtçe (Kurmanci)", ckb:"Kürtçe (Sorani)", ps:"Peştuca", he:"İbranice",
   ka:"Gürcüce", hy:"Ermenice", ur:"Urduca", hi:"Hintçe", bn:"Bengalce", pa:"Pencapça", ta:"Tamilce", te:"Telugu dili",
-  mr:"Marathi dili", gu:"Guceratça", ne:"Nepalce", "zh-CN":"Çince", ja:"Japonca", ko:"Korece", mn:"Moğolca", tg:"Tacikçe",
+  mr:"Marathi dili", gu:"Guceratça", ne:"Nepalce", "zh-CN":"Çince (Basitleştirilmiş)", "zh-TW":"Çince (Geleneksel)", yue:"Kantonca", ja:"Japonca", ko:"Korece", mn:"Moğolca", tg:"Tacikçe",
   id:"Endonezce", ms:"Malayca", vi:"Vietnamca", th:"Tayca", tl:"Filipince", my:"Birmanca", en:"İngilizce", ru:"Rusça",
   uk:"Ukraynaca", de:"Almanca", fr:"Fransızca", es:"İspanyolca", pt:"Portekizce", it:"İtalyanca", nl:"Felemenkçe", pl:"Lehçe",
   el:"Yunanca", ro:"Rumence", hu:"Macarca", bg:"Bulgarca", sr:"Sırpça", mk:"Makedonca", bs:"Boşnakça", sq:"Arnavutça",
   cs:"Çekçe", sv:"İsveççe", fi:"Fince", sw:"Svahili", ha:"Hausaca", am:"Amharca", so:"Somalice", yo:"Yorubaca",
-  om:"Oromoca", zu:"Zuluca", ig:"İgboca"};
+  om:"Oromoca", zu:"Zuluca", ig:"İgboca",
+  "fa-AF":"Darice", ba:"Başkurtça", cv:"Çuvaşça", sah:"Sahaca (Yakutça)", tyv:"Tuvaca", ml:"Malayalam dili", kn:"Kannada dili",
+  si:"Seylanca (Sinhala)", sa:"Sanskritçe", km:"Kmerce", lo:"Laoca", hr:"Hırvatça", sk:"Slovakça", sl:"Slovence", da:"Danca",
+  no:"Norveççe", lt:"Litvanca", lv:"Letonca", et:"Estonca", be:"Belarusça", ca:"Katalanca", la:"Latince",
+  "ber-Latn":"Berberice (Tamazight)", wo:"Volofça", ti:"Tigrinyaca", rw:"Kinyarwanda dili", af:"Afrikaanca"};
+/* Google Çeviri birkaç dilde eski kodu bekler; tespit ettiği dili de eski kodla bildirir */
+const gKod = k => ({he:"iw"})[k] || k;
+const gKodGeri = k => ({iw:"he"})[String(k||"")] || String(k||"");
+/* Dil düğmesindeki kısa kod: aynı köke çıkan iki dil karışmasın (Farsça FA, Darice PRS; Çince ZH, Geleneksel Çince TW) */
+const dilRozet = k => ({"zh-TW":"TW", "fa-AF":"PRS"})[k] || String(k).split("-")[0].toUpperCase();
 const cihazDili = () => ((navigator.languages && navigator.languages[0]) || navigator.language || "tr").toLowerCase();
 function varsayilanArayuz(){ return cihazDili().startsWith("tr") ? "tr" : "en"; }
 function varsayilanCeviri(){
   const d = cihazDili();
+  if(/^zh-(tw|hk|mo|hant)/.test(d)) return "zh-TW";   // Tayvan, Hong Kong, Makao: geleneksel yazı
   if(d.startsWith("zh")) return "zh-CN";
+  if(d.startsWith("yue")) return "yue";
   if(d.startsWith("fil")) return "tl";
   if(d.startsWith("iw")) return "he";   // eski Android İbranice'yi "iw" diye bildirir
+  if(/^(nb|nn)\b/.test(d)) return "no"; // Norveççenin iki yazı biçimi
+  if(d === "fa-af") return "fa-AF";
   const kok = d.split("-")[0];
   return CEVIRI_DILLERI.some(([k])=>k===kok) ? kok : "en";
 }
@@ -872,7 +890,7 @@ async function arayuzuHazirla(kod){
   try{
     for(const parca of parcalar){
       const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl="
-        + encodeURIComponent(kod) + "&dt=t&q=" + encodeURIComponent(parca.map(x=>x[1]).join("\n")));
+        + encodeURIComponent(gKod(kod)) + "&dt=t&q=" + encodeURIComponent(parca.map(x=>x[1]).join("\n")));
       if(!r.ok) throw new Error("çeviri " + r.status);
       const j = await r.json();
       // Google çeviriyi bölüt bölüt döndürür; her bölütün aslı da yanında gelir. Aslı satır sonuyla bitince satır biter.
@@ -1147,10 +1165,10 @@ function ceviriDuzelt(metin, kaynak, hedef){
 async function cevir(m){
   if(!m) return {metin:"", dil:""};
   const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="
-    + encodeURIComponent(S.ceviriDili) + "&dt=t&q=" + encodeURIComponent(m));
+    + encodeURIComponent(gKod(S.ceviriDili)) + "&dt=t&q=" + encodeURIComponent(m));
   if(!r.ok) throw new Error("çeviri "+r.status);
   const j = await r.json();
-  return {metin:ceviriDuzelt((j[0]||[]).map(p=>(p&&p[0])||"").join(""), m, S.ceviriDili), dil:String(j[2]||"")};
+  return {metin:ceviriDuzelt((j[0]||[]).map(p=>(p&&p[0])||"").join(""), m, S.ceviriDili), dil:gKodGeri(j[2])};
 }
 async function ikisiniCevir(y){
   const hedef = S.ceviriDili;
@@ -1368,7 +1386,7 @@ function temaDegistir(){
 /* ---------- Arayüz dili ---------- */
 function arayuzuCiz(){
   document.documentElement.lang = S.dil;
-  const dd = $("#dilAc"); if(dd){ $("#dilKod").textContent = S.dil.split("-")[0].toUpperCase(); dd.setAttribute("aria-label", t("dil_sec")); dd.title = t("dil_sec"); }
+  const dd = $("#dilAc"); if(dd){ $("#dilKod").textContent = dilRozet(S.dil); dd.setAttribute("aria-label", t("dil_sec")); dd.title = t("dil_sec"); }
   document.querySelectorAll("[data-t]").forEach(e=>{ e.textContent = t(e.dataset.t); });
   $("#q").placeholder = t("ara");
   $("#qsil").setAttribute("aria-label", t("aramayi_temizle_aria"));
@@ -1539,10 +1557,10 @@ function ceviriAdresi(adres, hedef){
     if(u.protocol !== "https:" || /^[\d.]+$/.test(u.hostname) || u.port) throw 0;
     const alan = u.hostname.toLowerCase().replace(/-/g, "--").replace(/\./g, "-") + ".translate.goog";
     const q = new URLSearchParams(u.search);
-    q.set("_x_tr_sl", "auto"); q.set("_x_tr_tl", hedef); q.set("_x_tr_hl", hedef); q.set("_x_tr_pto", "wapp");
+    q.set("_x_tr_sl", "auto"); q.set("_x_tr_tl", gKod(hedef)); q.set("_x_tr_hl", gKod(hedef)); q.set("_x_tr_pto", "wapp");
     return "https://" + alan + u.pathname + "?" + q.toString() + u.hash;
   }catch(e){
-    return "https://translate.google.com/translate?sl=auto&tl=" + encodeURIComponent(hedef) + "&u=" + encodeURIComponent(adres);
+    return "https://translate.google.com/translate?sl=auto&tl=" + encodeURIComponent(gKod(hedef)) + "&u=" + encodeURIComponent(adres);
   }
 }
 
@@ -2234,10 +2252,13 @@ const DIL_IPUCU = {tr:"Dili değiştir", en:"Change language", ku:"Ziman biguher
   ps:"ژبه بدله کړئ", hy:"Փոխել լեզուն", pa:"ਭਾਸ਼ਾ ਬਦਲੋ", ta:"மொழியை மாற்று", te:"భాషను మార్చండి", mr:"भाषा बदला",
   gu:"ભાષા બદલો", ne:"भाषा परिवर्तन गर्नुहोस्", mn:"Хэл солих", tg:"Иваз кардани забон", vi:"Đổi ngôn ngữ", th:"เปลี่ยนภาษา",
   tl:"Palitan ang wika", ro:"Schimbă limba", hu:"Nyelv módosítása", bg:"Смяна на езика", sr:"Промени језик", mk:"Промени јазик",
-  cs:"Změnit jazyk", sv:"Byt språk", fi:"Vaihda kieli", ha:"Canza harshe", am:"ቋንቋ ቀይር", so:"Beddel luqadda", zu:"Shintsha ulimi"};
+  cs:"Změnit jazyk", sv:"Byt språk", fi:"Vaihda kieli", ha:"Canza harshe", am:"ቋንቋ ቀይር", so:"Beddel luqadda", zu:"Shintsha ulimi",
+  hr:"Promijeni jezik", sk:"Zmeniť jazyk", sl:"Spremeni jezik", da:"Skift sprog", no:"Bytt språk", lt:"Keisti kalbą",
+  lv:"Mainīt valodu", et:"Muuda keelt", be:"Змяніць мову", ca:"Canvia l'idioma", af:"Verander taal", "zh-TW":"變更語言",
+  ml:"ഭാഷ മാറ്റുക", kn:"ಭಾಷೆ ಬದಲಿಸಿ", si:"භාෂාව වෙනස් කරන්න", km:"ប្តូរភាសា", lo:"ປ່ຽນພາສາ", rw:"Hindura ururimi"};
 function dilIpucuGoster(){
   try{ if(localStorage.getItem("ti.dilIpucu")) return; }catch(e){ return; }
-  const c = cihazDili(), kok = c.startsWith("zh") ? "zh-CN" : c.startsWith("fil") ? "tl" : c.startsWith("iw") ? "he" : c.split("-")[0];
+  const kok = varsayilanCeviri();                          // telefonun dili, Türkan'ın kodlarıyla
   if(kok === "tr" || S.dil !== "tr") return;             // Türkçe telefonda ya da dil zaten seçilmişse gerek yok
   const d = $("#dilAc"); if(!d) return;
   const r = d.getBoundingClientRect(); if(!r.width) return;
@@ -2315,7 +2336,7 @@ function dilPenceresiAc(){
     <div class="dil-grup"><div class="dil-liste">${
       dilSirali().map(([k,a]) => { const ad = dilUIAdi(k);
         return `<button data-dilsec="${k}" data-ara="${kac((a+" "+ad+" "+(DIL_TR[k]||"")+" "+k).toLocaleLowerCase("tr"))}"${k===S.dil?' class="secili" aria-current="true"':""}>`
-          + `<b>${k.split("-")[0].toUpperCase()}</b><span>${kac(ad)}${ad!==a?`<small lang="${k}">${kac(a)}</small>`:""}</span></button>`; }).join("")
+          + `<b>${dilRozet(k)}</b><span>${kac(ad)}${ad!==a?`<small lang="${k}">${kac(a)}</small>`:""}</span></button>`; }).join("")
     }</div></div>
     <p class="dil-bos" hidden>${kac(t("dil_bulunamadi"))}</p>
     <p class="dil-not">${kac(t("dil_not"))}</p></div>`;

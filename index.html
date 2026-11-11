@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -385,6 +385,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .tef-giris{padding:24px 6px 6px;text-align:center}
   .tef-giris h3{font-family:var(--serif);font-weight:500;font-size:32px;letter-spacing:.01em;margin:0 0 8px}
   .tef-giris p{font-family:var(--serif);font-size:15.5px;line-height:1.6;color:var(--ozet);margin:0 0 12px}
+  .tef-giris .tef-ilke{color:var(--gold);white-space:nowrap;text-underline-offset:3px}
   .tef-kart{display:block;position:relative;overflow:hidden;padding:17px 16px 15px 26px;margin:14px 0;background:var(--kart);border:1px solid var(--rule);border-radius:16px;box-shadow:var(--golge);text-decoration:none;color:inherit}
   .tef-kart::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:8px;background:linear-gradient(90deg,var(--ember) 0 50%,var(--turkuaz) 50% 100%)}
   /* Tefekkür yazısı uygulamanın içinde okunur: başlık, panorama ve kaydırma şeridi yerinde kalır */
@@ -765,6 +766,7 @@ const SOZLUK = {
     paylasilan_yazi:"Paylaşılan yazı", kapat:"kapat", kaynakta_oku:"Kaynakta oku", dilde_oku:d=>`${d} oku`,
     tef_baslik:"Tefekkür",
     tef_giris:"Tefekkür, davet ettiğimiz yazarların yalnızca Türkan İdrak Tefekkür için kaleme aldığı yazılardan oluşur. Üyelik, abonelik ya da ücretli yazarlık yoktur.",
+    tef_ilkeler:"Yayın ilkelerimiz",
     tef_yakinda:"İlk yazılar yakında", tef_yakinda_aciklama:"Davetli yazarlarımızın yazıları geldikçe burada yayımlanacak.",
     yukleniyor:"yükleniyor…",
     hakkinda:"Hakkında", iletisim:"İletişim", gizlilik:"Gizlilik",
@@ -822,6 +824,7 @@ const SOZLUK = {
     paylasilan_yazi:"Shared article", kapat:"close", kaynakta_oku:"Read at the source", dilde_oku:d=>`Read in ${d}`,
     tef_baslik:"Tefekkür",
     tef_giris:"Tefekkür brings together pieces that our invited writers write exclusively for Türkan İdrak Tefekkür. There are no memberships, subscriptions or paid contributors.",
+    tef_ilkeler:"Our writers’ principles",
     tef_yakinda:"First pieces coming soon", tef_yakinda_aciklama:"Pieces from our invited writers will be published here as they arrive.",
     yukleniyor:"loading…",
     hakkinda:"About", iletisim:"Contact", gizlilik:"Privacy",
@@ -1527,7 +1530,7 @@ function cizTefekkur(){
   }
   const liste = S.tefekkur || [];
   $("#count").textContent = liste.length ? t("yazi_sayisi", sayi(liste.length)) : "";
-  const giris = `<div class="tef-giris"><h3>${t("tef_baslik")}</h3><p>${t("tef_giris")}</p></div>`;
+  const giris = `<div class="tef-giris"><h3>${t("tef_baslik")}</h3><p>${t("tef_giris")} <a class="tef-ilke" href="tefekkur-ilkeleri.html${S.arayuz === "tr" ? "" : "#en"}">${kac(t("tef_ilkeler"))}</a></p></div>`;
   const govde = S.tefekkur===null
     ? `<div class="state"><p>${t("yukleniyor")}</p></div>`
     : liste.length

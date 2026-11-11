@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -663,11 +663,11 @@ function yaz(k,v){
 
 /* ---------- Diller ---------- */
 const ARAYUZ_DILLERI = [["tr","Türkçe"],["en","English"]];
-/* 65 dil, bölgelere göre: her dil kendi adıyla listelenir, herkes kendininkini tanır */
+/* 66 dil, bölgelere göre: her dil kendi adıyla listelenir, herkes kendininkini tanır */
 const DIL_GRUPLARI = [
   ["turk",   [["tr","Türkçe"],["az","Azərbaycanca"],["kk","Қазақша"],["uz","Oʻzbekcha"],["ky","Кыргызча"],["tk","Türkmençe"],
               ["tt","Татарча"],["ug","ئۇيغۇرچە"],["crh","Qırımtatarca"]]],
-  ["ortadogu",[["ar","العربية"],["fa","فارسی"],["ku","Kurdî (Kurmancî)"],["ckb","کوردی (سۆرانی)"],["ps","پښتو"],
+  ["ortadogu",[["ar","العربية"],["fa","فارسی"],["he","עברית"],["ku","Kurdî (Kurmancî)"],["ckb","کوردی (سۆرانی)"],["ps","پښتو"],
               ["ka","ქართული"],["hy","Հայերեն"]]],
   ["guneyasya",[["ur","اردو"],["hi","हिन्दी"],["bn","বাংলা"],["pa","ਪੰਜਾਬੀ"],["ta","தமிழ்"],["te","తెలుగు"],
               ["mr","मराठी"],["gu","ગુજરાતી"],["ne","नेपाली"]]],
@@ -683,7 +683,7 @@ const DIL_GRUPLARI = [
 const CEVIRI_DILLERI = DIL_GRUPLARI.flatMap(([,d]) => d);
 /* Türkçe adlar: dil penceresinde ikinci satır ve aramada ("alman", "kırım" yazan bulsun) */
 const DIL_TR = {tr:"Türkçe", az:"Azerbaycan Türkçesi", kk:"Kazakça", uz:"Özbekçe", ky:"Kırgızca", tk:"Türkmence", tt:"Tatarca",
-  ug:"Uygurca", crh:"Kırım Tatarcası", ar:"Arapça", fa:"Farsça", ku:"Kürtçe (Kurmanci)", ckb:"Kürtçe (Sorani)", ps:"Peştuca",
+  ug:"Uygurca", crh:"Kırım Tatarcası", ar:"Arapça", fa:"Farsça", ku:"Kürtçe (Kurmanci)", ckb:"Kürtçe (Sorani)", ps:"Peştuca", he:"İbranice",
   ka:"Gürcüce", hy:"Ermenice", ur:"Urduca", hi:"Hintçe", bn:"Bengalce", pa:"Pencapça", ta:"Tamilce", te:"Telugu dili",
   mr:"Marathi dili", gu:"Guceratça", ne:"Nepalce", "zh-CN":"Çince", ja:"Japonca", ko:"Korece", mn:"Moğolca", tg:"Tacikçe",
   id:"Endonezce", ms:"Malayca", vi:"Vietnamca", th:"Tayca", tl:"Filipince", my:"Birmanca", en:"İngilizce", ru:"Rusça",
@@ -697,6 +697,7 @@ function varsayilanCeviri(){
   const d = cihazDili();
   if(d.startsWith("zh")) return "zh-CN";
   if(d.startsWith("fil")) return "tl";
+  if(d.startsWith("iw")) return "he";   // eski Android İbranice'yi "iw" diye bildirir
   const kok = d.split("-")[0];
   return CEVIRI_DILLERI.some(([k])=>k===kok) ? kok : "en";
 }
@@ -2224,7 +2225,7 @@ $("#qsil").addEventListener("click", ()=>{
 });
 
 /* Telefonu Türkçe olmayan okura, ilk açılışta kendi dilinde tek bir işaret: "dili buradan değiştir" */
-const DIL_IPUCU = {tr:"Dili değiştir", en:"Change language", ku:"Ziman biguherîne", ar:"تغيير اللغة", fa:"تغییر زبان",
+const DIL_IPUCU = {tr:"Dili değiştir", en:"Change language", ku:"Ziman biguherîne", ar:"تغيير اللغة", fa:"تغییر زبان", he:"שינוי שפה",
   ur:"زبان تبدیل کریں", az:"Dili dəyiş", kk:"Тілді өзгерту", uz:"Tilni oʻzgartirish", ky:"Тилди өзгөртүү", tk:"Dili üýtget",
   ru:"Сменить язык", uk:"Змінити мову", de:"Sprache ändern", fr:"Changer de langue", es:"Cambiar idioma", pt:"Mudar idioma",
   it:"Cambia lingua", nl:"Taal wijzigen", pl:"Zmień język", el:"Αλλαγή γλώσσας", bs:"Promijeni jezik", sq:"Ndrysho gjuhën",
@@ -2236,7 +2237,7 @@ const DIL_IPUCU = {tr:"Dili değiştir", en:"Change language", ku:"Ziman biguher
   cs:"Změnit jazyk", sv:"Byt språk", fi:"Vaihda kieli", ha:"Canza harshe", am:"ቋንቋ ቀይር", so:"Beddel luqadda", zu:"Shintsha ulimi"};
 function dilIpucuGoster(){
   try{ if(localStorage.getItem("ti.dilIpucu")) return; }catch(e){ return; }
-  const c = cihazDili(), kok = c.startsWith("zh") ? "zh-CN" : c.startsWith("fil") ? "tl" : c.split("-")[0];
+  const c = cihazDili(), kok = c.startsWith("zh") ? "zh-CN" : c.startsWith("fil") ? "tl" : c.startsWith("iw") ? "he" : c.split("-")[0];
   if(kok === "tr" || S.dil !== "tr") return;             // Türkçe telefonda ya da dil zaten seçilmişse gerek yok
   const d = $("#dilAc"); if(!d) return;
   const r = d.getBoundingClientRect(); if(!r.width) return;

@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -35,7 +35,7 @@
 (function(){var t="koyu";try{t=localStorage.getItem("ti.tema")||"koyu"}catch(e){}
 document.documentElement.setAttribute("data-tema",t);
 if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#F0F5FA";}
-try{if(localStorage.getItem("ti.acilisGun")!==new Date().toLocaleDateString("sv")&&!/[?&]y=/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
+try{if(localStorage.getItem("ti.acilisGun")!==new Date().toLocaleDateString("sv")&&!/[?&](y|ekran)=/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
 document.documentElement.classList.add("acilis-var");}catch(e){}})();
 
   /* Bayram panoraması: 23 Nisan, 19 Mayıs, 30 Ağustos, 29 Ekim ve 3 Kasım'da Galata ile Kız Kulesi bayrak ışığıyla aydınlanır; ertesi gün kendiliğinden eski hâline döner */
@@ -477,6 +477,15 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .yukle-hap .yk-kapat{width:28px;height:28px;border-radius:50%;border:0;background:transparent;color:var(--dim);font-size:18px;line-height:1;cursor:pointer}
   .yukle-ios{position:fixed;z-index:41;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 160px);max-width:420px;margin:0 auto;
     padding:13px 15px;border-radius:12px;background:#F8FBFF;color:#0B1E36;font:500 14px/1.5 var(--sans);box-shadow:0 10px 26px rgba(0,0,0,.38)}
+  /* Çeviri yanıt vermezse: akış kartlarında düğmenin yazısı görünmediği için okura açıkça söylenir */
+  .ceviri-hap{position:fixed;z-index:42;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 108px);transform:translate(-50%,12px);
+    display:flex;align-items:center;gap:10px;width:max-content;max-width:calc(100vw - 24px);padding:9px 8px 9px 14px;border-radius:14px;background:var(--raised);
+    border:1.5px solid var(--gold);color:var(--vellum);box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .3s,transform .3s;
+    font:500 14px/1.35 var(--sans)}
+  .ceviri-hap.acik{opacity:1;transform:translate(-50%,0)}
+  .ceviri-hap.ust{bottom:calc(env(safe-area-inset-bottom,0px) + 164px)}
+  .ceviri-hap a{color:var(--gold);font-weight:600;white-space:nowrap;text-underline-offset:3px}
+  .ceviri-hap button{flex:none;width:28px;height:28px;border-radius:50%;border:0;background:transparent;color:var(--dim);font-size:18px;line-height:1;cursor:pointer}
   .dil-ipucu small{display:block;margin-top:2px;font-weight:500;font-size:12px;opacity:.65}
   .dil-ipucu::before{content:"";position:absolute;top:-6px;right:var(--ok,18px);width:12px;height:12px;background:inherit;
     transform:rotate(45deg);border-radius:2px}
@@ -753,6 +762,7 @@ const SOZLUK = {
     depo_doldu:"depo doldu",
     daha_eski:n=>`daha eski yazılar (${n})`, arsiv_sonu:n=>`arşivin sonu — ${n} yazı`,
     kaydet:"kaydet", kayitli:"kayıtlı", cevir:"çevir", cevriliyor:"çevriliyor…", ceviri_kapali:"çeviri kapalı",
+    ceviri_yanitsiz:"Çeviri şu an yanıt vermiyor.", gt_ac:"Google Çeviri’de aç",
     orijinal:"özgün metin", kaynak:"kaynak", paylas:"paylaş", kopyalandi:"kopyalandı",
     kayit_yok:"Henüz kayıt yok",
     kayit_yok_aciklama:"İdrak’taki bir yazının altındaki <strong>kaydet</strong>’e dokun, burada birikir.",
@@ -811,6 +821,7 @@ const SOZLUK = {
     depo_doldu:"storage full",
     daha_eski:n=>`older articles (${n})`, arsiv_sonu:n=>`end of archive — ${n} articles`,
     kaydet:"save", kayitli:"saved", cevir:"translate", cevriliyor:"translating…", ceviri_kapali:"translation unavailable",
+    ceviri_yanitsiz:"Translation isn’t responding right now.", gt_ac:"Open in Google Translate",
     orijinal:"original", kaynak:"source", paylas:"share", kopyalandi:"copied",
     kayit_yok:"Nothing saved yet",
     kayit_yok_aciklama:"Tap <strong>save</strong> under any article in İdrak and it will be kept here.",
@@ -1177,6 +1188,26 @@ async function cevir(m){
   const j = await r.json();
   return {metin:ceviriDuzelt((j[0]||[]).map(p=>(p&&p[0])||"").join(""), m, S.ceviriDili), dil:gKodGeri(j[2])};
 }
+/* Yedek yol: hızlı çeviri kapısı yanıt vermezse yazının başlığı ve özeti Google Çeviri'nin kendi sayfasında açılır */
+function gtAdresi(y){
+  const metin = [y && y.baslik, y && y.ozet].filter(Boolean).join("\n\n").slice(0, 1800);
+  return "https://translate.google.com/?sl=auto&tl=" + encodeURIComponent(gKod(S.ceviriDili)) + "&op=translate&text=" + encodeURIComponent(metin);
+}
+let ceviriUyariSayaci = 0;
+function ceviriUyarisi(y){
+  document.querySelectorAll(".ceviri-hap").forEach(e => e.remove());
+  const h = document.createElement("div"); h.className = "ceviri-hap"; h.setAttribute("role","status");
+  if(document.querySelector(".yukle-hap.acik")) h.classList.add("ust");
+  h.innerHTML = `<span>${kac(t("ceviri_yanitsiz"))}${y && y.baslik ? ` <a href="${kac(gtAdresi(y))}" target="_blank" rel="noopener">${kac(t("gt_ac"))}</a>` : ""}</span>`
+    + `<button type="button" aria-label="${kac(t("kapat"))}">×</button>`;
+  document.body.appendChild(h);
+  const kapat = () => { h.classList.remove("acik"); setTimeout(() => h.remove(), 320); };
+  h.querySelector("button").onclick = kapat;
+  const a = h.querySelector("a"); if(a) a.addEventListener("click", () => setTimeout(kapat, 200));
+  requestAnimationFrame(() => h.classList.add("acik"));
+  const sira = ++ceviriUyariSayaci;
+  setTimeout(() => { if(sira === ceviriUyariSayaci && h.isConnected) kapat(); }, 9000);
+}
 async function ikisiniCevir(y){
   const hedef = S.ceviriDili;
   const [b,o] = await Promise.all([cevir(y.baslik), cevir(y.ozet)]);
@@ -1227,6 +1258,7 @@ async function yaziyiCevir(id){
     if(S.acilan && S.acilan.id===id) ciz(); else { kartiYenile(id); topluDugmesi(); }
   }catch(e){
     if(d){ d.classList.remove("busy"); d.lastElementChild.textContent = t("ceviri_kapali"); }
+    ceviriUyarisi(y);
   }
 }
 function orijinaliGoster(id){
@@ -1252,7 +1284,7 @@ async function hepsiniCevir(){
     try{
       const sonuc = await Promise.all(grup.map(ikisiniCevir));
       grup.forEach((y,k)=>{ ceviriSakla(y.id, sonuc[k]); kartiYenile(y.id); });
-    }catch(e){ S.otoCeviri = false; break; }   // çeviri kapısı yanıt vermezse dur, zorlama
+    }catch(e){ S.otoCeviri = false; ceviriUyarisi(grup[0]); break; }   // çeviri kapısı yanıt vermezse dur, zorlama; okura söyle
     S.topluKalan = Math.max(0, liste.length-i-grup.length); topluDugmesi();
     await new Promise(r=>setTimeout(r,150));
   }
@@ -1483,6 +1515,7 @@ async function tefYaziyiCevir(yol){
       S.tefCeviri[anahtar] = kap.innerHTML;
     }catch(e){
       document.querySelectorAll("[data-tefcevir] span").forEach(s => s.textContent = t("ceviri_kapali"));
+      ceviriUyarisi(null);
       return;
     }
   }
@@ -2487,6 +2520,12 @@ cek().then(() => { if(donus && !ACILIS && !okurDokundu) scrollTo(0, donus.y || 0
 addEventListener("pageshow", e => { if(e.persisted) try{ sessionStorage.removeItem("ti.donus"); }catch(_){} });
 /* Doğrudan bir Tefekkür yazısının adresiyle gelinirse (#tefekkur-...) yazı uygulamanın içinde açılır */
 { const h = location.hash.slice(1); if(/^tefekkur-[\w-]+$/.test(h)) tefAc(h + ".html", false); }
+/* Simgeye uzun basınca çıkan kısayollar (Tefekkür, Kayıtlı, Kaynaklar) uygulamayı doğrudan o bölümde açar */
+{ const e = new URLSearchParams(location.search).get("ekran");
+  if(["tefekkur","saved","sources"].includes(e)){
+    try{ history.replaceState(null, "", location.pathname + location.hash); }catch(_){}
+    const b = $("#nav-" + e); if(b) b.click();
+  } }
 
 /* Uygulama zaten açıkken bir paylaşım bağlantısına dokunulursa bazı tarayıcılar sayfayı yeniden yüklemeden
    bağlantıyı buraya iletir: yazıyı ya da Tefekkür yazısını hemen aç */

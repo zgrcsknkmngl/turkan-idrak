@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "Türkan İdrak Tefekkür",
-  "short_name": "İdrak",
+  "short_name": "Türkan",
   "description": "Düşünce kuruluşları, dergiler ve haber ajansları tek akışta; isteyen kendi diline çevirir. Tefekkür: davetli yazarların yazıları.",
   "start_url": "./",
   "scope": "./",
@@ -33,6 +33,47 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tefekkür",
+      "short_name": "Tefekkür",
+      "description": "Davetli yazarların yazıları",
+      "url": "./?ekran=tefekkur",
+      "icons": [
+        {
+          "src": "kisayol-tefekkur.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Kayıtlı",
+      "short_name": "Kayıtlı",
+      "description": "Kaydettiğin yazılar",
+      "url": "./?ekran=saved",
+      "icons": [
+        {
+          "src": "kisayol-kayitli.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Kaynaklar",
+      "short_name": "Kaynaklar",
+      "description": "Türkan'ın okuduğu bütün kaynaklar",
+      "url": "./?ekran=sources",
+      "icons": [
+        {
+          "src": "kisayol-kaynaklar.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }

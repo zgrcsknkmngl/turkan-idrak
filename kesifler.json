@@ -238,5 +238,9 @@
  "asiatimes.com": {
   "url": "",
   "tarih": "2026-11-13"
+ },
+ "perlentaucher.de": {
+  "url": "https://www.perlentaucher.de/index.rss",
+  "tarih": "2026-11-13"
  }
 }

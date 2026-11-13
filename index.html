@@ -431,7 +431,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   :root.bayram[data-tema="acik"] .manzara{background-image:url(dunya-gunduz-bayram.jpg),url(dunya-gunduz.jpg);background-size:100% 100%;
     background-image:image-set(url(dunya-gunduz-bayram.webp) type("image/webp"), url(dunya-gunduz-bayram.jpg) type("image/jpeg")),
                      image-set(url(dunya-gunduz.webp) type("image/webp"), url(dunya-gunduz.jpg) type("image/jpeg"))}
-  .manzara::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(rgba(0,0,0,0),var(--ink))}
+  /* Manzaranın altı eritilmez: denizdeki yansımalar olduğu gibi görünsün */
   .siluet,.sayaclar{display:none!important}
   .masthead .wordmark{color:#F4EFE3;text-shadow:0 1px 6px rgba(0,10,30,.35)}
   .masthead .wordmark em{color:#8CC6FF}
@@ -584,21 +584,25 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .masthead .kose-sol{justify-self:start} .masthead .kose-sag{justify-self:end}
   .masthead .marka{display:flex!important;flex-direction:row!important;align-items:center!important;gap:8px!important;min-width:0;padding-top:2px}
   .masthead .marka-metin{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
-  .masthead .kose .tema-dugme,.masthead .kose .tanitim-dugme,.masthead .kose .dil-dugme{position:static;transform:none;margin:0;flex:none;
+  /* Simgelerin içi gökyüzü camı: arkadaki gökyüzü buzlu camdan görünür, gece de gündüz de manzarayla bir olur */
+  .masthead .kose .tema-dugme,.masthead .kose .tanitim-dugme,.masthead .kose .dil-dugme{position:relative;left:auto;top:auto;transform:none;margin:0;flex:none;
     width:30px;height:30px;padding:0;display:grid;place-items:center;border-radius:50%;cursor:pointer;
-    border:1.5px solid transparent;color:#F4F1E8;box-shadow:0 2px 10px rgba(0,8,20,.35);
-    background:linear-gradient(rgba(11,20,32,.78),rgba(11,20,32,.78)) padding-box,var(--bes-element) border-box}
+    border:0;color:#F4F1E8;box-shadow:0 1px 6px rgba(0,8,20,.18);background:var(--kose-cam);
+    -webkit-backdrop-filter:blur(7px) saturate(1.2);backdrop-filter:blur(7px) saturate(1.2)}
+  .masthead .kose .tema-dugme::before,.masthead .kose .tanitim-dugme::before,.masthead .kose .dil-dugme::before{content:"";position:absolute;inset:0;
+    border-radius:inherit;padding:2px;background:var(--bes-element);pointer-events:none;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
   .masthead .kose svg{width:15px;height:15px}
   .masthead .kose .tanitim-dugme svg{width:13px;height:13px;margin-left:2px}
   .masthead .kose .dil-dugme{width:auto;min-width:30px;padding:0 7px;display:inline-flex;align-items:center;gap:3px;border-radius:999px;font:700 11px/1 var(--sans);letter-spacing:.04em}
   .masthead .kose .dil-dugme svg{width:14px;height:14px}
-  :root{--bes-element:linear-gradient(135deg,#5BC48A 0%,#F0475A 28%,#E6C46B 52%,#F4F1E8 74%,#3CC6D0 100%)}
+  :root{--bes-element:linear-gradient(135deg,#5BC48A 0%,#F0475A 28%,#E6C46B 52%,#F4F1E8 74%,#3CC6D0 100%);--kose-cam:rgba(30,72,130,.28)}
   .masthead .alan-adi{background-image:linear-gradient(90deg,#5BC48A 0%,#F0475A 28%,#E6C46B 52%,#F4F1E8 74%,#3CC6D0 100%);
     background-clip:text;-webkit-background-clip:text;color:transparent!important;text-shadow:none!important;font-weight:600!important;
     filter:drop-shadow(0 1px 3px rgba(0,10,30,.55))}
   :root[data-tema="acik"]{--bes-element:linear-gradient(135deg,#2E8B57 0%,#C8102E 28%,#B8860B 52%,#8A8F98 74%,#00838F 100%)}
-  :root[data-tema="acik"] .masthead .kose .tema-dugme,:root[data-tema="acik"] .masthead .kose .tanitim-dugme,:root[data-tema="acik"] .masthead .kose .dil-dugme{
-    color:#13243B;background:linear-gradient(rgba(255,255,255,.85),rgba(255,255,255,.85)) padding-box,var(--bes-element) border-box}
+  :root[data-tema="acik"]{--kose-cam:rgba(255,255,255,.30)}
+  :root[data-tema="acik"] .masthead .kose .tema-dugme,:root[data-tema="acik"] .masthead .kose .tanitim-dugme,:root[data-tema="acik"] .masthead .kose .dil-dugme{color:#13243B}
   :root[data-tema="acik"] .masthead .alan-adi{background-image:linear-gradient(90deg,#2E8B57 0%,#C8102E 28%,#B8860B 52%,#6B7079 74%,#00838F 100%);filter:none}
   /* Ara düğmesi araç çubuğunda, Gözdeler'in yanında; satırdaki diğer düğmelerle aynı görünüm */
   .cubuk .ara-mini{display:inline-grid;place-items:center;padding-left:11px;padding-right:11px}

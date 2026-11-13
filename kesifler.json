@@ -226,5 +226,13 @@
  "stearthinktank.com": {
   "url": "https://www.stearthinktank.com/blog-feed.xml",
   "tarih": "2026-11-11"
+ },
+ "hakaimagazine.com": {
+  "url": "https://hakaimagazine.com/feed/",
+  "tarih": "2026-11-13"
+ },
+ "the-tls.com": {
+  "url": "",
+  "tarih": "2026-11-13"
  }
 }

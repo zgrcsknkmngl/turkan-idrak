@@ -139,7 +139,8 @@ const KAYNAKLAR = [
   { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
   { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://www.politico.com/rss/politicopicks.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", ucretli:true, url:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // 27 Ekim 2026: okurun isteğiyle geri alındı (23 Ekim'de ücretliler arasında çıkarılmıştı)
+  { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", ucretli:true, url:"https://www.haaretz.com/srv/haaretz-latest-headlines", yedek:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // 27 Ekim 2026: okurun isteğiyle geri alındı (23 Ekim'de ücretliler arasında çıkarılmıştı)
+  // 14 Kasım 2026: Google Haberler araması Haaretz'ten günde ancak 20 kadar haber getiriyordu, okurun aradığı haham haberi akışta yoktu; artık kendi beslemesinden
   { ad:"Tehran Times", ulke:"İran", nitelik:"devlet bağlantılı", tur:"ajans", url:"https://news.google.com/rss/search?q=site:tehrantimes.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Prensa Latina", ulke:"Küba", nitelik:"devlet", tur:"ajans", url:"https://news.google.com/rss/search?q=site:plenglish.com+when:7d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Mexico News Daily", ulke:"Meksika", tur:"ajans", url:"https://mexiconewsdaily.com/feed/", yedek:"https://news.google.com/rss/search?q=site:mexiconewsdaily.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -380,6 +381,17 @@ const KAYNAKLAR = [
 ];
 
 const ARSIV_SINIRI = 70;
+/* Haber ajansları ve gazeteler günde onlarca haber yayımlar; 70 yazı onlarda ancak iki-üç günü tutuyordu,
+   aramada kaybolan haberler oluyordu. Ajanslarda son 72 saatin tamamı tutulur: en az 70, en çok 150 yazı. */
+const AJANS_ARSIV_SAAT = 72, AJANS_ARSIV_TAVAN = 150;
+function arsivKes(liste, tur) {
+  if (tur !== "ajans") return liste.slice(0, ARSIV_SINIRI);
+  const z = y => { const d = tarihOku(y.tarih); return d ? d.getTime() : 0; };
+  const sirali = liste.map((y, i) => [z(y), i, y]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).map(x => x[2]);
+  const sinir = Date.now() - AJANS_ARSIV_SAAT * 3600e3;
+  const taze = sirali.filter(y => z(y) >= sinir).length;
+  return sirali.slice(0, Math.min(AJANS_ARSIV_TAVAN, Math.max(ARSIV_SINIRI, taze)));
+}
 /* Özet: tamamlanmış son cümlede kesilir; ilk cümle uzunsa onu bitirecek kadar ileri gidilir. Yarım cümle bırakılmaz. */
 function kisalt(o, sinir = 320){
   if (!o || o.length <= sinir) return o;
@@ -571,13 +583,22 @@ function ytAciklama(b) {
   const ilk = m[1].split(/\r?\n/).map(s => s.trim()).find(s => s && !/https?:\/\//i.test(s)) || "";
   return /^(subscribe|join|follow|watch|support|help support|become a member|\*{3}|☞)/i.test(ilk) ? "" : ilk;
 }
+/* Google Haberler araması sonuçları yeniliğe göre değil ilgiye göre dizer; ilk 20'yi almak günde onlarca haber
+   yayımlayan kaynakta yeni haberlerin çoğunu dışarıda bırakıyordu. Orada sonuçlar en yeniden başlayarak dizilir
+   ve 40 tanesi alınır. Kendi beslemesi olan kaynaklar zaten en yeniden başlar. */
+const GN_DILIM = 40;
 function ayikla(xml, kaynakAd) {
   let bloklar = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
   if (!bloklar.length) bloklar = xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
   if (!bloklar.length) throw new Error("beslemede yazı yok");
   const ajans = ((KAYNAKLAR.find(k => k.ad === kaynakAd) || {}).tur === "ajans");
+  const gnBesleme = /news\.google\.com/i.test(xml.slice(0, 3000));
+  if (gnBesleme) {
+    const z = b => Date.parse(temiz(etiket(b, "pubDate"))) || 0;
+    bloklar = bloklar.map((b, i) => [z(b), i, b]).sort((a, c) => c[0] - a[0] || a[1] - c[1]).map(x => x[2]);
+  }
 
-  return bloklar.slice(0, 20).map(b => {
+  return bloklar.slice(0, gnBesleme ? GN_DILIM : 20).map(b => {
     const baslik = temiz(etiket(b, "title"));
     const link = baglanti(b);
     if (ajans && ajansElenir(b, link, baslik)) return null;     // spor, magazin, yaşam
@@ -1123,6 +1144,64 @@ async function simgeleriHazirla() {
   return sonuc;
 }
 
+/* ---------- Türkçe arama karşılığı ----------
+   Yazılar okura özgün dilinde gelir; bu alan yalnız arama içindir, ekranda görünmez.
+   Türkçe arayan okur ("haham") İngilizce ya da başka dildeki başlığı ("Chabad rabbi …") da bulabilsin diye
+   her başlık bir kez Türkçeye çevrilip "ara" alanında saklanır. Okurun yazdığı arama sözcüğü hiçbir yere
+   gönderilmez; eşleştirme telefonda yapılır. Türkçe kaynaklara dokunulmaz. Çeviri kapısı yanıt vermezse
+   akış eskisi gibi yazılır, kalan başlıklar sonraki taramaya kalır. */
+const ARA_HAKKI = 1500;          // bir taramada en çok bu kadar başlık (ilk günlerde arşiv sırayla dolar)
+const araSade = x => String(x || "").toLocaleLowerCase("tr").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+async function ceviriIste(metin) {
+  const c = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=tr&dt=t&q=" + encodeURIComponent(metin),
+    { headers: { "user-agent": TARAYICI }, signal: AbortSignal.timeout(15000) });
+  if (c.status === 429 || c.status === 503) { const e = new Error("çeviri kapısı sınır koydu (HTTP " + c.status + ")"); e.dur = true; throw e; }
+  if (!c.ok) throw new Error("çeviri HTTP " + c.status);
+  const j = await c.json();
+  return { metin: (j[0] || []).map(p => (p && p[0]) || "").join(""), dil: String(j[2] || "") };
+}
+async function partiCevir(liste) {          // aynı dilde başlıklar; satır satır
+  const farkliysa = (t, b) => (t && araSade(t) !== araSade(b) ? t : "");
+  const { metin, dil } = await ceviriIste(liste.map(y => String(y.baslik).replace(/\s+/g, " ").trim()).join("\n"));
+  if (/^tr/i.test(dil)) { for (const y of liste) y.ara = ""; return; }
+  const satir = metin.split("\n").map(x => x.trim());
+  if (satir.length === liste.length) { liste.forEach((y, i) => { y.ara = farkliysa(satir[i], y.baslik); }); return; }
+  if (liste.length === 1) { liste[0].ara = farkliysa(metin.replace(/\s*\n\s*/g, " ").trim(), liste[0].baslik); return; }
+  const yari = Math.ceil(liste.length / 2);   // satırlar kaydıysa ikiye bölüp yeniden dene
+  await partiCevir(liste.slice(0, yari));
+  await partiCevir(liste.slice(yari));
+}
+async function aramaKarsiliklari(sonuc) {
+  const bekleyen = [];
+  for (const [ad, k] of Object.entries(sonuc.kaynaklar)) {
+    if (/^tr(\b|-|_|$)/i.test(k.dil || "")) continue;
+    // aynı dildeki başlıklar birlikte gönderilir (daha az istek); dili bilinmeyen kaynak kendi başına
+    const grup = (k.dil || "").split(/[-_]/)[0].toLowerCase() || "kaynak:" + ad;
+    for (const y of (k.yazilar || [])) if (y.ara === undefined && y.baslik) bekleyen.push([grup, y]);
+  }
+  const z = y => { const d = tarihOku(y.tarih); return d ? d.getTime() : 0; };
+  bekleyen.sort((a, b) => z(b[1]) - z(a[1]));
+  const secilen = bekleyen.slice(0, ARA_HAKKI), gruplar = new Map();
+  for (const [g, y] of secilen) { if (!gruplar.has(g)) gruplar.set(g, []); gruplar.get(g).push(y); }
+  const partiler = [];
+  for (const liste of gruplar.values()) {
+    let p = [], boy = 0;
+    for (const y of liste) {
+      const u = encodeURIComponent(String(y.baslik)).length + 3;
+      if (p.length && (p.length >= 40 || boy + u > 3500)) { partiler.push(p); p = []; boy = 0; }
+      p.push(y); boy += u;
+    }
+    if (p.length) partiler.push(p);
+  }
+  let biten = 0, hata = "";
+  for (const p of partiler) {
+    try { await partiCevir(p); biten += p.length; }
+    catch (e) { hata = e.message; if (e.dur) break; }
+    await uyu(250);
+  }
+  console.log(`Türkçe arama karşılığı: ${biten} başlık hazırlandı, ${bekleyen.length - biten} kaldı${hata ? " · " + hata : ""}`);
+}
+
 /* ---------- ana akış ---------- */
 
 (async () => {
@@ -1162,6 +1241,7 @@ async function simgeleriHazirla() {
         if (e.zng2) y.zng2 = 1;
         if (gnMi(y.link) && e.link && !gnMi(e.link)) y.link = e.link;
         if (e.pay && !y.pay) y.pay = e.pay;
+        if (e.ara !== undefined && e.baslik === y.baslik) y.ara = e.ara;
       }
 
       // beslemede özet ya da görsel yoksa yazının kendi sayfasından tamamla (her yazı için bir kez; Google Haberler sayfasını yorma)
@@ -1200,7 +1280,7 @@ async function simgeleriHazirla() {
       birlesik.length = 0; birlesik.push(...tekil);
 
       sonuc.kaynaklar[k.ad] = Object.assign({
-        yazilar: ortakOzetleriAyikla(profilKumesiniAyikla(birlesik, k.ad)).slice(0, ARSIV_SINIRI),
+        yazilar: arsivKes(ortakOzetleriAyikla(profilKumesiniAyikla(birlesik, k.ad)), k.tur),
         tarandi: new Date().toISOString(),
         durum: "tamam"
       }, yol === "yedek" ? { yol: "yedek" } : {}, (dil || eskiKayit.dil) ? { dil: dil || eskiKayit.dil } : {}, kimlikBilgisi);
@@ -1246,6 +1326,8 @@ async function simgeleriHazirla() {
     if (a) { if (!y.pay) y.pay = payKodu(y); y.link = a; cozuldu++; }
   }
   console.log(`Google Haberler baglantisi: ${cozuldu} cozuldu, ${gnCozulen} denendi, ${bekleyen.length - cozuldu} kaldi`);
+
+  try { await aramaKarsiliklari(sonuc); } catch (e) { console.log("Türkçe arama karşılığı atlandı: " + e.message); }
 
   // Yazilar orijinal dilinde kalir; onceki bir surumden kalan ceviri alanlari varsa temizle
   for (const k of Object.values(sonuc.kaynaklar))

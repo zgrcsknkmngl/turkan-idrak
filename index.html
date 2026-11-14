@@ -12,18 +12,18 @@
 <meta property="og:site_name" content="Türkan İdrak Tefekkür">
 <meta property="og:title" content="Türkan İdrak Tefekkür">
 <meta property="og:description" content="Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.">
-<meta property="og:url" content="https://turkanidrak.com/">
-<meta property="og:image" content="https://turkanidrak.com/paylas2.jpg">
+<meta property="og:url" content="https://zgrcsknkmngl.github.io/turkan-idrak/">
+<meta property="og:image" content="https://zgrcsknkmngl.github.io/turkan-idrak/paylas2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://turkanidrak.com/">
+<link rel="canonical" href="https://zgrcsknkmngl.github.io/turkan-idrak/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Türkan İdrak Tefekkür",
 "alternateName":["Türkan İdrak","İdrak","Turkan Idrak","Turkan Idrak Tefekkur"],
-"url":"https://turkanidrak.com/",
+"url":"https://zgrcsknkmngl.github.io/turkan-idrak/",
 "description":"Düşünce kuruluşları, dergiler ve haber ajansları tek akışta. Think tanks, magazines and news agencies in one feed.",
 "inLanguage":"tr",
 "author":{"@type":"Person","name":"Özgür Coşkun Akmanoğlu"}}
@@ -227,7 +227,7 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   :is(#feed,#saved) > :last-child{scroll-snap-align:end}
   /* Paylaşılan yazı kutusu da bir durak: yoksa sayfa açılışta ilk akış kartına kayıp kutuyu başlığın altına gizliyor */
   #acilanAlan > .acilan{scroll-snap-align:start;scroll-snap-stop:always}
-  :is(#feed,#saved) .entry .kapak-alan{flex:0 0 61.8%;aspect-ratio:auto;height:auto;margin:0 0 6px;border-radius:11px}
+  :is(#feed,#saved) .entry .kapak-alan{flex:0 0 53%;aspect-ratio:auto;height:auto;margin:0 0 1px;border-radius:11px}
   :is(#feed,#saved) .entry .meta{margin:0 2px 3px;font-size:11.5px;white-space:nowrap;overflow:hidden}
   :is(#feed,#saved) .entry .govde{flex:1 1 auto;min-height:0;overflow:hidden;padding:0 2px}
   :is(#feed,#saved) .entry h2{font-size:16px;line-height:1.25;margin:0 0 3px}
@@ -250,6 +250,19 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .ust-blok .rail{padding-top:7px;padding-bottom:7px}
   :is(#feed,#saved){padding-top:10px}
   .kapak-alan .act:active{background:rgba(255,255,255,.16)}
+  /* Kaynak, saat ve düğmeler fotoğrafın altında ince bir şeritte: fotoğrafın hiçbir yeri kapanmaz */
+  .serit{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;margin:0 0 3px;padding-inline-start:3px}
+  .serit .meta,:is(#feed,#saved) .entry .serit .meta{margin:0;display:flex;gap:7px;align-items:center;font-size:11.5px;white-space:nowrap;overflow:hidden;min-width:0}
+  .serit .meta .src{color:var(--ember);font-weight:700;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .serit .meta .yazar{display:none}
+  .serit .meta .when{color:var(--dim);flex:none}
+  .serit .acts{gap:0;flex:none;flex-wrap:nowrap}
+  .serit .act{width:34px;height:34px;justify-content:center;border-radius:999px;font-size:0;color:var(--dim)}
+  .serit .act span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .serit .act svg{width:17px;height:17px}
+  .serit .act.on,.serit .act[aria-pressed="true"]{color:var(--ember)}
+  .serit .act:active{background:rgba(127,127,127,.16)}
+  .serit .dugme-ipucu{bottom:42px}
   .kaynak-ozet{font-family:var(--serif);font-size:16.5px;line-height:1.55;color:var(--ozet);margin:4px 0 6px}
   .entry.okundu h2{color:var(--okundu1)}
   .entry.okundu .sum{color:var(--okundu2)}
@@ -1772,7 +1785,8 @@ function kart(y){
       y.yazar ? `<span class="yazar">${kac(y.yazar)}</span>` : ""
     }<span class="when">${nezaman(y.tarih)}</span></div>`;
   return `<article class="entry${S.okunan.includes(y.id)?" okundu":""}">
-    ${kapakAlani(y, ad, kunye + dugmeler)}
+    ${kapakAlani(y, ad, "")}
+    <div class="serit">${kunye}${dugmeler}</div>
     <div class="govde">
       <div class="yazi">
         <h2>${kac(baslik)}</h2>
@@ -1784,7 +1798,7 @@ function kart(y){
 }
 
 /* Ekranda her zaman iki kart: üst blok ve alt şerit ölçülür, kalan yükseklik ikiye bölünür.
-   Kartta resim altın oranla (%61,8) büyük, başlık ve özet kalan %38,2'de; özet, kalan yere sığan satır kadar gösterilir. */
+   Kartta resim %53, altında kaynak ve düğme şeridi, başlık ve özet kalan yerde; özet, kalan yere sığan satır kadar gösterilir. */
 /* Tanıtım videosu: arayüz dilinde bir sürüm varsa o, yoksa İngilizce sürüm (dikey). Yeni dil eklendikçe listeye yazılır. */
 const TANITIM_DILLERI = ["tr", "en", "es", "pt", "ar", "fr", "ru", "hi", "de", "ja", "fa", "zh", "id"];
 function tanitimAc(){
@@ -1897,10 +1911,10 @@ function kartlariSigdirAsil(){
   }
   kapaklariCercevele();
 }
-/* Resmin üstündeki simgelerin ne işe yaradığını bir kez söyle; okur "✓"ye basınca bir daha çıkmaz. */
+/* Resmin altındaki simgelerin ne işe yaradığını bir kez söyle; okur "✓"ye basınca bir daha çıkmaz. */
 function dugmeIpucu(){
   try { if (localStorage.getItem("ti.dugmeIpucu")) return; } catch (e) { return; }
-  const serit = document.querySelector("#feed .entry .kapak-alan .acts");
+  const serit = document.querySelector("#feed .entry .serit .acts");
   if (!serit || document.querySelector(".dugme-ipucu")) return;
   const d = document.createElement("button"); d.type = "button"; d.className = "dugme-ipucu";
   d.innerHTML = `${kac(t("kaydet"))} · ${kac(t("cevir"))} · ${kac(t("kaynak"))} · ${kac(t("paylas"))}<b aria-hidden="true">✓</b>`;

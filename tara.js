@@ -155,7 +155,7 @@ const KAYNAKLAR = [
   { ad:"The Young Turks", ulke:"ABD", tur:"ajans", url:"https://www.youtube.com/feeds/videos.xml?channel_id=UC1yBKRuGpC1tSM73A0ZjYjQ" },   // Cenk Uygur; yazılı yayını ve açık beslemesi yok, YouTube kanalının kendi beslemesi
   { ad:"Politico Europe", ulke:"Belçika", tur:"ajans", url:"https://www.politico.eu/feed/", yedek:"https://news.google.com/rss/search?q=site:politico.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"AA Analiz", ulke:"Türkiye", nitelik:"devlet",          tur:"ajans", ulke:"Türkiye", kimlik:"kamu", url:"https://www.aa.com.tr/tr/rss/default?cat=analiz" },
-  { ad:"BirGün", ulke:"Türkiye", tur:"ajans", url:"https://www.birgun.net/rss/home", yedek:"https://news.google.com/rss/search?q=site:birgun.net+when:1d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"BirGün", ulke:"Türkiye", tur:"ajans", url:"https://www.birgun.net/rss/home", yalnizTurkce:true, yedek:"https://news.google.com/rss/search?q=site:birgun.net+when:1d&hl=tr&gl=TR&ceid=TR:tr" },
   { ad:"soL Haber", ulke:"Türkiye", tur:"ajans", url:"https://news.google.com/rss/search?q=site:sol.org.tr+when:3d&hl=tr&gl=TR&ceid=TR:tr", coz:true },
   // Raporlar ve endeksler (16 Ekim 2026)
   { ad:"Heritage", ulke:"ABD", tur:"kurum", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:heritage.org+when:120d&hl=en-US&gl=US&ceid=US:en" },
@@ -1205,6 +1205,17 @@ async function aramaKarsiliklari(sonuc) {
   console.log(`Türkçe arama karşılığı: ${biten} başlık hazırlandı, ${bekleyen.length - biten} kaldı${hata ? " · " + hata : ""}`);
 }
 
+/* yalnizTurkce: Türkçe bir kaynağın beslemesine karışan İngilizce baskı yazıları (ör. BirGün Daily) ayıklanır.
+   Adresleri Türkçe yazılarla aynı yapıda olduğu için başlığa bakılır: Türkçe harf yoksa ve en az iki
+   İngilizce bağlaç/edat varsa yazı İngilizce sayılır. */
+function ingilizceBaslik(b) {
+  const t = String(b || "");
+  if (/[çğıöşüÇĞİÖŞÜ]/.test(t)) return false;
+  const k = t.toLowerCase().match(/[a-z']+/g) || [];
+  const ing = new Set(["the","of","and","to","in","for","with","on","is","are","as","at","by","from","against","its","their","that","this","after","over","how","why","what","new","says"]);
+  return k.filter(w => ing.has(w)).length >= 2;
+}
+
 /* ---------- ana akış ---------- */
 
 (async () => {
@@ -1229,10 +1240,10 @@ async function aramaKarsiliklari(sonuc) {
       const { yazilar: gelenHam, yol, dil } = await cekYedekli(k);
       // yolIcerir: genel beslemeden yalnız o bölümün yazıları alınır; yolHaric: o bölüm dışarıda bırakılır
       // (yedek yol zaten o bölüme göre aranıyor)
-      const gelen = yol === "yedek" ? gelenHam : gelenHam.filter(y => {
+      const gelen = (yol === "yedek" ? gelenHam : gelenHam.filter(y => {
         const l = String(y.link || "");
         return (!k.yolIcerir || l.includes(k.yolIcerir)) && (!k.yolHaric || !l.includes(k.yolHaric));
-      });
+      })).filter(y => !(k.yalnizTurkce && ingilizceBaslik(y.baslik)));
       const tekBaslik = new Set();
       const yeni = gelen.filter(y => !copMu(y, k.ad)).filter(y => {
         const t = String(y.baslik).toLocaleLowerCase("tr").replace(/\s+/g, " ").trim();
@@ -1283,7 +1294,8 @@ async function aramaKarsiliklari(sonuc) {
       const gelenler = new Set(yeni.map(y => y.id));
       const basliklar = new Set(yeni.map(y => y.baslik.toLocaleLowerCase("tr")));
       const birlesik = yeni.concat(eskiKayit.yazilar.filter(y =>
-        !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr")) && !copMu(y, k.ad)));
+        !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr")) && !copMu(y, k.ad) &&
+        !(k.yalnizTurkce && ingilizceBaslik(y.baslik))));
       for (const y of birlesik) { if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));

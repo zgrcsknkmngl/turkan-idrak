@@ -36,7 +36,7 @@ const KAYNAKLAR = [
   { ad:"ECFR", ulke:"Avrupa",               tur:"kurum", ulke:"Avrupa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:ecfr.eu+when:120d&hl=en-US&gl=US&ceid=US:en" },                                    // ✓
   { ad:"Foreign Policy Centre", ulke:"İngiltere", tur:"kurum", ulke:"İngiltere", kimlik:"bağımsız", url:"https://fpc.org.uk/feed/" },                              // ✓
   // Berlin Policy Journal 2020'de kapandı; DGAP yerine Internationale Politik Quarterly'yi çıkarıyor
-  { ad:"IPQ Berlin", ulke:"Almanya", tur:"dergi", ulke:"Almanya", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:ip-quarterly.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // G
+  { ad:"IPQ Berlin", ulke:"Almanya", tur:"dergi", ulke:"Almanya", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:ip-quarterly.com+when:120d&hl=en-US&gl=US&ceid=US:en", coz:true },   // G
   { ad:"Bruegel", ulke:"Belçika",            tur:"kurum", ulke:"Belçika", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:bruegel.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                                      // G
   { ad:"SWP Berlin", ulke:"Almanya", nitelik:"devlet fonlu",         tur:"kurum", ulke:"Almanya", kimlik:"devlet destekli", url:"https://news.google.com/rss/search?q=site:swp-berlin.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                                   // G
   { ad:"Elcano", ulke:"İspanya",             tur:"kurum", ulke:"İspanya", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:realinstitutoelcano.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                          // G
@@ -69,10 +69,10 @@ const KAYNAKLAR = [
   { ad:"The Nation", ulke:"ABD",         tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://www.thenation.com/subject/foreign-policy/feed/" },   // ✓
   { ad:"Rest of World", ulke:"ABD",      tur:"dergi", ulke:"ABD", kimlik:"vakıf", url:"https://restofworld.org/feed/latest/" },                     // ✓
   { ad:"Yale E360", ulke:"ABD",          tur:"dergi", ulke:"ABD", kimlik:"üniversite", url:"https://e360.yale.edu/feed.xml" },                           // ✓
-  { ad:"Americas Quarterly", ulke:"ABD", tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:americasquarterly.org+when:120d&hl=en-US&gl=US&ceid=US:en" },                  // ✓
+  { ad:"Americas Quarterly", ulke:"ABD", tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:americasquarterly.org+when:120d&hl=en-US&gl=US&ceid=US:en", coz:true },                  // ✓
   { ad:"Asia Times", ulke:"Hong Kong",         tur:"dergi", ulke:"Hong Kong", kimlik:"özel", url:"https://asiatimes.com/category/world/feed/" },               // ✓
   { ad:"Jacobin", ulke:"ABD",            tur:"dergi", ulke:"ABD", kimlik:"bağımsız", url:"https://jacobin.com/feed" },
-  { ad:"+972 Magazine", ulke:"Yafa",      tur:"dergi", ulke:"Yafa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:972mag.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"+972 Magazine", ulke:"Yafa",      tur:"dergi", ulke:"Yafa", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:972mag.com+when:120d&hl=en-US&gl=US&ceid=US:en", coz:true },
   // --- Dergiler, G20 genişlemesi (24 Ekim 2026): ücretsiz, ciddi ve düzenli yayın yapan dergiler; yoksa The Conversation'ın o ülke baskısı ---
   { ad:"Aeon", ulke:"İngiltere", tur:"dergi", url:"https://aeon.co/feed.rss", yedek:"https://news.google.com/rss/search?q=site:aeon.co+when:30d&hl=en-US&gl=US&ceid=US:en" },
   // ---- Bilim, tarih, psikoloji ve fikir dergileri (Kasım 2026) ----
@@ -96,19 +96,19 @@ const KAYNAKLAR = [
   { ad:"Decode39", ulke:"İtalya", tur:"dergi", url:"https://decode39.com/feed/", yedek:"https://news.google.com/rss/search?q=site:decode39.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Social Europe", ulke:"Avrupa Birliği", tur:"dergi", url:"https://www.socialeurope.eu/feed", yedek:"https://news.google.com/rss/search?q=site:socialeurope.eu+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Russia in Global Affairs", ulke:"Rusya", tur:"dergi", url:"https://eng.globalaffairs.ru/feed/", yedek:"https://news.google.com/rss/search?q=site:eng.globalaffairs.ru+when:60d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Insight Turkey", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:insightturkey.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Perspektif", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:perspektif.online+when:30d&hl=tr&gl=TR&ceid=TR:tr" },
+  { ad:"Insight Turkey", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:insightturkey.com+when:90d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"Perspektif", ulke:"Türkiye", tur:"dergi", url:"https://news.google.com/rss/search?q=site:perspektif.online+when:30d&hl=tr&gl=TR&ceid=TR:tr", coz:true },
   { ad:"Daktilo1984", ulke:"Türkiye", tur:"dergi", url:"https://daktilo1984.com/feed/", yedek:"https://news.google.com/rss/search?q=site:daktilo1984.com+when:30d&hl=tr&gl=TR&ceid=TR:tr" },
-  { ad:"Al Majalla", ulke:"Suudi Arabistan", tur:"dergi", url:"https://news.google.com/rss/search?q=site:en.majalla.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"China-US Focus", ulke:"Çin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:chinausfocus.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Sixth Tone", ulke:"Çin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:sixthtone.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Nippon.com", ulke:"Japonya", tur:"dergi", url:"https://news.google.com/rss/search?q=site:nippon.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Global Asia", ulke:"Güney Kore", tur:"dergi", url:"https://news.google.com/rss/search?q=site:globalasia.org+when:90d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"The India Forum", ulke:"Hindistan", tur:"dergi", url:"https://news.google.com/rss/search?q=site:theindiaforum.in+when:60d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Al Majalla", ulke:"Suudi Arabistan", tur:"dergi", url:"https://news.google.com/rss/search?q=site:en.majalla.com+when:30d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"China-US Focus", ulke:"Çin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:chinausfocus.com+when:30d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"Sixth Tone", ulke:"Çin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:sixthtone.com+when:14d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"Nippon.com", ulke:"Japonya", tur:"dergi", url:"https://www.nippon.com/en/rss-all/", yedek:"https://news.google.com/rss/search?q=site:nippon.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Global Asia", ulke:"Güney Kore", tur:"dergi", url:"https://news.google.com/rss/search?q=site:globalasia.org+when:90d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"The India Forum", ulke:"Hindistan", tur:"dergi", url:"https://news.google.com/rss/search?q=site:theindiaforum.in+when:60d&hl=en-US&gl=US&ceid=US:en", coz:true },
   { ad:"The Conversation Endonezya", ulke:"Endonezya", tur:"dergi", url:"https://theconversation.com/id/articles.atom", yedek:"https://news.google.com/rss/search?q=site:theconversation.com/id+when:14d&hl=id&gl=ID&ceid=ID:id" },
-  { ad:"The Walrus", ulke:"Kanada", tur:"dergi", url:"https://thewalrus.ca/feed/", yedek:"https://news.google.com/rss/search?q=site:thewalrus.ca+when:30d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Policy Options", ulke:"Kanada", tur:"dergi", url:"https://policyoptions.irpp.org/feed/", yedek:"https://news.google.com/rss/search?q=site:policyoptions.irpp.org+when:90d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Nueva Sociedad", ulke:"Arjantin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:nuso.org+when:30d&hl=es-419&gl=MX&ceid=MX:es-419" },
+  { ad:"The Walrus", ulke:"Kanada", tur:"dergi", url:"https://thewalrus.ca/feed/", yedek:"https://news.google.com/rss/search?q=site:thewalrus.ca+when:30d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"Policy Options", ulke:"Kanada", tur:"dergi", url:"https://policyoptions.irpp.org/feed/", yedek:"https://news.google.com/rss/search?q=site:policyoptions.irpp.org+when:90d&hl=en-US&gl=US&ceid=US:en", coz:true },
+  { ad:"Nueva Sociedad", ulke:"Arjantin", tur:"dergi", url:"https://news.google.com/rss/search?q=site:nuso.org+when:30d&hl=es-419&gl=MX&ceid=MX:es-419", coz:true },
   { ad:"Revista Anfibia", ulke:"Arjantin", tur:"dergi", url:"https://www.revistaanfibia.com/feed/", yedek:"https://news.google.com/rss/search?q=site:revistaanfibia.com+when:30d&hl=es-419&gl=MX&ceid=MX:es-419" },
   { ad:"Letras Libres", ulke:"Meksika", tur:"dergi", url:"https://letraslibres.com/feed/", yedek:"https://news.google.com/rss/search?q=site:letraslibres.com+when:30d&hl=es-419&gl=MX&ceid=MX:es-419" },
   { ad:"The Conversation Brezilya", ulke:"Brezilya", tur:"dergi", url:"https://theconversation.com/br/articles.atom", yedek:"https://news.google.com/rss/search?q=site:theconversation.com/br+when:14d&hl=pt-BR&gl=BR&ceid=BR:pt-419" },
@@ -364,11 +364,11 @@ const KAYNAKLAR = [
   { ad:"MIT Teknoloji", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://www.technologyreview.com/feed", yedek:"https://news.google.com/rss/search?q=site:technologyreview.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
   { ad:"The Diplomat", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://thediplomat.com/feed/", yedek:"https://news.google.com/rss/search?q=site:thediplomat.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
   { ad:"The Economist", ulke:"İngiltere", tur:"dergi", ucretli:true, url:"https://www.economist.com/latest/rss.xml", yedek:"https://news.google.com/rss/search?q=site:economist.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // ✓ son 300 yazı; geri alındı
-  { ad:"Le Monde Diplomatique", ulke:"Fransa", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:mondediplo.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
-  { ad:"Caixin", ulke:"Çin", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:caixinglobal.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
-  { ad:"Nikkei Asia", ulke:"Japonya", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:asia.nikkei.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Le Monde Diplomatique", ulke:"Fransa", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:mondediplo.com+when:120d&hl=en-US&gl=US&ceid=US:en", coz:true },   // geri alındı
+  { ad:"Caixin", ulke:"Çin", tur:"dergi", ucretli:true, url:"https://news.google.com/rss/search?q=site:caixinglobal.com+when:120d&hl=en-US&gl=US&ceid=US:en", coz:true },   // geri alındı
+  { ad:"Nikkei Asia", ulke:"Japonya", tur:"dergi", ucretli:true, url:"https://asia.nikkei.com/rss/feed/nar", yedek:"https://news.google.com/rss/search?q=site:asia.nikkei.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
   { ad:"Bloomberg Opinion", ulke:"ABD", tur:"dergi", ucretli:true, url:"https://www.bloomberg.com/feeds/bview/news.rss", yedek:"https://news.google.com/rss/search?q=site:bloomberg.com/opinion+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
-  { ad:"Project Syndicate", ulke:"Çekya", tur:"dergi", kimlik:"bağımsız", ucretli:true, url:"https://news.google.com/rss/search?q=site:project-syndicate.org+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
+  { ad:"Project Syndicate", ulke:"Çekya", tur:"dergi", kimlik:"bağımsız", ucretli:true, url:"https://www.project-syndicate.org/rss", yedek:"https://news.google.com/rss/search?q=site:project-syndicate.org+when:120d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
   { ad:"London Review of Books", ulke:"İngiltere", tur:"kitap", ucretli:true, url:"https://www.lrb.co.uk/feeds/rss", yedek:"https://news.google.com/rss/search?q=site:lrb.co.uk+when:60d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
   { ad:"Times Literary Supplement", ulke:"İngiltere", tur:"kitap", ucretli:true, url:"https://www.the-tls.com/feed/", yedek:"https://news.google.com/rss/search?q=site:the-tls.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı
   { ad:"New York Review of Books", ulke:"ABD", tur:"kitap", ucretli:true, url:"https://www.nybooks.com/feed/", yedek:"https://news.google.com/rss/search?q=site:nybooks.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // geri alındı

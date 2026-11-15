@@ -54,6 +54,13 @@ jobs:
             echo "degisiklik yok"
           else
             git commit -q -m "Akis guncellendi"
-            git pull -q --rebase || true
-            git push
+            # Bu tarama sürerken başka bir tarama ya da elle yükleme araya girdiyse, çakışan dosyada bu taramanın
+            # yeni hâli tutulur; olmazsa yarım kalan birleştirme geri alınır. GitHub ara sıra geçici hata da
+            # verdiği için üç kez, araya bekleme koyarak denenir.
+            for i in 1 2 3; do
+              if ! git pull -q --rebase -X theirs; then git rebase --abort || true; fi
+              if git push; then exit 0; fi
+              echo "gonderilemedi (deneme $i); 30 sn sonra yeniden"; sleep 30
+            done
+            exit 1
           fi

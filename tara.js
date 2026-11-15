@@ -141,7 +141,7 @@ const KAYNAKLAR = [
   // 12 Ekim 2026: yeni kaynaklar (besleme adresleri yayincilarin guncel adresleriyle dogrulandi)
   { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
   // 15 Kasım 2026: okurun isteğiyle; Mavi Vatan doktrininin kurucusu E. Koramiral Cem Gürdeniz'in yayını. İdrak'taki ilk tek kişilik ses
-  { ad:"Mavi Vatan Geopolitics", ulke:"Türkiye", tur:"kurum", kimlik:"bağımsız", url:"https://mavivatan.substack.com/feed", yedek:"https://news.google.com/rss/search?q=site:mavivatan.substack.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Mavi Vatan Geopolitics", ulke:"Türkiye", tur:"kurum", kimlik:"bağımsız", url:"https://mavivatan.substack.com/feed", yedek:"https://news.google.com/rss/search?q=site:mavivatan.substack.com+when:120d&hl=en-US&gl=US&ceid=US:en", coz:true },
   { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://rss.politico.com/politics-news.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", ucretli:true, url:"https://www.haaretz.com/srv/haaretz-latest-headlines", yedek:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // 27 Ekim 2026: okurun isteğiyle geri alındı (23 Ekim'de ücretliler arasında çıkarılmıştı)
@@ -1262,7 +1262,7 @@ function ingilizceBaslik(b) {
         if (e.zng) y.zng = 1;
         if (e.zng2) y.zng2 = 1;
         if (gnMi(y.link) && e.link && !gnMi(e.link)) y.link = e.link;
-        if (e.czd) y.czd = 1;
+        if (e.czd) y.czd = e.czd;
         if (e.pay && !y.pay) y.pay = e.pay;
         if (e.ara !== undefined && e.baslik === y.baslik) y.ara = e.ara;
       }
@@ -1343,13 +1343,13 @@ function ingilizceBaslik(b) {
   // Asıl adres bulununca yazının kendi sayfasından görseli de alınır.
   const cozulecek = new Set(KAYNAKLAR.filter(k => k.coz).map(k => k.ad));
   const bekleyen = [];
-  for (const [ad, k] of Object.entries(sonuc.kaynaklar)) if (cozulecek.has(ad)) for (const y of (k.yazilar || [])) if (gnMi(y.link) && !y.czd) bekleyen.push(y);
+  for (const [ad, k] of Object.entries(sonuc.kaynaklar)) if (cozulecek.has(ad)) for (const y of (k.yazilar || [])) if (gnMi(y.link) && (y.czd || 0) < 3) bekleyen.push(y);
   bekleyen.sort((a, b) => zaman(b) - zaman(a));
   let cozuldu = 0, gorselli = 0;
   for (const y of bekleyen) {
     if (gnCozulen >= GN_COZ_SINIRI) break;
     const a = await gnCoz(y.link);
-    if (!a) { y.czd = 1; continue; }        // çözülemeyen bağlantı bir daha denenmez
+    if (!a) { y.czd = (y.czd || 0) + 1; continue; }   // Google o an vermediyse sonraki taramalarda yeniden denenir; üç denemeden sonra bırakılır
     if (!y.pay) y.pay = payKodu(y);
     y.link = a; cozuldu++;
     if (!y.gorsel) {

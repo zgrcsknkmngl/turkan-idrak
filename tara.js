@@ -140,6 +140,8 @@ const KAYNAKLAR = [
   { ad:"Gazete Oksijen", ulke:"Türkiye",                tur:"ajans", url:"https://news.google.com/rss/search?q=site:gazeteoksijen.com+when:120d&hl=tr&gl=TR&ceid=TR:tr", coz:true },
   // 12 Ekim 2026: yeni kaynaklar (besleme adresleri yayincilarin guncel adresleriyle dogrulandi)
   { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
+  // 15 Kasım 2026: okurun isteğiyle; Mavi Vatan doktrininin kurucusu E. Koramiral Cem Gürdeniz'in yayını. İdrak'taki ilk tek kişilik ses
+  { ad:"Mavi Vatan Geopolitics", ulke:"Türkiye", tur:"kurum", kimlik:"bağımsız", url:"https://mavivatan.substack.com/feed", yedek:"https://news.google.com/rss/search?q=site:mavivatan.substack.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Politico", ulke:"ABD", tur:"ajans", url:"https://rss.politico.com/politics-news.xml", yedek:"https://news.google.com/rss/search?q=site:politico.com+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Middle East Eye", ulke:"İngiltere", tur:"ajans", url:"https://www.middleeasteye.net/rss", yedek:"https://news.google.com/rss/search?q=site:middleeasteye.net+when:120d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Haaretz",        ulke:"Yafa",                  tur:"ajans", ucretli:true, url:"https://www.haaretz.com/srv/haaretz-latest-headlines", yedek:"https://news.google.com/rss/search?q=site:haaretz.com+when:120d&hl=en-US&gl=US&ceid=US:en" },   // 27 Ekim 2026: okurun isteğiyle geri alındı (23 Ekim'de ücretliler arasında çıkarılmıştı)

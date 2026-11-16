@@ -1261,7 +1261,7 @@ async function cek(){
     }
     yaz("ti.kaynaklar6", S.kaynaklar);
     // cevrimdisi icin kucuk kopya: telefonun deposu dolmasin diye kaynak basina 40 yazi
-    yaz("ti.bellek", Object.fromEntries(Object.entries(S.bellek).map(([ad,v]) => [ad, {...v, yazilar:(v.yazilar||[]).slice(0,40).map(({ara, ...y}) => y)}])));
+    yaz("ti.bellek", Object.fromEntries(Object.entries(S.bellek).map(([ad,v]) => [ad, {...v, yazilar:(v.yazilar||[]).slice(0,20).map(({ara, ...y}) => y)}])));
   }catch(e){
     S.hata.push({ad:t("nav_idrak"), mesaj:e.message});
   }
@@ -2661,7 +2661,7 @@ try{ donus = JSON.parse(sessionStorage.getItem("ti.donus") || "null"); sessionSt
 if(!donus && document.documentElement.classList.contains("devam")) try{ donus = JSON.parse(localStorage.getItem("ti.kaldigi") || "null"); }catch(e){}
 if(donus && !ACILIS){
   S.ekran = donus.ekran || S.ekran; S.kategori = donus.kategori || S.kategori;
-  S.suzgec = donus.suzgec || S.suzgec; S.goster = Math.max(40, donus.goster || 40);
+  S.suzgec = donus.suzgec || S.suzgec; S.goster = Math.min(120, Math.max(40, donus.goster || 40));   // açılış hafif kalsın: en çok 120 kart
   if(donus.gozdeFiltre) S.gozdeFiltre = true;
   if(donus.zaman) S.zaman = donus.zaman;
 }
@@ -2670,7 +2670,7 @@ const yerineDon = () => {
   const c = donus.capa;
   const bul = () => { if(!c || !c.id) return null; const el = document.querySelector('.entry[data-yid="' + CSS.escape(c.id) + '"]'); return el && el.offsetParent ? el : null; };
   let el = bul(), n = 0;
-  while(!el && c && c.id && S.ekran === "feed" && n++ < 6){ S.goster += 40; cizAkis(); el = bul(); }   // araya yeni yazılar girdiyse kaldığı yazıya kadar aç
+  while(!el && c && c.id && S.ekran === "feed" && S.goster < 160 && n++ < 2){ S.goster += 40; cizAkis(); el = bul(); }   // araya yeni yazılar girdiyse kaldığı yazıya kadar aç
   if(el) scrollTo(0, Math.max(0, el.getBoundingClientRect().top + scrollY - c.ust));
   else scrollTo(0, donus.y || 0);
 };

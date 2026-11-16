@@ -302,5 +302,17 @@
  "cpdi-pakistan.org": {
   "url": "",
   "tarih": "2026-11-16"
+ },
+ "cigionline.org": {
+  "url": "",
+  "tarih": "2026-11-16"
+ },
+ "iiss.org": {
+  "url": "",
+  "tarih": "2026-11-16"
+ },
+ "nybooks.com": {
+  "url": "http://feeds.feedburner.com/nybooks",
+  "tarih": "2026-11-16"
  }
 }

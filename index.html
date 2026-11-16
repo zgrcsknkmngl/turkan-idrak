@@ -752,12 +752,24 @@ const VARSAYILAN = [];   // kaynaklar akis.json ile gelir
 const YEREL = location.protocol === "file:" || location.protocol === "content:";
 
 function yukle(k,v){ try{const x=localStorage.getItem(k);return x?JSON.parse(x):v}catch(e){return v} }
+/* Cihaz deposu (5 MB civarı) dolarsa önce akış önbelleği, sonra en eski çeviriler ve okundu işaretleri boşaltılır;
+   çeviri belleği "otomatik çevir" açıkken her yazıyla büyüdüğü için sınırsız kalmaz, en yeni 1500 çeviri saklanır. */
+function depoBudama(k, v){
+  try{
+    const c = k === "ti.ceviri" ? v : yukle("ti.ceviri", {});
+    const an = Object.keys(c);
+    if(an.length > 1500){ for(const a of an.slice(0, an.length - 1500)) delete c[a]; if(k !== "ti.ceviri") localStorage.setItem("ti.ceviri", JSON.stringify(c)); }
+    const o = k === "ti.okunan" ? v : yukle("ti.okunan", []);
+    if(Array.isArray(o) && o.length > 2000){ o.splice(0, o.length - 2000); if(k !== "ti.okunan") localStorage.setItem("ti.okunan", JSON.stringify(o)); }
+  }catch(e){}
+}
 function yaz(k,v){
-  try{ localStorage.setItem(k,JSON.stringify(v)); return true; }
-  catch(e){
-    try{ localStorage.removeItem("ti.bellek"); localStorage.setItem(k,JSON.stringify(v)); return true; }
-    catch(e2){ S.dolu=true; return false; }
-  }
+  try{ localStorage.setItem(k,JSON.stringify(v)); S.dolu=false; return true; }catch(e){}
+  try{ localStorage.removeItem("ti.bellek"); localStorage.setItem(k,JSON.stringify(v)); S.dolu=false; return true; }catch(e){}
+  depoBudama(k, v);
+  try{ localStorage.setItem(k,JSON.stringify(v)); S.dolu=false; return true; }catch(e){}
+  try{ if(k !== "ti.ceviri"){ localStorage.removeItem("ti.ceviri"); localStorage.setItem(k,JSON.stringify(v)); S.dolu=false; return true; } }catch(e){}
+  S.dolu=true; return false;
 }
 
 /* ---------- Diller ---------- */

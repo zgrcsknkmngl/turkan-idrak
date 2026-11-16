@@ -2536,7 +2536,8 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
   arayuzuHazirla(S.dil).then(() => { arayuzuCiz(); ciz(); });
 
 /* ---------- Açılış: iki anka denizden çıkar, Ayasofya'nın üstünde buluşur, göğe yükselir (4,8 sn: Fetih suresi, 48) ---------- */
-/* ---------- Açılış: acilis.mp4 (19 sn) ----------
+/* ---------- Açılış: acilis.mp4 (yaklaşık 21,5 sn; 16 Kasım 2026'dan beri Tac Mahal'li yeni manzarayla açılır) ----------
+   "Türkan İdrak Tefekkür · turkanidrak.com" yazısı artık videonun içinde; video tek başına paylaşılınca da görünür, sayfa üstüne ayrıca yazmaz.
    Video, kendi bulanık kopyasının önünde kırpılmadan oynar.
    Video yüklenirken de, oynatılamazsa da videonun bir karesi (acilis-kare.jpg) görünür; oynatılamazsa kısa bir an sonra uygulamaya geçilir.
    Her taze açılışta oynar; "Atla" videonun 3. saniyesinden itibaren görünür. Okur 49 dakika içinde dönerse video oynamaz, uygulama kaldığı yerden açılır (bkz. "Kaldığı yer"). Bitince yumuşakça uygulamaya geçer. */
@@ -2596,7 +2597,6 @@ function acilisOynat(){
   });
   v.addEventListener("timeupdate", () => {
     if(v.currentTime >= 3) atla.classList.add("gorunur");
-    if(v.currentTime >= 16.3) ac.classList.add("marka-acik");
   });
   v.addEventListener("ended", () => kapat(750));
   v.addEventListener("error", kareyleBitir);

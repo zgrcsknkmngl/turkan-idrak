@@ -274,5 +274,25 @@
  "idsa.in": {
   "url": "https://idsa.in/feed",
   "tarih": "2026-11-16"
+ },
+ "plenglish.com": {
+  "url": "https://www.plenglish.com/feed/",
+  "tarih": "2026-11-16"
+ },
+ "capricaribbean.org": {
+  "url": "",
+  "tarih": "2026-11-16"
+ },
+ "rusi.org": {
+  "url": "",
+  "tarih": "2026-11-16"
+ },
+ "gorky.media": {
+  "url": "",
+  "tarih": "2026-11-16"
+ },
+ "reuters.com": {
+  "url": "",
+  "tarih": "2026-11-16"
  }
 }

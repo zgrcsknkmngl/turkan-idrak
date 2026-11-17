@@ -101,7 +101,7 @@
  },
  "smeru.or.id": {
   "url": "",
-  "tarih": "2026-11-08"
+  "tarih": "2026-11-17"
  },
  "gppi.net": {
   "url": "",
@@ -316,6 +316,14 @@
   "tarih": "2026-11-16"
  },
  "dgap.org": {
+  "url": "",
+  "tarih": "2026-11-17"
+ },
+ "grupofaro.org": {
+  "url": "https://grupofaro.org/feed/",
+  "tarih": "2026-11-17"
+ },
+ "policycenter.ma": {
   "url": "",
   "tarih": "2026-11-17"
  }

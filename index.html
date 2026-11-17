@@ -1042,7 +1042,7 @@ const S = {
   kayitli:   yukle("ti.kayitli", []),
   gozde:     new Set(yukle("ti.gozde", [])),
   gozdeFiltre: false,
-  otoCeviri: yukle("ti.otoCeviri", false),   // okur "Çevir"e bir kez dokunduysa akış her açılışta onun dilinde gelir
+  otoCeviri: false,   // her açılış özgün metinle başlar; okur "Çevir"e dokunursa o oturum boyunca çevrili gelir
   zaman:     0,          // 0 = bütün akış; 1, 7, 30 = son gün sayısı (kayan pencere, hatırlanmaz)
   ceviri:    yukle("ti.ceviri", {}),
   bellek:    yukle("ti.bellek",{}),
@@ -1211,7 +1211,8 @@ async function yedekliGetir(dosya, tur = "json"){
   for(const adres of sira){
     const anaMi = adres === ana;
     try{
-      const veri = await tekGetir(adres, tur, anaMi ? 5000 : 9000);
+      // Tam arşiv 9 MB: zayıf bağlantıda 5 saniyede inmez, yedek yola (bayat olabilir) kaçmasın; artık arkadan indiği için beklemek sorun değil
+      const veri = await tekGetir(adres, tur, dosya === "akis.json" ? 20000 : (anaMi ? 5000 : 9000));
       if(dosya !== "akis.json"){ if(anaMi) anaKapali(false); return veri; }
       // Akışta tazeliğe bakılır: ağ yokken telefondaki eski kopya dönmüş olabilir; taze olanı bulana kadar diğer yolları da dene
       if(!elde || akisTarihi(veri) > akisTarihi(elde)) elde = veri;
@@ -1230,6 +1231,71 @@ async function yedekliGetir(dosya, tur = "json"){
 async function akisiCek(){
   return yedekliGetir("akis.json", "json");
 }
+/* Küçük akış (akis-son.json): kaynak başına en yeni 8 yazı, yaklaşık 1 MB. Uygulama önce bunu alır, ekran hemen dolar;
+   9 MB'lık tam arşiv (akis.json) birkaç saniye sonra arkadan sessizce iner. Küçük dosya yoksa ya da bayatsa doğrudan tam arşiv. */
+async function kucukAkisiCek(){
+  try{
+    const v = await tekGetir("akis-son.json?t=" + Date.now(), "json", 6000);
+    return v && v.kaynaklar && Date.now() - akisTarihi(v) < 6*3600e3 ? v : null;
+  }catch(e){ return null; }
+}
+function akisiIsle(veri){
+  S.guncellendi = veri.guncellendi;
+  S.hata = [];
+  S.tum = new Map();
+  for(const [ad, kayit] of Object.entries(veri.kaynaklar||{})){
+    S.bilgi[ad] = {ulke:kayit.ulke||"", nitelik:kayit.nitelik||"", kimlik:kayit.kimlik||"", dil:kayit.dil||"", simge:kayit.simge||""};
+    for(const y of (kayit.yazilar||[])){ if(y.pay) S.tum.set(y.pay, y); S.tum.set(y.id, y); }
+    const mevcut = S.kaynaklar.find(k=>k.ad===ad);
+    if(mevcut) mevcut.tur = kayit.tur || mevcut.tur || "kurum";
+    else S.kaynaklar.push({ad, url:"", acik:true, sunucu:true, tur:kayit.tur||"kurum"});
+    S.bellek[ad] = {yazilar:(kayit.yazilar||[]).filter(taze).slice(0,150), zaman:Date.parse(kayit.tarandi)||Date.now()};
+    if(kayit.durum && kayit.durum!=="tamam") S.hata.push({ad, mesaj:kayit.durum});
+  }
+  // sunucunun artik taramadigi eski kaynaklar listeden kalksin (kapanan, adi degisen)
+  const sunucuda = new Set(Object.keys(veri.kaynaklar||{}));
+  if(sunucuda.size){
+    S.kaynaklar = S.kaynaklar.filter(k=>sunucuda.has(k.ad));
+    for(const ad of Object.keys(S.bellek)) if(!sunucuda.has(ad)) delete S.bellek[ad];
+    if(S.suzgec!=="hepsi" && !sunucuda.has(S.suzgec)) S.suzgec="hepsi";
+  }
+  yaz("ti.kaynaklar6", S.kaynaklar);
+  // cevrimdisi icin kucuk kopya: telefonun deposu dolmasin diye kaynak basina 20 yazi
+  yaz("ti.bellek", Object.fromEntries(Object.entries(S.bellek).map(([ad,v]) => [ad, {...v, yazilar:(v.yazilar||[]).slice(0,20).map(({ara, ...y}) => y)}])));
+}
+function tamAkisiGetir(){
+  setTimeout(async () => {
+    try{
+      const veri = await akisiCek();
+      if(!veri || !veri.kaynaklar) return;
+      akisiIsle(veri); S.tamGeldi = true; bellektenTopla();
+      const odak = document.activeElement;
+      if(!(odak && /^(INPUT|TEXTAREA|SELECT)$/.test(odak.tagName))){   // okur arama kutusuna yazıyorsa ekranı yeniden çizip bölme
+        const capa = S.ekran === "feed" ? capaBul() : null, yy = scrollY;
+        ciz();
+        const el = capa && document.querySelector('.entry[data-yid="' + CSS.escape(capa.id) + '"]');
+        if(el) scrollTo(0, Math.max(0, el.getBoundingClientRect().top + scrollY - capa.ust)); else scrollTo(0, yy);
+      }
+      depoBakim();
+    }catch(e){}
+  }, 1200);
+}
+/* Düzenli depo bakımı (günde bir kez, tam arşiv gelince): akışta artık olmayan yazıların çevirileri silinir, en çok 1500 çeviri
+   ve son 2000 okundu işareti kalır. Kayıtlı yazıların çevirilerine dokunulmaz. Depo böylece dolmadan kendiliğinden hafifler. */
+function depoBakim(){
+  try{
+    const bugun = new Date().toDateString();
+    if(localStorage.getItem("ti.bakim") === bugun) return;
+    const kayitli = new Set((S.kayitli||[]).map(y => y && y.id));
+    let degisti = false;
+    for(const id of Object.keys(S.ceviri)) if(!S.tum.has(id) && !kayitli.has(id)){ delete S.ceviri[id]; degisti = true; }
+    const an = Object.keys(S.ceviri);
+    if(an.length > 1500){ for(const a of an.slice(0, an.length - 1500)) if(!kayitli.has(a)) delete S.ceviri[a]; degisti = true; }
+    if(degisti) yaz("ti.ceviri", S.ceviri);
+    if(S.okunan.length > 2000){ S.okunan.splice(0, S.okunan.length - 2000); yaz("ti.okunan", S.okunan); }
+    localStorage.setItem("ti.bakim", bugun);
+  }catch(e){}
+}
 
 async function cek(){
   if(S.yukleniyor) return;
@@ -1245,36 +1311,18 @@ async function cek(){
   }
   const g=$("#tazele"); if(g) g.textContent="…";
 
-  try{
+  const kucuk = S.tamGeldi ? null : await kucukAkisiCek();
+  if(kucuk) akisiIsle(kucuk);
+  else try{
     const veri = await akisiCek();
-    S.guncellendi = veri.guncellendi;
-
-    S.tum = new Map();
-    for(const [ad, kayit] of Object.entries(veri.kaynaklar||{})){
-      S.bilgi[ad] = {ulke:kayit.ulke||"", nitelik:kayit.nitelik||"", kimlik:kayit.kimlik||"", dil:kayit.dil||"", simge:kayit.simge||""};
-      for(const y of (kayit.yazilar||[])){ if(y.pay) S.tum.set(y.pay, y); S.tum.set(y.id, y); }
-      const mevcut = S.kaynaklar.find(k=>k.ad===ad);
-      if(mevcut) mevcut.tur = kayit.tur || mevcut.tur || "kurum";
-      else S.kaynaklar.push({ad, url:"", acik:true, sunucu:true, tur:kayit.tur||"kurum"});
-      S.bellek[ad] = {yazilar:(kayit.yazilar||[]).filter(taze).slice(0,150), zaman:Date.parse(kayit.tarandi)||Date.now()};
-      if(kayit.durum && kayit.durum!=="tamam") S.hata.push({ad, mesaj:kayit.durum});
-    }
-    // sunucunun artik taramadigi eski kaynaklar listeden kalksin (kapanan, adi degisen)
-    const sunucuda = new Set(Object.keys(veri.kaynaklar||{}));
-    if(sunucuda.size){
-      S.kaynaklar = S.kaynaklar.filter(k=>sunucuda.has(k.ad));
-      for(const ad of Object.keys(S.bellek)) if(!sunucuda.has(ad)) delete S.bellek[ad];
-      if(S.suzgec!=="hepsi" && !sunucuda.has(S.suzgec)) S.suzgec="hepsi";
-    }
-    yaz("ti.kaynaklar6", S.kaynaklar);
-    // cevrimdisi icin kucuk kopya: telefonun deposu dolmasin diye kaynak basina 40 yazi
-    yaz("ti.bellek", Object.fromEntries(Object.entries(S.bellek).map(([ad,v]) => [ad, {...v, yazilar:(v.yazilar||[]).slice(0,20).map(({ara, ...y}) => y)}])));
+    akisiIsle(veri); S.tamGeldi = true; setTimeout(depoBakim, 1500);
   }catch(e){
     S.hata.push({ad:t("nav_idrak"), mesaj:e.message});
   }
 
   bellektenTopla();
   S.yukleniyor=false;
+  if(kucuk) tamAkisiGetir();
   if(g) g.textContent="";
   // paylasilan baglantidan gelindiyse yazinin tam halini yerlestir
   if(ACILIS && S.acilan){
@@ -1289,11 +1337,15 @@ async function cek(){
 }
 
 /* ---------- Çeviri: okurun seçtiği dile, yalnızca istenince ---------- */
-const trOf = y => { const c = S.ceviri[y.id]; if (!(c && (c.dil||"tr")===S.ceviriDili && !c.ayni)) return null;
+const trOf = y => { if(!y || S.orjIstek.has(y.id) || !(S.ceviriGoster || S.tekCevrilen.has(y.id))) return null; const c = S.ceviri[y.id]; if (!(c && (c.dil||"tr")===S.ceviriDili && !c.ayni)) return null;
   return {...c, baslik: ceviriDuzelt(c.baslik, y.baslik, c.dil||S.ceviriDili), ozet: ceviriDuzelt(c.ozet, y.ozet, c.dil||S.ceviriDili)}; };   // eski kayıtlı çeviriler de düzelir
 const cevrilmeli = y => { const c = S.ceviri[y.id]; return !(c && (c.dil||"tr")===S.ceviriDili); };
 S.orjIstek = new Set();   // bu oturumda okurun tek tek "orijinali" dediği yazılar: toplu ve kendiliğinden çeviri bunlara dokunmaz
-const topluCevrilmeli = y => cevrilmeli(y) && !S.orjIstek.has(y.id);
+/* Telefonda saklı çeviriler kendiliğinden gösterilmez: açılış hep özgün metinle. "Çevir" (hepsi) ya da kartın çevir düğmesi
+   o oturum için açar; saklı çeviri varsa ağa gitmeden anında gelir. */
+S.ceviriGoster = false; S.tekCevrilen = new Set();
+try{ localStorage.removeItem("ti.otoCeviri"); }catch(e){}
+const topluCevrilmeli = y => !S.orjIstek.has(y.id) && (cevrilmeli(y) || (!S.ceviriGoster && !S.tekCevrilen.has(y.id) && !(S.ceviri[y.id]||{}).ayni));
 
 /* Makine çevirisinin bilinen yanlışları, kaynağın kendi sözüne bakılarak düzeltilir (şimdilik Türkçe):
    "midterm elections" → ara sınav değil ara seçim; "swing state" → salıncak değil kararsız eyalet. */
@@ -1374,9 +1426,10 @@ function topluDugmesi(){
 }
 
 async function yaziyiCevir(id){
-  S.orjIstek.delete(id);
+  S.orjIstek.delete(id); S.tekCevrilen.add(id);
   const y = [...S.yazilar,...S.kayitli,S.acilan,...tefOgeleri()].filter(Boolean).find(x=>x.id===id);
-  if(!y || !cevrilmeli(y)) return;
+  if(!y) return;
+  if(!cevrilmeli(y)){ if(S.acilan && S.acilan.id===id) ciz(); else { kartiYenile(id); topluDugmesi(); } return; }   // saklı çeviri: anında
   const d = document.querySelector(`[data-cev="${id}"]`);
   if(d){ d.classList.add("busy"); d.lastElementChild.textContent = t("cevriliyor"); }
   try{
@@ -1389,20 +1442,20 @@ async function yaziyiCevir(id){
   }
 }
 function orijinaliGoster(id){
-  S.orjIstek.add(id);
-  delete S.ceviri[id]; yaz("ti.ceviri", S.ceviri);
+  S.orjIstek.add(id); S.tekCevrilen.delete(id);   // çeviri telefonda kalır, yeniden istenirse anında gelir
   if(S.acilan && S.acilan.id===id) ciz(); else { kartiYenile(id); topluDugmesi(); }
 }
 
 function orijinallereDon(){
-  S.otoCeviri = false; yaz("ti.otoCeviri", false);   // okur özgün metne döndü: bir dahaki açılışta da özgün
-  ekrandakiler().forEach(y => { const c = S.ceviri[y.id]; if(c && (c.dil||"tr") === S.ceviriDili) delete S.ceviri[y.id]; });
-  yaz("ti.ceviri", S.ceviri); ciz();
+  S.otoCeviri = false; S.ceviriGoster = false; S.tekCevrilen.clear();   // özgün metne dönüş; çeviriler telefonda kalır
+  ciz();
 }
 
 async function hepsiniCevir(){
   if(S.topluCeviri) return;
-  S.otoCeviri = true; yaz("ti.otoCeviri", true);   // yeni görünen yazılar da çevrilsin; seçim sonraki açılışlarda da sürer
+  const ilk = !S.ceviriGoster;
+  S.otoCeviri = true; S.ceviriGoster = true;   // bu oturumda yeni görünen yazılar da çevrilsin; bir sonraki açılış yine özgün metinle
+  if(ilk) ekrandakiler().forEach(y => kartiYenile(y.id));   // daha önce çevrilmiş olanlar ağa gitmeden hemen görünsün
   const liste = ekrandakiler().filter(topluCevrilmeli);
   if(!liste.length){ topluDugmesi(); return; }
   S.topluCeviri = true; S.topluKalan = liste.length; topluDugmesi();

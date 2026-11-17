@@ -1367,6 +1367,11 @@ function ingilizceBaslik(b) {
     for (const y of k.yazilar) { delete y.baslikTr; delete y.ozetTr; delete y.dil; y.ozet = ozetDuzelt(y.ozet, y.baslik); }
 
   fs.writeFileSync("akis.json", JSON.stringify(sonuc));
+  // Küçük akış: kaynak başına en yeni 8 yazı, arama alanı olmadan (~1 MB). Uygulama önce bunu alır, ekran hemen dolar;
+  // tam arşiv (akis.json) arkadan iner.
+  const kucuk = { ...sonuc, kaynaklar: Object.fromEntries(Object.entries(sonuc.kaynaklar).map(([ad, k]) =>
+    [ad, { ...k, yazilar: (k.yazilar || []).slice(0, 8).map(({ ara, ...y }) => y) }])) };
+  fs.writeFileSync("akis-son.json", JSON.stringify(kucuk));
   const toplam = Object.values(sonuc.kaynaklar).reduce((n, k) => n + k.yazilar.length, 0);
   console.log(`\nakis.json yazıldı — ${toplam} yazı`);
 

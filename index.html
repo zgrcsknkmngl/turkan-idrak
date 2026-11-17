@@ -384,6 +384,13 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
     .masthead{position:relative;padding-top:0!important}   /* manzaranın üstünde mavi şerit kalmasın */
     .masthead .bas{position:absolute;left:0;right:0;top:0;z-index:2;padding:10px 18px 0}
     .manzara{aspect-ratio:2064/512!important;height:auto;margin:0 -18px!important;background-size:100% 100%!important}
+    /* Manzaranın yüksekliği pencerenin en çok üçte biri (18 Kasım 2026): manzara bu yüksekliğe sığacak kadar küçülür, hiçbir yapısı kırpılmaz;
+       geniş ekranda iki yanı aynı manzaranın göğü ve denizi doldurur (dunya-*-genis). Kartlara ekranın üçte ikisi kalır, fotoğraflar küçülmez. */
+    .manzara{aspect-ratio:auto!important;height:min(calc(100vw * 512 / 2064), 33vh)!important;background-size:cover!important;background-position:50% 100%!important;
+      background-image:url(dunya-gece-genis.jpg)!important;
+      background-image:image-set(url(dunya-gece-genis.webp) type("image/webp"), url(dunya-gece-genis.jpg) type("image/jpeg"))!important}
+    :root[data-tema="acik"] .manzara{background-image:url(dunya-gunduz-genis.jpg)!important;
+      background-image:image-set(url(dunya-gunduz-genis.webp) type("image/webp"), url(dunya-gunduz-genis.jpg) type("image/jpeg"))!important}
     .manzara::before{content:"";position:absolute;left:0;right:0;top:0;height:42%;z-index:1;
       background:linear-gradient(color-mix(in srgb,var(--ink) 72%,transparent),transparent)}
     #katlar{position:relative;z-index:3;margin-top:-58px;min-height:58px;box-sizing:border-box;border-bottom:none;
@@ -1949,6 +1956,12 @@ function kartlariSigdirAsil(){
         y.style.display = "none"; h = b; tas = h.getBoundingClientRect().bottom - alt();
       }
       if (tas > 0) { k.style.height = Math.max(60, k.getBoundingClientRect().height - tas - 2) + "px"; k.style.flex = "none"; }
+    }
+    if (k) {   // Özet sığmadıysa ya da kısa kaldıysa kartın altında boşluk kalmasın: artan yeri fotoğraf doldurur
+      let enAlt = 0;
+      for (const x of [b, y, s]) if (x && x.style.display !== "none" && x.offsetParent) enAlt = Math.max(enAlt, x.getBoundingClientRect().bottom);
+      const bos = enAlt ? alt() - enAlt : 0;
+      if (bos > 14) { k.style.height = (k.getBoundingClientRect().height + bos - 4) + "px"; k.style.flex = "none"; }
     }
   }
   kapaklariCercevele();

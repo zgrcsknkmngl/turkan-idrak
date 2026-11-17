@@ -362,5 +362,33 @@
  "thebookseller.com": {
   "url": "",
   "tarih": "2026-11-17"
+ },
+ "moroccoworldnews.com": {
+  "url": "https://www.moroccoworldnews.com/feed/",
+  "tarih": "2026-11-17"
+ },
+ "lpem.org": {
+  "url": "",
+  "tarih": "2026-11-17"
+ },
+ "mecouncil.org": {
+  "url": "https://mecouncil.org/feed/",
+  "tarih": "2026-11-17"
+ },
+ "bajetihub.org": {
+  "url": "https://bajetihub.org/feed/",
+  "tarih": "2026-11-17"
+ },
+ "ideas.org.my": {
+  "url": "",
+  "tarih": "2026-11-17"
+ },
+ "fund.ar": {
+  "url": "https://fund.ar/feed/",
+  "tarih": "2026-11-17"
+ },
+ "mubi.com": {
+  "url": "",
+  "tarih": "2026-11-17"
  }
 }

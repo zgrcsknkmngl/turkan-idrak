@@ -137,7 +137,7 @@ const KAYNAKLAR = [
   { ad:"Kommersant", ulke:"Rusya", tur:"ajans", kimlik:"özel", url:"https://www.kommersant.ru/RSS/main.xml", yedek:"https://news.google.com/rss/search?q=site:kommersant.ru+when:7d&hl=ru&gl=RU&ceid=RU:ru" },
   { ad:"ProPublica", ulke:"ABD",         tur:"ajans", ulke:"ABD", kimlik:"vakıf", url:"https://www.propublica.org/feeds/propublica/main" },         // ✓
   { ad:"Mongabay", ulke:"ABD",           tur:"ajans", ulke:"ABD", kimlik:"vakıf", url:"https://news.mongabay.com/feed" },                           // ✓
-  { ad:"Gazete Oksijen", ulke:"Türkiye",                tur:"ajans", url:"https://news.google.com/rss/search?q=site:gazeteoksijen.com+when:120d&hl=tr&gl=TR&ceid=TR:tr", coz:true },
+  { ad:"Gazete Oksijen", ulke:"Türkiye",                tur:"ajans", url:"https://news.google.com/rss/search?q=site:gazeteoksijen.com+when:120d&hl=tr&gl=TR&ceid=TR:tr", coz:true, numara:/-(\d{5,})\/?$/ },
   // 12 Ekim 2026: yeni kaynaklar (besleme adresleri yayincilarin guncel adresleriyle dogrulandi)
   { ad:"EDAM", ulke:"Türkiye", tur:"kurum", url:"https://edam.org.tr/feed/", yedek:"https://news.google.com/rss/search?q=site:edam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr" },
   // 15 Kasım 2026: okurun isteğiyle; Mavi Vatan doktrininin kurucusu E. Koramiral Cem Gürdeniz'in yayını. İdrak'taki ilk tek kişilik ses
@@ -1273,6 +1273,32 @@ async function haritaGorselleri(sonuc) {
   console.log(`Haber site haritaları: ${isler.length} kaynak, ${siteSayisi} sitenin haritasında görsel var; ${gorsel} görsel, ${baglanti} bağlantı, ${saat} yayın saati düzeltildi`);
 }
 
+/* ---------- numara sırası ----------
+   Bazı yayıncılar haber adresinin sonuna artan bir numara koyar (Gazete Oksijen: …-296251); numarası büyük olan haber
+   sonra yayımlanmıştır. Bu kaynaklar sunucumuza kapalı olduğu için Google Haberler'den geliyor ve Google'ın saati
+   haberi dizine aldığı an olup bir gün kadar geç kalabiliyor. Bir haber, kendisinden sonra yayımlanmış bir haberden
+   daha yeni olamaz: saati, daha büyük numaralı haberlerin en erken saatine çekilir. Böylece gösterilen saat, haberin
+   en geç yayımlanmış olabileceği saattir (Oksijen'in iki haberinde sayfadaki saatle farkı yarım saat çıktı). */
+function numaraSirasi(sonuc) {
+  let duzelen = 0;
+  for (const k of KAYNAKLAR) {
+    if (!k.numara) continue;
+    const kayit = sonuc.kaynaklar[k.ad];
+    if (!kayit || !kayit.yazilar) continue;
+    const sirali = kayit.yazilar
+      .map(y => { const m = String(y.link || "").match(k.numara); return m ? [Number(m[1]), y] : null; })
+      .filter(Boolean).sort((a, b) => b[0] - a[0]);   // en büyük numara (en son yayımlanan) önce
+    let enErken = Infinity;
+    for (const [, y] of sirali) {
+      const t = zaman(y);
+      if (!t) continue;
+      if (t > enErken + 60e3) { y.tarih = new Date(enErken).toUTCString(); duzelen++; }
+      else enErken = Math.min(enErken, t);
+    }
+  }
+  console.log(`Numara sırası: ${duzelen} yazının saati yayın sırasına göre düzeltildi`);
+}
+
 /* ---------- kaynak simgeleri ---------- */
 const SIMGE_KLASORU = "simge";
 function alanBul(k) {
@@ -1539,6 +1565,8 @@ function ingilizceBaslik(b) {
     }
   }
   console.log(`Google Haberler baglantisi: ${cozuldu} cozuldu (${gorselli} gorsel), ${gnCozulen} denendi, ${bekleyen.length - cozuldu} kaldi`);
+
+  try { numaraSirasi(sonuc); } catch (e) { console.log("Numara sırası atlandı: " + e.message); }
 
   try { await aramaKarsiliklari(sonuc); } catch (e) { console.log("Türkçe arama karşılığı atlandı: " + e.message); }
 

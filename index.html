@@ -330,6 +330,25 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .kapak-alan .rozet{width:76px;height:76px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;
     box-shadow:0 8px 24px rgba(0,0,0,.28)}
   .kapak-alan .rozet img{width:54px;height:54px;object-fit:contain;border-radius:8px}
+  /* Resmini alamadığımız yazılar: İznik'in iki rengi, sol üstten Türk mavisi, sağ alttan kırmızı; ortada küçük simge ve kaynağın adı.
+     Yalnızca resmi olmayan ya da resmi yüklenemeyen kartlarda; resimli kartlar olduğu gibi kalır. */
+  .kapak-alan .kad{display:none}
+  .kapak-alan.resimsiz{background:
+      radial-gradient(ellipse 70% 120% at 12% 10%,rgba(47,184,198,.66),rgba(47,184,198,0) 66%),
+      radial-gradient(ellipse 70% 120% at 88% 92%,rgba(255,97,102,.55),rgba(255,97,102,0) 66%),
+      linear-gradient(158deg,#123058,#0F1E3A)}
+  .kapak-alan.resimsiz .yer{flex-direction:column;gap:9px}
+  .kapak-alan.resimsiz .rozet{width:44px;height:44px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.30)}
+  .kapak-alan.resimsiz .rozet img{width:30px;height:30px}
+  .kapak-alan.resimsiz .harf{font-size:34px;color:#EEF3FA}
+  .kapak-alan.resimsiz .kad{display:block;max-width:88%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;
+      font:500 11.5px var(--sans);letter-spacing:.26em;text-transform:uppercase;color:#C9D6EA;text-shadow:0 1px 6px rgba(0,0,0,.45)}
+  :root[data-tema="acik"] .kapak-alan.resimsiz{background:
+      radial-gradient(ellipse 70% 120% at 12% 10%,rgba(47,184,198,.42),rgba(47,184,198,0) 66%),
+      radial-gradient(ellipse 70% 120% at 88% 92%,rgba(255,97,102,.32),rgba(255,97,102,0) 66%),
+      linear-gradient(158deg,#E6F0F8,#D3E3F0)}
+  :root[data-tema="acik"] .kapak-alan.resimsiz .kad{color:#2A4466;text-shadow:none}
+  :root[data-tema="acik"] .kapak-alan.resimsiz .harf{color:#2A4466}
   .entry h2{font-family:var(--serif);font-weight:500;font-size:19.5px;line-height:1.28;margin:0 0 6px}
   .orig{font-size:13px;color:var(--dim);font-style:italic;margin:0 0 8px}
   .entry .orig{font-size:12.5px;margin:0 0 6px}
@@ -1832,13 +1851,17 @@ function rozetHata(img){
 }
 function kapakAlani(y, ad, ek){
   const harf = kac(ad.trim()[0] || "İ");
-  const simge = (S.bilgi[y.kaynak] || y.kb || {}).simge;
+  const bilgi = S.bilgi[y.kaynak] || y.kb || {};
+  const simge = bilgi.simge;
+  // kaynağın adı kendi dilinin kuralıyla büyük harfe çevrilir ("Financial Times" → FINANCIAL, FİNANCİAL değil)
+  const dil = String(bilgi.dil || "").split("-")[0].toLowerCase() || (/[çğıöşüİ]/i.test(ad) ? "tr" : "en");
+  const kad = `<span class="kad" lang="${kac(dil)}">${kac(ad)}</span>`;
   const zemin = simge
-    ? `<div class="yer"><span class="rozet"><img src="${kac(simge)}" alt="" loading="lazy" data-h="${harf}" onerror="rozetHata(this)"></span></div>`
-    : `<div class="yer"><span class="harf">${harf}</span></div>`;
+    ? `<div class="yer"><span class="rozet"><img src="${kac(simge)}" alt="" loading="lazy" data-h="${harf}" onerror="rozetHata(this)"></span>${kad}</div>`
+    : `<div class="yer"><span class="harf">${harf}</span>${kad}</div>`;
   const gorsel = y.gorsel
-    ? `<img class="bulanik" src="${kac(y.gorsel)}" alt="" aria-hidden="true" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"><img class="kapak" src="${kac(y.gorsel)}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="kapakCercevele(this)" onerror="this.parentElement.classList.remove('tam');this.remove()">` : "";
-  return `<div class="kapak-alan">${zemin}${gorsel}${ek || ""}</div>`;
+    ? `<img class="bulanik" src="${kac(y.gorsel)}" alt="" aria-hidden="true" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"><img class="kapak" src="${kac(y.gorsel)}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="kapakCercevele(this)" onerror="this.parentElement.classList.remove('tam');this.parentElement.classList.add('resimsiz');this.remove()">` : "";
+  return `<div class="kapak-alan${y.gorsel ? "" : " resimsiz"}">${zemin}${gorsel}${ek || ""}</div>`;
 }
 
 /* Yazarın adı: kaynağın kendi adı, kurum hesabı ya da genel bir imzaysa gösterilmez */

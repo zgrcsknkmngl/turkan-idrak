@@ -740,7 +740,7 @@ function ortakOzetleriAyikla(liste) {
    paylaşım etiketlerinden (og:description, og:image) tamamla. */
 function sayfaMetasi(bas, url) {
   const meta = ad => {
-    const etiket = bas.match(new RegExp("<meta[^>]+(?:property|name)=[\"']" + ad + "[\"'][^>]*>", "i"));
+    const etiket = bas.match(new RegExp("<meta[^>]+(?:property|name|itemprop)=[\"']" + ad + "[\"'][^>]*>", "i"));
     if (!etiket) return "";
     const c = etiket[0].match(/content=["']([^"']*)["']/i);
     return c ? c[1] : "";
@@ -758,7 +758,22 @@ function sayfaMetasi(bas, url) {
   let gorsel = meta("og:image") || meta("og:image:url") || meta("twitter:image") || meta("twitter:image:src");
   if (!gorsel) { const l = bas.match(/<link[^>]+rel=["']image_src["'][^>]*href=["']([^"']+)["']/i); if (l) gorsel = l[1]; }
   if (gorsel) { try { gorsel = temizUrl(new URL(coz(gorsel), url).href) || ""; } catch (e) { gorsel = ""; } }
-  return { aciklama, gorsel };
+  // yayıncının kendi yazdığı yayın zamanı (Google Haberler'in verdiği saat, haberi dizine aldığı an olabiliyor)
+  const ham = meta("article:published_time") || meta("og:article:published_time") || meta("datePublished") ||
+              meta("parsely-pub-date") || meta("sailthru.date") || meta("publish-date") || meta("pubdate") ||
+              ((bas.match(/"datePublished"\s*:\s*"([^"]+)"/) || [])[1]) || "";
+  return { aciklama, gorsel, yayin: yayinZamani(ham) };
+}
+// geçerli ve makul bir yayın zamanıysa UTC biçiminde döndürür (gelecekten ya da 2000 öncesinden gelen değer sayılmaz)
+function yayinZamani(ham) {
+  const t = Date.parse(String(ham || "").trim());
+  return t && t > 946684800000 && t < Date.now() + 36e5 ? new Date(t).toUTCString() : "";
+}
+// Google Haberler'den gelen yazıda saati yayıncının verdiğiyle düzelt; sonraki taramalar bu düzeltmeyi korur (ytarih)
+function yayinciSaati(y, yayin) {
+  if (!yayin) return false;
+  y.tarih = yayin; y.ytarih = yayin;
+  return true;
 }
 async function sayfaBilgisi(url) {
   if (!url) return null;
@@ -1100,18 +1115,21 @@ function siteDosyalari(oncekiTaban) {
 // Bir taramada yazı sayfalarına en fazla bu kadar gidilir; yeni kaynak eklenince ilk tarama saatler sürmesin
 let SAYFA_HAKKI = 150;
 
-/* ---------- haber site haritalarından görsel ----------
+/* ---------- haber site haritaları: görsel, yayıncı adresi ve yayın saati ----------
    Bazı yayıncılar (The Economist, Financial Times, Reuters…) yazı sayfalarını sunucudan gelen isteklere kapatıyor,
-   beslemelerine de görsel koymuyor. Ama arama motorları için kendi yayımladıkları haber site haritası
-   (Google News sitemap) yazının adresini, başlığını ve görselini birlikte veriyor. Görseli eksik yazılar oradan
-   tamamlanır; Google Haberler bağlantısı başlıktan eşleşirse yayıncının kendi adresine de çevrilir.
+   beslemelerine de görsel koymuyor. Kendi beslemesi olmayan kaynaklar da Google Haberler'den geliyor; Google'ın
+   verdiği saat, haberi dizine aldığı an olabiliyor ve saatlerce geç kalabiliyor. Arama motorları için yayıncının kendi
+   yayımladığı haber site haritası (Google News sitemap) ise yazının adresini, başlığını, görselini ve yayın saatini
+   birlikte veriyor. Görseli eksik yazılar oradan tamamlanır; Google Haberler'den gelen yazının bağlantısı yayıncının
+   adresine, saati de yayıncının saatine çevrilir.
    Tahmin edilen adres yoktur: yalnızca sitenin robots.txt dosyasında kendisinin ilan ettiği haritalar okunur.
-   Bulunan (ya da bulunamayan) haritalar site-haritalari.json'a yazılır; bulunamayan site bir hafta yeniden yoklanmaz. */
+   Her sitenin yoklama ve okuma sonucu site-haritalari.json'a yazılır (ne ilan edilmiş, okunabildi mi, kaç eşleşme). */
 const HARITA_DOSYA = "site-haritalari.json";
+const HARITA_SURUM = 2;
 let HARITALAR = {};
 try { HARITALAR = JSON.parse(fs.readFileSync(HARITA_DOSYA, "utf8")) || {}; } catch (e) { HARITALAR = {}; }
 const HARITA_PENCERE_GUN = 4;   // haber haritaları son iki günü tutar; biraz pay bırakılır
-let HARITA_KESIF_HAKKI = 40;    // bir taramada robots.txt'i ilk kez yoklanacak en çok site; kalanlar sonraki taramalara
+let HARITA_KESIF_HAKKI = 40;    // bir taramada robots.txt'i yoklanacak en çok site; kalanlar sonraki taramalara
 
 async function haritaMetni(url, sinir = 4e6, sure = 12000) {
   const c = await fetch(url, {
@@ -1135,7 +1153,7 @@ function haritaOku(x) {
     if (!/^https?:\/\//i.test(loc)) continue;
     let gorsel = xmlDeger(b, "image:loc");
     if (gorsel) { try { gorsel = temizUrl(new URL(gorsel, loc).href) || ""; } catch (e) { gorsel = ""; } }
-    out.push({ loc, gorsel, baslik: temiz(xmlDeger(b, "news:title")) });
+    out.push({ loc, gorsel, baslik: temiz(xmlDeger(b, "news:title")), yayin: yayinZamani(xmlDeger(b, "news:publication_date")) });
   }
   return out;
 }
@@ -1144,15 +1162,18 @@ function haritaOku(x) {
    "news" haritaları ya da doğrudan haber etiketi (news:news) taşıyan haritalar. */
 async function haberHaritalari(alan, hostlar) {
   const k = HARITALAR[alan];
-  if (k && k.denendi && Date.now() - Date.parse(k.denendi) < 7 * 864e5) return k.haritalar || [];
+  if (k && k.surum === HARITA_SURUM && k.denendi && Date.now() - Date.parse(k.denendi) < 7 * 864e5) return k.haritalar || [];
   if (HARITA_KESIF_HAKKI <= 0) return (k && k.haritalar) || [];
   HARITA_KESIF_HAKKI--;
-  let haritalar = [];
+  const kayit = { surum: HARITA_SURUM, denendi: new Date().toISOString().slice(0, 10), haritalar: [], robots: "", ilan: [] };
   for (const host of hostlar) {
     let robots;
-    try { robots = await haritaMetni(`https://${host}/robots.txt`, 300000, 6000); } catch (e) { continue; }
-    if (!/user-agent|sitemap:/i.test(robots) || /<html/i.test(robots)) continue;
+    try { robots = await haritaMetni(`https://${host}/robots.txt`, 300000, 6000); }
+    catch (e) { kayit.robots = `${host}: ${e.message}`; continue; }
+    if (!/user-agent|sitemap:/i.test(robots) || /<html/i.test(robots)) { kayit.robots = `${host}: robots.txt değil`; continue; }
+    kayit.robots = `${host}: okundu`;
     const ilan = [...robots.matchAll(/^\s*sitemap:\s*(\S+)/gim)].map(m => m[1].trim()).filter(u => /^https?:\/\//i.test(u));
+    kayit.ilan = ilan.slice(0, 10);
     let haber = ilan.filter(u => /news/i.test(u));
     if (!haber.length) {
       for (const u of ilan.slice(0, 4)) {
@@ -1164,11 +1185,12 @@ async function haberHaritalari(alan, hostlar) {
         if (haber.length) break;
       }
     }
-    haritalar = [...new Set(haber)].slice(0, 3);
-    if (haritalar.length) break;
+    kayit.haritalar = [...new Set(haber)].slice(0, 3);
+    if (kayit.haritalar.length) break;
   }
-  HARITALAR[alan] = { denendi: new Date().toISOString().slice(0, 10), haritalar };
-  return haritalar;
+  if (k && k.son) kayit.son = k.son;
+  HARITALAR[alan] = kayit;
+  return kayit.haritalar;
 }
 
 const adresAnahtari = u => {
@@ -1184,7 +1206,8 @@ async function haritaGorselleri(sonuc) {
   for (const k of KAYNAKLAR) {
     const kayit = sonuc.kaynaklar[k.ad];
     if (!kayit || !kayit.yazilar) continue;
-    const eksik = kayit.yazilar.filter(y => !y.gorsel && zaman(y) >= sinir);
+    const gn = gnMi(k.url);   // Google Haberler'den gelen kaynakta saat ve bağlantı da düzeltilecek
+    const eksik = kayit.yazilar.filter(y => zaman(y) >= sinir && (!y.gorsel || (gn && (!y.ytarih || gnMi(y.link)))));
     if (!eksik.length) continue;
     const alan = alanBul(k);
     if (!alan || /(^|\.)(google|youtube|substack|medium|wordpress|blogspot|patreon|bsky)\./.test(alan)) continue;
@@ -1193,55 +1216,61 @@ async function haritaGorselleri(sonuc) {
     for (const y of kayit.yazilar) if (!gnMi(y.link)) { try { const h = new URL(y.link).hostname; sayac.set(h, (sayac.get(h) || 0) + 1); } catch (e) {} }
     const hostlar = [...new Set([...[...sayac].sort((a, b) => b[1] - a[1]).map(([h]) => h).filter(h => h.endsWith(alan)).slice(0, 1),
                                  "www." + alan, alan])];
-    isler.push({ alan, hostlar, eksik });
+    isler.push({ alan, hostlar, eksik, gn });
   }
-  // en çok görseli eksik olan kaynaklar önce yoklanır (yoklama hakkı sınırlı)
+  // en çok eksiği olan kaynaklar önce yoklanır (yoklama hakkı sınırlı)
   isler.sort((a, b) => b.eksik.length - a.eksik.length);
   const okunan = new Map();   // aynı alan adını paylaşan kaynaklar (Bloomberg ve Bloomberg Opinion gibi) haritayı bir kez okur
-  const girdileriAl = alan => okunan.get(alan);
-  let siteSayisi = 0, gorsel = 0, baglanti = 0, sira = 0;
+  let siteSayisi = 0, gorsel = 0, baglanti = 0, saat = 0, sira = 0;
   await Promise.all(Array.from({ length: 6 }, async () => {
     while (sira < isler.length) {
-      const { alan, hostlar, eksik } = isler[sira++];
+      const { alan, hostlar, eksik, gn } = isler[sira++];
       if (!okunan.has(alan)) okunan.set(alan, (async () => {
         const haritalar = await haberHaritalari(alan, hostlar);
-        const girdiler = [];
+        const girdiler = [], hatalar = [];
         for (const h of haritalar) {
           try {
             let x = await haritaMetni(h);
             if (/<sitemapindex/i.test(x)) { const ilk = haritaKonumlari(x)[0]; x = ilk ? await haritaMetni(ilk) : ""; }
             girdiler.push(...haritaOku(x));
-          } catch (e) {}
+          } catch (e) { hatalar.push(e.message); }
         }
+        if (haritalar.length && HARITALAR[alan]) HARITALAR[alan].son = {
+          tarih: new Date().toISOString().slice(0, 16), girdi: girdiler.length,
+          gorselli: girdiler.filter(g => g.gorsel).length, saatli: girdiler.filter(g => g.yayin).length,
+          eslesen: 0, hata: hatalar.join("; ").slice(0, 200)
+        };
         if (girdiler.some(g => g.gorsel)) siteSayisi++;
         return girdiler;
       })());
-      const girdiler = await girdileriAl(alan);
+      const girdiler = await okunan.get(alan);
+      if (!girdiler.length) continue;
       const adresle = new Map(), baslikla = new Map();
       for (const g of girdiler) {
-        if (!g.gorsel) continue;
         adresle.set(adresAnahtari(g.loc), g);
         if (g.baslik) baslikla.set(baslikAnahtari(g.baslik), g);
       }
-      if (!adresle.size) continue;
+      let eslesen = 0;
       for (const y of eksik) {
-        if (y.gorsel) continue;
         const ak = gnMi(y.link) ? "" : adresAnahtari(y.link);
         let g = ak ? adresle.get(ak) : null;
         // beslemedeki adres kısaltılmışsa (ör. kesik kısa ad) haritadaki tam adresin başıyla eşleşir
         if (!g && ak.length >= 30) for (const [a, v] of adresle) if (a.startsWith(ak)) { g = v; break; }
         if (!g) g = baslikla.get(baslikAnahtari(y.baslik)) || null;
         if (!g) continue;
-        y.gorsel = g.gorsel; gorsel++;
-        if (gnMi(y.link) && adresAnahtari(g.loc).split("/")[0].endsWith(alan)) {
+        eslesen++;
+        if (!y.gorsel && g.gorsel) { y.gorsel = g.gorsel; gorsel++; }
+        if (gn && gnMi(y.link) && adresAnahtari(g.loc).split("/")[0].endsWith(alan)) {
           if (!y.pay) y.pay = payKodu(y);
           y.link = g.loc; baglanti++;
         }
+        if (gn && !y.ytarih && yayinciSaati(y, g.yayin)) saat++;
       }
+      if (HARITALAR[alan] && HARITALAR[alan].son) HARITALAR[alan].son.eslesen += eslesen;
     }
   }));
   try { fs.writeFileSync(HARITA_DOSYA, JSON.stringify(HARITALAR, null, 1)); } catch (e) {}
-  console.log(`Haber site haritaları: ${isler.length} kaynak yoklandı, ${siteSayisi} sitenin haritasında görsel var; ${gorsel} yazıya görsel, ${baglanti} bağlantı yayıncının adresine çevrildi`);
+  console.log(`Haber site haritaları: ${isler.length} kaynak, ${siteSayisi} sitenin haritasında görsel var; ${gorsel} görsel, ${baglanti} bağlantı, ${saat} yayın saati düzeltildi`);
 }
 
 /* ---------- kaynak simgeleri ---------- */
@@ -1405,6 +1434,7 @@ function ingilizceBaslik(b) {
         if (!y.ozet && e.ozet) y.ozet = e.ozet;
         if (e.zng) y.zng = 1;
         if (e.zng2) y.zng2 = 1;
+        if (e.ytarih) { y.tarih = e.ytarih; y.ytarih = e.ytarih; }
         if (gnMi(y.link) && e.link && !gnMi(e.link)) y.link = e.link;
         if (e.czd) y.czd = e.czd;
         if (e.pay && !y.pay) y.pay = e.pay;
@@ -1421,6 +1451,7 @@ function ingilizceBaslik(b) {
           if (b) {
             if (!y.gorsel && b.gorsel) y.gorsel = b.gorsel;
             if (!y.ozet && b.aciklama) y._sayfaOzeti = b.aciklama;
+            if (gnMi(k.url) && !y.ytarih) yayinciSaati(y, b.yayin);
           }
           y.zng = 1; y.zng2 = 1;
         }));
@@ -1500,9 +1531,10 @@ function ingilizceBaslik(b) {
     if (!a) { y.czd = (y.czd || 0) + 1; continue; }   // Google o an vermediyse sonraki taramalarda yeniden denenir; üç denemeden sonra bırakılır
     if (!y.pay) y.pay = payKodu(y);
     y.link = a; cozuldu++;
-    if (!y.gorsel) {
+    if (!y.gorsel || !y.ytarih) {
       const b = await sayfaBilgisi(a);
-      if (b && b.gorsel) { y.gorsel = b.gorsel; gorselli++; }
+      if (b && b.gorsel && !y.gorsel) { y.gorsel = b.gorsel; gorselli++; }
+      if (b && !y.ytarih) yayinciSaati(y, b.yayin);
       y.zng = 1;
     }
   }
@@ -1518,7 +1550,7 @@ function ingilizceBaslik(b) {
   // Küçük akış: kaynak başına en yeni 8 yazı, arama alanı olmadan (~1 MB). Uygulama önce bunu alır, ekran hemen dolar;
   // tam arşiv (akis.json) arkadan iner.
   const kucuk = { ...sonuc, kaynaklar: Object.fromEntries(Object.entries(sonuc.kaynaklar).map(([ad, k]) =>
-    [ad, { ...k, yazilar: (k.yazilar || []).slice(0, 8).map(({ ara, ...y }) => y) }])) };
+    [ad, { ...k, yazilar: (k.yazilar || []).slice().sort((a, b) => zaman(b) - zaman(a)).slice(0, 8).map(({ ara, ...y }) => y) }])) };
   fs.writeFileSync("akis-son.json", JSON.stringify(kucuk));
   const toplam = Object.values(sonuc.kaynaklar).reduce((n, k) => n + k.yazilar.length, 0);
   console.log(`\nakis.json yazıldı — ${toplam} yazı`);

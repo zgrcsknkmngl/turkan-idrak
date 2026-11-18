@@ -315,7 +315,7 @@ const KAYNAKLAR = [
   { ad:"Los Angeles Review of Books", ulke:"ABD", tur:"kitap", url:"https://lareviewofbooks.org/feed/", yedek:"https://news.google.com/rss/search?q=site:lareviewofbooks.org+when:30d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"The Paris Review", ulke:"ABD", tur:"kitap", url:"https://www.theparisreview.org/blog/feed/", yedek:"https://news.google.com/rss/search?q=site:theparisreview.org+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Publishers Weekly", ulke:"ABD", tur:"kitap", url:"https://www.publishersweekly.com/pw/feeds/recent/index.xml", yedek:"https://news.google.com/rss/search?q=site:publishersweekly.com+when:14d&hl=en-US&gl=US&ceid=US:en" },
-  { ad:"Kirkus Reviews", ulke:"ABD", tur:"kitap", url:"https://news.google.com/rss/search?q=site:kirkusreviews.com+when:30d&hl=en-US&gl=US&ceid=US:en" },
+  { ad:"Kirkus Reviews", ulke:"ABD", tur:"kitap", url:"https://news.google.com/rss/search?q=site:kirkusreviews.com+when:30d&hl=en-US&gl=US&ceid=US:en", kesfet:true },
   { ad:"The Guardian Books", ulke:"İngiltere", tur:"kitap", url:"https://www.theguardian.com/books/rss" },
   { ad:"Words Without Borders", ulke:"ABD", tur:"kitap", url:"https://wordswithoutborders.org/feed/", yedek:"https://news.google.com/rss/search?q=site:wordswithoutborders.org+when:90d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"Asymptote", ulke:"Uluslararası", tur:"kitap", url:"https://www.asymptotejournal.com/blog/feed/", yedek:"https://news.google.com/rss/search?q=site:asymptotejournal.com+when:90d&hl=en-US&gl=US&ceid=US:en" },
@@ -867,7 +867,7 @@ async function cek(kaynak, deneme = 0) {
 /* Google Haberler'den gelen yazıların bağlantısı news.google.com'a gider; okur o sayfayı kendi diline çeviremez.
    Her taramada sınırlı sayıda bağlantı yayıncının kendi adresine çevrilir (Google'ın kendi sayfasının kullandığı yol).
    Olmazsa bağlantı olduğu gibi kalır; hiçbir şey bozulmaz. */
-const GN_COZ_SINIRI = 30;  // bir taramada en çok bu kadar bağlantı; yalnız kendi beslemesi bulunamayan (coz:true) kaynaklarda
+const GN_COZ_SINIRI = 30;  // bir taramada en çok bu kadar bağlantı (Google'ı yormamak için); en yeni yazılar önce
 let gnCozulen = 0;
 const gnMi = u => /(^|\/\/|\.)news\.google\.com\//i.test(String(u || ""));
 async function gnCoz(url) {
@@ -978,6 +978,14 @@ async function cekYedekli(k) {
       return { yazilar: y, yol: "asıl", dil: y.dil };
     } catch (e) {
       if (!k.yedek) throw e;
+      // Asıl besleme açılmadı: adresi değişmiş olabilir. Yedeğe (çoğu zaman Google Haberler) düşmeden önce sitenin
+      // ana sayfasında ilan ettiği besleme aranır; bulunursa kesifler.json'a yazılır, sonraki taramalar doğrudan onu dener.
+      if (alan && !kesif && !gnMi(k.url)) {
+        const u = await beslemeKesfet(alan);
+        if (u && u !== k.url && !gnMi(u)) {
+          try { const y = await tazeCek(k, u); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil, asilHata: e.message }; } catch (e3) { /* yedeğe geç */ }
+        }
+      }
       try {
         const y = await tazeCek(k, k.yedek); return { yazilar: y, yol: "yedek", dil: y.dil, asilHata: e.message };
       } catch (e2) {
@@ -1557,9 +1565,9 @@ function ingilizceBaslik(b) {
   // Google Haberler baglantilarini yayincinin adresine cevir: butun kaynaklardan, en yeni yazilar once.
   // Okurun ilk gordugu yazilar once cozulur; eskiler sonraki taramalarda sirayla gelir.
   // Asıl adres bulununca yazının kendi sayfasından görseli de alınır.
-  const cozulecek = new Set(KAYNAKLAR.filter(k => k.coz).map(k => k.ad));
+  // Bütün kaynaklar: kendi beslemesi olmayanlar da, kendi beslemesine geçmeden önce Google'dan gelmiş eski yazılar da.
   const bekleyen = [];
-  for (const [ad, k] of Object.entries(sonuc.kaynaklar)) if (cozulecek.has(ad)) for (const y of (k.yazilar || [])) if (gnMi(y.link) && (y.czd || 0) < 3) bekleyen.push(y);
+  for (const k of Object.values(sonuc.kaynaklar)) for (const y of (k.yazilar || [])) if (gnMi(y.link) && (y.czd || 0) < 3) bekleyen.push(y);
   bekleyen.sort((a, b) => zaman(b) - zaman(a));
   let cozuldu = 0, gorselli = 0;
   for (const y of bekleyen) {

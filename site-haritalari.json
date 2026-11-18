@@ -21,12 +21,12 @@
    "https://www.euronews.com/sitemap/lettered-pages/countries.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
-   "girdi": 1426,
-   "gorselli": 1253,
-   "saatli": 169,
-   "eslesen": 22,
-   "hata": ""
+   "tarih": "2026-11-18T06:36",
+   "girdi": 0,
+   "gorselli": 0,
+   "saatli": 0,
+   "eslesen": 0,
+   "hata": "HTTP 406; HTTP 406; HTTP 406"
   }
  },
  "reuters.com": {
@@ -49,7 +49,7 @@
    "https://www.reuters.com/arc/outboundfeeds/topic-sitemap/?outputType=xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -85,11 +85,11 @@
    "https://www.bloomberg.com/billionaires/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
-   "girdi": 4215,
+   "tarih": "2026-11-18T06:36",
+   "girdi": 4214,
    "gorselli": 0,
-   "saatli": 549,
-   "eslesen": 146,
+   "saatli": 548,
+   "eslesen": 147,
    "hata": ""
   }
  },
@@ -111,10 +111,10 @@
    "https://www.ft.com/sitemaps/index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
-   "girdi": 218,
+   "tarih": "2026-11-18T06:36",
+   "girdi": 220,
    "gorselli": 0,
-   "saatli": 218,
+   "saatli": 220,
    "eslesen": 117,
    "hata": ""
   }
@@ -134,7 +134,7 @@
    "https://www.kommersant.ru/sitemaps/themes.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 90,
    "gorselli": 79,
    "saatli": 90,
@@ -154,7 +154,7 @@
    "https://www.politico.eu/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 54,
    "gorselli": 0,
    "saatli": 54,
@@ -173,7 +173,7 @@
    "https://www.dawn.com/feeds/sitemap"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 146,
    "gorselli": 0,
    "saatli": 100,
@@ -207,10 +207,10 @@
    "https://www.thehindu.com/business/feeder/default.rss"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
-   "girdi": 568,
-   "gorselli": 440,
-   "saatli": 568,
+   "tarih": "2026-11-18T06:36",
+   "girdi": 572,
+   "gorselli": 444,
+   "saatli": 572,
    "eslesen": 1,
    "hata": ""
   }
@@ -227,7 +227,7 @@
    "https://www.economist.com/googlenews.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -248,7 +248,7 @@
    "https://www.cato.org/google-news-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 9,
    "gorselli": 0,
    "saatli": 9,
@@ -267,7 +267,7 @@
    "https://mexiconewsdaily.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 1000,
    "gorselli": 997,
    "saatli": 0,
@@ -287,7 +287,7 @@
    "https://www.thebookseller.com/TheBooksellerNewsSitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 17,
    "gorselli": 0,
    "saatli": 17,
@@ -309,7 +309,7 @@
    "https://www.haaretz.com/news-sitemap-latest.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 86,
    "gorselli": 86,
    "saatli": 86,
@@ -335,7 +335,7 @@
    "https://www.perlentaucher.de/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 30,
    "gorselli": 0,
    "saatli": 30,
@@ -361,7 +361,7 @@
    "https://www.premiumtimesng.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 102,
    "gorselli": 0,
    "saatli": 102,
@@ -380,7 +380,7 @@
    "https://www.brookings.edu/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 513,
    "gorselli": 39,
    "saatli": 0,
@@ -470,7 +470,7 @@
    "https://www.nippon.com/ru/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 49,
    "gorselli": 0,
    "saatli": 49,
@@ -542,7 +542,7 @@
    "https://www.thejakartapost.com/sitemap_web_adv_longform.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 240,
    "gorselli": 0,
    "saatli": 40,
@@ -621,7 +621,7 @@
    "https://theprint.in/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -647,7 +647,7 @@
    "https://ecfr.eu/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 13,
    "gorselli": 0,
    "saatli": 0,
@@ -697,7 +697,7 @@
    "https://www.project-syndicate.org/news-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 12,
    "gorselli": 12,
    "saatli": 12,
@@ -716,7 +716,7 @@
    "https://www.ips-journal.eu/news-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 3,
    "gorselli": 3,
    "saatli": 3,
@@ -745,7 +745,7 @@
    "https://www.worldbank.org/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 10000,
    "gorselli": 0,
    "saatli": 0,
@@ -785,7 +785,7 @@
    "https://www.moroccoworldnews.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -905,7 +905,7 @@
    "https://foreignpolicy.com/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 17,
    "gorselli": 0,
    "saatli": 17,
@@ -941,12 +941,12 @@
    "https://www.idsa.in/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
-   "girdi": 0,
-   "gorselli": 0,
+   "tarih": "2026-11-18T06:36",
+   "girdi": 1034,
+   "gorselli": 1033,
    "saatli": 0,
    "eslesen": 0,
-   "hata": "The operation was aborted due to timeout; The operation was aborted due to timeout"
+   "hata": ""
   }
  },
  "spf.org": {
@@ -1027,7 +1027,7 @@
    "https://www.vera.org/sitemaps-1-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 2,
    "gorselli": 1,
    "saatli": 0,
@@ -1074,7 +1074,7 @@
    "https://tdri.or.th/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 66,
    "gorselli": 41,
    "saatli": 0,
@@ -1102,7 +1102,7 @@
    "https://mecouncil.org/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 82,
    "gorselli": 0,
    "saatli": 0,
@@ -1111,15 +1111,29 @@
   }
  },
  "nytimes.com": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://www.nytimes.com/sitemaps/new/news.xml.gz"
   ],
+  "robots": "www.nytimes.com: okundu",
+  "ilan": [
+   "https://www.nytimes.com/sitemaps/new/news.xml.gz",
+   "https://www.nytimes.com/sitemaps/new/sitemap.xml.gz",
+   "https://www.nytimes.com/sitemaps/new/collections.xml.gz",
+   "https://www.nytimes.com/sitemaps/new/video.xml.gz",
+   "https://www.nytimes.com/sitemaps/new/cooking.xml.gz",
+   "https://www.nytimes.com/sitemaps/new/recipe-collects.xml.gz",
+   "https://www.nytimes.com/sitemaps/new/regions.xml",
+   "https://www.nytimes.com/sitemaps/new/best-sellers.xml",
+   "https://www.nytimes.com/sitemaps/new/subscription-landing-pages.xml",
+   "https://www.nytimes.com/sitemaps/new/weather.xml.gz"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
-   "girdi": 705,
+   "tarih": "2026-11-18T06:36",
+   "girdi": 703,
    "gorselli": 655,
-   "saatli": 705,
+   "saatli": 703,
    "eslesen": 0,
    "hata": ""
   }
@@ -1139,7 +1153,7 @@
    "https://time.com/video-landing-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 76,
    "gorselli": 0,
    "saatli": 76,
@@ -1231,7 +1245,7 @@
    "https://www.france24.com/sitemaps/ar/news.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -1263,7 +1277,7 @@
    "https://www.birgun.net/sitemap/haberler"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 18,
    "gorselli": 0,
    "saatli": 18,
@@ -1298,7 +1312,7 @@
    "https://www.tehrantimes.com/sitemap/2019/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 30,
    "gorselli": 30,
    "saatli": 30,
@@ -1364,16 +1378,27 @@
   "ilan": []
  },
  "nybooks.com": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "nybooks.com: okundu",
+  "ilan": []
  },
  "fpri.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "fpri.org: okundu",
+  "ilan": []
  },
  "nkafu.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "www.nkafu.org: okundu",
+  "ilan": [
+   "https://nkafu.org/sitemap_index.xml"
+  ]
  },
  "aljazeera.com": {
   "denendi": "2026-11-18",
@@ -1390,12 +1415,19 @@
   }
  },
  "cahiersducinema.com": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://cahiersducinema.com/api/articles-sitemap.xml"
   ],
+  "robots": "cahiersducinema.com: okundu",
+  "ilan": [
+   "https://cahiersducinema.com/sitemap.xml",
+   "https://cahiersducinema.com/api/server-sitemap.xml",
+   "https://cahiersducinema.com/api/articles-sitemap.xml"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 1850,
    "gorselli": 1820,
    "saatli": 1849,
@@ -1426,44 +1458,74 @@
   ]
  },
  "dejusticia.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "dejusticia.org: okundu",
+  "ilan": []
  },
  "iris-france.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "iris-france.org: okundu",
+  "ilan": []
  },
  "odi.org": {
   "denendi": "2026-11-18",
   "haritalar": []
  },
  "cepchile.cl": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "cepchile.cl: robots.txt değil",
+  "ilan": []
  },
  "emaisenergia.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "emaisenergia.org: HTTP 403",
+  "ilan": []
  },
  "iai.it": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "iai.it: fetch failed",
+  "ilan": []
  },
  "aphrc.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "aphrc.org: okundu",
+  "ilan": [
+   "https://aphrc.org/sitemap_index.xml"
+  ]
  },
  "afrobarometer.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "afrobarometer.org: okundu",
+  "ilan": [
+   "https://www.afrobarometer.org/wp-sitemap.xml"
+  ]
  },
  "moreincommon.org.uk": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://www.moreincommon.org.uk/news-category-sitemap.xml"
   ],
+  "robots": "www.moreincommon.org.uk: okundu",
+  "ilan": [
+   "https://www.moreincommon.org.uk/sitemap_index.xml"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 19,
    "gorselli": 0,
    "saatli": 0,
@@ -1472,13 +1534,18 @@
   }
  },
  "carnegiecouncil.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://www.carnegiecouncil.org/sitemap-news-1.xml",
    "https://www.carnegiecouncil.org/sitemap-news-2.xml"
   ],
+  "robots": "www.carnegiecouncil.org: okundu",
+  "ilan": [
+   "https://www.carnegiecouncil.org//sitemap.xml"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 200,
    "gorselli": 0,
    "saatli": 0,
@@ -1487,12 +1554,17 @@
   }
  },
  "capsunlock.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://capsunlock.org/news-sitemap.xml"
   ],
+  "robots": "capsunlock.org: okundu",
+  "ilan": [
+   "https://capsunlock.org/sitemap_index.xml"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 38,
    "gorselli": 37,
    "saatli": 0,
@@ -1501,21 +1573,34 @@
   }
  },
  "cedice.org.ve": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "cedice.org.ve: fetch failed",
+  "ilan": []
  },
  "redesarrollo.pe": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "redesarrollo.pe: okundu",
+  "ilan": [
+   "https://www.redesarrollo.pe/wp-sitemap.xml"
+  ]
  },
  "al-shabaka.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://al-shabaka.org/news-sitemap.xml",
    "https://al-shabaka.org/news-sitemap2.xml"
   ],
+  "robots": "www.al-shabaka.org: okundu",
+  "ilan": [
+   "https://al-shabaka.org/sitemap_index.xml"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 1460,
    "gorselli": 910,
    "saatli": 0,
@@ -1524,20 +1609,39 @@
   }
  },
  "ideas.org.my": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "ideas.org.my: okundu",
+  "ilan": [
+   "https://www.ideas.org.my/sitemap_index.xml"
+  ]
  },
  "iep.org.pe": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "iep.org.pe: okundu",
+  "ilan": [
+   "https://iep.org.pe/sitemap_index.xml",
+   "https://iep.org.pe/coleccioncid/sitemap_index.xml"
+  ]
  },
  "samriddhi.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "www.samriddhi.org: okundu",
+  "ilan": []
  },
  "freedomhouse.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "freedomhouse.org: okundu",
+  "ilan": [
+   "https://freedomhouse.org/sitemap.xml"
+  ]
  },
  "grattan.edu.au": {
   "surum": 2,
@@ -1549,17 +1653,34 @@
   ]
  },
  "altyazi.net": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "www.altyazi.net: okundu",
+  "ilan": [
+   "https://altyazi.net/sitemap_index.xml"
+  ]
  },
  "transparency.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
   "haritalar": [
    "https://www.transparency.org/en/sitemaps-1-section-newsIndex-1-sitemap.xml",
    "https://www.transparency.org/en/sitemaps-1-section-newsPost-1-sitemap-p1.xml"
   ],
+  "robots": "www.transparency.org: okundu",
+  "ilan": [
+   "https://www.transparency.org/en/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/fr/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/es/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/ru/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/ar/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/de/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/pt/sitemaps-1-sitemap.xml",
+   "https://www.transparency.org/it/sitemaps-1-sitemap.xml"
+  ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 492,
    "gorselli": 359,
    "saatli": 0,
@@ -1578,7 +1699,7 @@
    "https://www.caixinglobal.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-18T06:07",
+   "tarih": "2026-11-18T06:36",
    "girdi": 64,
    "gorselli": 0,
    "saatli": 64,
@@ -1587,20 +1708,34 @@
   }
  },
  "bfi.org.uk": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "bfi.org.uk: HTTP 404",
+  "ilan": []
  },
  "afripoli.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "afripoli.org: okundu",
+  "ilan": [
+   "https://afripoli.org/sitemap.xml"
+  ]
  },
  "the-tls.com": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "the-tls.com: robots.txt değil",
+  "ilan": []
  },
  "k24kitap.org": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "k24kitap.org: The operation was aborted due to timeout",
+  "ilan": []
  },
  "asianreviewofbooks.com": {
   "denendi": "2026-11-18",
@@ -1624,8 +1759,11 @@
   "haritalar": []
  },
  "idscs.org.mk": {
+  "surum": 2,
   "denendi": "2026-11-18",
-  "haritalar": []
+  "haritalar": [],
+  "robots": "www.idscs.org.mk: okundu",
+  "ilan": []
  },
  "institutmontaigne.org": {
   "surum": 2,

@@ -377,5 +377,190 @@
  "kippra.or.ke": {
   "denendi": "2026-11-18",
   "haritalar": []
+ },
+ "ifs.org.uk": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "vera.org": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.vera.org/sitemaps-1-section-news_stories-1-sitemap.xml",
+   "https://www.vera.org/sitemaps-1-section-news_stories_explainers-1-sitemap.xml"
+  ]
+ },
+ "gcsp.ch": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "cidob.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "spda.org.pe": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "cigionline.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "tdri.or.th": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://tdri.or.th/tdri-insight-news-sitemap.xml"
+  ]
+ },
+ "lwlies.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "mecouncil.org": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://mecouncil.org/in_the_news-sitemap.xml"
+  ]
+ },
+ "nytimes.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.nytimes.com/sitemaps/new/news.xml.gz"
+  ]
+ },
+ "time.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://time.com/news-sitemap.xml"
+  ]
+ },
+ "arab-reform.net": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "carnegieendowment.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "bruegel.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "cips-cepi.ca": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "scidev.net": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "valdaiclub.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "insidestory.org.au": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "majalla.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "france24.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.france24.com/sitemaps/fr/news.xml",
+   "https://www.france24.com/sitemaps/en/news.xml",
+   "https://www.france24.com/sitemaps/es/news.xml"
+  ]
+ },
+ "americasquarterly.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "birgun.net": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.birgun.net/sitemap/makaleler"
+  ]
+ },
+ "edam.org.tr": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "tehrantimes.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.tehrantimes.com/sitemap/news/sitemap.xml"
+  ]
+ },
+ "ember-energy.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "aa.com.tr": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.aa.com.tr/tr/SiteMap/News"
+  ]
+ },
+ "ecdpm.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "jiia.or.jp": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "foraus.ch": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "ipe.org.pe": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "sipri.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "dgap.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "nybooks.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "fpri.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "nkafu.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "aljazeera.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.aljazeera.com/news-sitemap.xml"
+  ]
+ },
+ "cahiersducinema.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://cahiersducinema.com/api/articles-sitemap.xml"
+  ]
+ },
+ "greatergood.berkeley.edu": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "nuso.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "mckinsey.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
  }
 }

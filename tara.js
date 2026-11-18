@@ -909,6 +909,7 @@ async function gnCoz(url) {
    <link rel="alternate" type="application/rss+xml"> etiketinden asıl besleme bulunur.
    Bulunan adres kesifler.json'a yazılır, sonraki taramalarda önce o denenir; bulunamayan bir hafta yeniden yoklanmaz. */
 const KESIF_DOSYA = "kesifler.json";
+const BESLEME_DURUMU = {};   // bu taramanın yol ve hata kaydı (besleme-durumu.json)
 let KESIFLER = {};
 try { KESIFLER = JSON.parse(fs.readFileSync(KESIF_DOSYA, "utf8")) || {}; } catch (e) { KESIFLER = {}; }
 let KESIF_HAKKI = 25;   // bir taramada en çok bu kadar ana sayfa yoklanır
@@ -978,7 +979,7 @@ async function cekYedekli(k) {
     } catch (e) {
       if (!k.yedek) throw e;
       try {
-        const y = await tazeCek(k, k.yedek); return { yazilar: y, yol: "yedek", dil: y.dil };
+        const y = await tazeCek(k, k.yedek); return { yazilar: y, yol: "yedek", dil: y.dil, asilHata: e.message };
       } catch (e2) {
         throw new Error(e.message + " · yedek yol: " + e2.message);
       }
@@ -1445,7 +1446,8 @@ function ingilizceBaslik(b) {
                                         simgeler[k.ad] ? { simge: simgeler[k.ad] } : {},
                                         k.ucretli ? { ucretli: true } : {});
     try {
-      const { yazilar: gelenHam, yol, dil } = await cekYedekli(k);
+      const { yazilar: gelenHam, yol, dil, asilHata } = await cekYedekli(k);
+      BESLEME_DURUMU[k.ad] = { yol, asil: k.url, hata: asilHata || "" };
       // yolIcerir: genel beslemeden yalnız o bölümün yazıları alınır; yolHaric: o bölüm dışarıda bırakılır
       // (yedek yol zaten o bölüme göre aranıyor)
       const gelen = (yol === "yedek" ? gelenHam : gelenHam.filter(y => {
@@ -1523,7 +1525,7 @@ function ingilizceBaslik(b) {
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: ortakOzetleriAyikla(profilKumesiniAyikla(eskiKayit.yazilar, k.ad).filter(y => !copMu(y, k.ad) && (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)))),
         tarandi: eskiKayit.tarandi || null,
-        durum: "hata: " + e.message
+        durum: (BESLEME_DURUMU[k.ad] = { yol: "yok", asil: k.url, hata: e.message }, "hata: " + e.message)
       }, eskiKayit.dil ? { dil: eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✗ ${k.ad} — ${e.message} (${eskiKayit.yazilar.length} eski yazi korundu)`);
     }
@@ -1534,6 +1536,8 @@ function ingilizceBaslik(b) {
     while (sira < KAYNAKLAR.length) { const k = KAYNAKLAR[sira++]; await tek(k); }
   }));
   try { fs.writeFileSync(KESIF_DOSYA, JSON.stringify(KESIFLER, null, 1)); } catch (e) {}
+  // her kaynağın bu taramada hangi yoldan geldiği ve kendi beslemesi açılmadıysa nedeni (asıl / yedek / keşif / yok)
+  try { fs.writeFileSync("besleme-durumu.json", JSON.stringify({ tarih: new Date().toISOString(), kaynaklar: BESLEME_DURUMU }, null, 1)); } catch (e) {}
   const kesfedilen = Object.entries(KESIFLER).filter(([, v]) => v && v.url);
   if (kesfedilen.length) console.log(`Besleme keşfi: ${kesfedilen.length} sitenin beslemesi ana sayfasından bulundu`);
 

@@ -894,7 +894,7 @@ const SOZLUK = {
     kayit_yok_aciklama:"İdrak’taki bir yazının altındaki <strong>kaydet</strong>’e dokun, burada birikir.",
     idrake_don:"İdrak’a dön",
     bolum_sec:"Bölüm seç", kayit_suzgec_bos:"Bu süzgeçlerle kayıtlı yazı yok", suzgecleri_temizle:"Süzgeçleri temizle",
-    kaynak_ozet:(n,l,d,a)=>`Dünyanın dört bir yanından${d>1?`, ${d} dilde`:""} ${n} ses: ${l}. Her biri kendi dilinde, kendi penceresinden konuşur; Türkan hepsini aynı mecliste dinler${a>1?` ve ${a} dilde okura sunar`:""}.`, ve:"ve",
+    kaynak_ozet:(n,l,a,u)=>`Dünyanın dört bir yanından${u>1?`, ${u} ülkeden`:""} ${n} ses: ${l}. Her biri kendi dilinde, kendi penceresinden konuşur; Türkan hepsini aynı mecliste dinler${a>1?` ve ${a} dilde okura sunar`:""}.`, ve:"ve",
     say_kurum:"düşünce kuruluşu", say_dergi:"dergi", say_ajans:"haber ajansı", say_kitap:"kültür sanat yayını", say_rapor:"rapor kaynağı",
     son_tarama:z=>`Son yoklama: ${z}.`, henuz_taranmadi:"Kaynaklar henüz taranmadı.",
     kapali:"kapalı", ulasilamadi:"ulaşılamadı", ulasilamadi_duruyor:n=>`ulaşılamadı · ${n} yazı duruyor`,
@@ -954,7 +954,7 @@ const SOZLUK = {
     kayit_yok_aciklama:"Tap <strong>save</strong> under any article in İdrak and it will be kept here.",
     idrake_don:"Back to İdrak",
     bolum_sec:"Choose section", kayit_suzgec_bos:"No saved articles match these filters", suzgecleri_temizle:"Clear filters",
-    kaynak_ozet:(n,l,d,a)=>`${n} voices from every corner of the world${d>1?`, in ${d} languages`:""}: ${l}. Each speaks in its own language, from its own window; Türkan listens to them all in one gathering${a>1?` and offers them to readers in ${a} languages`:""}.`, ve:"and",
+    kaynak_ozet:(n,l,a,u)=>`${n} voices from every corner of the world${u>1?`, from ${u} countries`:""}: ${l}. Each speaks in its own language, from its own window; Türkan listens to them all in one gathering${a>1?` and offers them to readers in ${a} languages`:""}.`, ve:"and",
     say_kurum:"think tanks", say_dergi:"magazines", say_ajans:"news agencies", say_kitap:"culture & arts outlets", say_rapor:"report sources",
     son_tarama:z=>`Last roll call: ${z}.`, henuz_taranmadi:"Sources have not been scanned yet.",
     kapali:"off", ulasilamadi:"unreachable", ulasilamadi_duruyor:n=>`unreachable · ${n} articles kept`,
@@ -2342,9 +2342,11 @@ function kaynakOzeti(){
     .map(([kod, n]) => `${sayi(n)} ${t("say_" + kod)}`);
   if(!parca.length) return "";
   const liste = parca.length > 1 ? parca.slice(0, -1).join(", ") + " " + t("ve") + " " + parca[parca.length - 1] : parca[0];
-  // kaynakların yazdığı diller: beslemenin bildirdiği dil kodunun kökü (en-us, en-gb → en)
-  const diller = new Set(S.kaynaklar.map(k => ((S.bilgi[k.ad]||{}).dil || "").toLowerCase().split(/[-_]/)[0]).filter(Boolean));
-  return t("kaynak_ozet", sayi(S.kaynaklar.length), liste, diller.size, dilSirali().length);
+  // ülkeler: ISO kodu olan yerler (Avrupa Birliği hariç) ile Filistin; "Uluslararası", "Avrupa", "Balkanlar" gibi bölge adları sayılmaz
+  const ulkeler = new Set(S.kaynaklar.map(k => (S.bilgi[k.ad]||{}).ulke || k.ulke || "")
+    .filter(u => (ULKE_KOD[u] && ULKE_KOD[u] !== "EU") || u === "Filistin"));
+  // dil sayısı: okura sunduğumuz çeviri dilleri (kaynakların kendi dilleri değil)
+  return t("kaynak_ozet", sayi(S.kaynaklar.length), liste, dilSirali().length, ulkeler.size);
 }
 
 function cizKaynaklar(){

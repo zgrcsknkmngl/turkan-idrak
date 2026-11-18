@@ -2618,7 +2618,8 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
    Video, kendi bulanık kopyasının önünde kırpılmadan oynar.
    Video yüklenirken de, oynatılamazsa da videonun bir karesi (acilis-kare.jpg) görünür; oynatılamazsa kısa bir an sonra uygulamaya geçilir.
    Her taze açılışta oynar; "Atla" videonun 3. saniyesinden itibaren görünür. Okur 49 dakika içinde dönerse video oynamaz, uygulama kaldığı yerden açılır (bkz. "Kaldığı yer"). Bitince yumuşakça uygulamaya geçer.
-   Ses: video sessiz oynar, sesi ayrı bir dosyadan (acilis-ses.m4a) Web Audio ile çalınır. Sesli <video> telefondan "ses odağı" ister ve
+   Ses: açılış sessiz başlar; okur hoparlöre dokunursa ses ayrı bir dosyadan (acilis-ses.m4a) Web Audio ile çalınır.
+   Dosya ancak o dokunuşta indirilir; dokunmayanın verisi harcanmaz. Sesli <video> telefondan "ses odağı" ister ve
    arka planda çalan müziği ya da YouTube'u kalıcı olarak durdurur; Web Audio ise onlarla karışarak çalar, açılış bitince de hiçbir şeyi tutmaz. */
 function acilisOynat(){
   const kok = document.documentElement, ac = document.getElementById("acilis");
@@ -2632,37 +2633,42 @@ function acilisOynat(){
   const HOPARLOR = '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/>';
   const SES_ACIK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">${HOPARLOR}<path d="M15.5 8.6a4.6 4.6 0 0 1 0 6.8M18.2 6a8.3 8.3 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   const SES_KAPALI = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">${HOPARLOR}<path d="M16 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-  let sessizTercih = false; try{ sessizTercih = localStorage.getItem("ti.introSessiz") === "1"; }catch(e){}
   let bitti = false, basladi = false, kare = 0;
 
-  /* Ses (Web Audio): tampon çözülünce ve video oynamaya başlayınca videonun o anki saniyesinden başlar */
-  let ctx = null, kazanc = null, kaynak = null, tampon = null;
-  const sesliMi = () => !!ctx && ctx.state === "running" && !!kazanc && kazanc.gain.value > 0;
-  const sesGoster = () => { const a = sesliMi(); ses.innerHTML = a ? SES_ACIK : SES_KAPALI; ses.setAttribute("aria-label", t(a ? "ses_kapat" : "ses_ac")); };
+  /* Ses (Web Audio): yalnız okur hoparlöre dokununca kurulur; videonun o anki saniyesinden başlar */
+  let ctx = null, kazanc = null, kaynak = null, tampon = null, yukleniyor = false, sesli = false;
+  const sesGoster = () => { ses.innerHTML = sesli ? SES_ACIK : SES_KAPALI; ses.setAttribute("aria-label", t(sesli ? "ses_kapat" : "ses_ac")); };
   const sesBaslat = () => {
-    if(bitti || !ctx || !tampon || kaynak || !basladi) return;
+    if(bitti || !sesli || !ctx || !tampon || kaynak || !basladi) return;
     try{
       kaynak = ctx.createBufferSource(); kaynak.buffer = tampon; kaynak.connect(kazanc);
       kaynak.start(0, Math.min(Math.max(0, v.currentTime), Math.max(0, tampon.duration - 0.05)));
     }catch(e){ kaynak = null; }
   };
+  const sesDurdur = () => { try{ if(kaynak) kaynak.stop(); }catch(e){} kaynak = null; };
   const sesKapat = () => {
-    try{ if(kaynak) kaynak.stop(); }catch(e){}
-    kaynak = null;
+    sesDurdur();
     try{ if(ctx) ctx.close(); }catch(e){}
     ctx = null;
   };
-  try{
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if(AC){
-      ctx = new AC();
-      kazanc = ctx.createGain(); kazanc.gain.value = sessizTercih ? 0 : 1; kazanc.connect(ctx.destination);
-      if(ctx.resume) ctx.resume().then(sesGoster, () => {});   // tarayıcı izin vermezse bağlam askıda kalır; hoparlöre dokunmak açar
+  const sesAc = () => {
+    if(!ctx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return false;
+      try{ ctx = new AC(); kazanc = ctx.createGain(); kazanc.connect(ctx.destination); }catch(e){ ctx = null; return false; }
+    }
+    if(ctx.state !== "running" && ctx.resume) ctx.resume().catch(() => {});   // dokunuşun içinde: tarayıcı izin verir
+    if(tampon){ sesBaslat(); return true; }
+    if(!yukleniyor){
+      yukleniyor = true;
       fetch("acilis-ses.m4a").then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(r.status)))
         .then(b => ctx ? new Promise((ok, red) => ctx.decodeAudioData(b, ok, red)) : Promise.reject())
-        .then(tb => { tampon = tb; sesBaslat(); }).catch(() => {});
+        .then(tb => { tampon = tb; sesBaslat(); })
+        .catch(() => { sesli = false; sesGoster(); })
+        .then(() => { yukleniyor = false; });
     }
-  }catch(e){ ctx = null; }
+    return true;
+  };
 
   const kapat = sure => {
     if(bitti) return; bitti = true;
@@ -2694,21 +2700,19 @@ function acilisOynat(){
   atla.addEventListener("click", e => { e.stopPropagation(); kapat(320); });
   ses.addEventListener("click", e => {
     e.stopPropagation();
-    if(!ctx || !kazanc) return;
-    const ac = !sesliMi();
-    kazanc.gain.value = ac ? 1 : 0;
-    try{ ac ? localStorage.removeItem("ti.introSessiz") : localStorage.setItem("ti.introSessiz", "1"); }catch(_){}
-    if(ac && ctx.state !== "running" && ctx.resume) ctx.resume().then(() => { sesBaslat(); sesGoster(); }, () => {});   // dokunuş izni verir
+    if(bitti) return;
+    if(sesli){ sesli = false; sesDurdur(); try{ if(ctx && ctx.suspend) ctx.suspend().catch(() => {}); }catch(_){} }
+    else { sesli = true; if(!sesAc()) sesli = false; }
     sesGoster();
   });
   ac.addEventListener("click", () => { if(!basladi) kapat(320); });   // video başlamadan dokunan beklemeden geçer
   v.addEventListener("playing", () => {
-    if(ctx && kaynak && ctx.state === "suspended" && ctx.resume) ctx.resume().catch(() => {});   // takılma bittiyse ses de devam
+    if(sesli && ctx && kaynak && ctx.state === "suspended" && ctx.resume) ctx.resume().catch(() => {});   // takılma bittiyse ses de devam
     if(basladi || bitti) return; basladi = true;
     ac.classList.add("oynuyor"); zemin();
     sesBaslat(); sesGoster(); ses.classList.add("gorunur");
   });
-  v.addEventListener("waiting", () => { if(ctx && kaynak && ctx.state === "running" && ctx.suspend) ctx.suspend().catch(() => {}); });   // video takılırsa ses beklesin
+  v.addEventListener("waiting", () => { if(sesli && ctx && kaynak && ctx.state === "running" && ctx.suspend) ctx.suspend().catch(() => {}); });   // video takılırsa ses beklesin
   v.addEventListener("timeupdate", () => {
     if(v.currentTime >= 3) atla.classList.add("gorunur");
   });
@@ -2717,6 +2721,7 @@ function acilisOynat(){
   setTimeout(kareyleBitir, 3500);
   v.src = "acilis.mp4";
   v.muted = true;            // video hep sessiz: ses odağı istemez, arka plandaki müziği durdurmaz
+  try{ localStorage.removeItem("ti.introSessiz"); }catch(e){}   // eski tercih anahtarı artık kullanılmıyor
   v.setAttribute("muted", "");
   const oynat = v.play();
   if(oynat && oynat.catch) oynat.catch(kareyleBitir);

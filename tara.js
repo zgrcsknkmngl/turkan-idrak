@@ -646,8 +646,8 @@ function ayikla(xml, kaynakAd) {
 /* Yazı olmayan sayfalar akışa girmesin: yazar ve uzman profilleri, etkinlik duyuruları, arama sayfaları,
    kurumun ana sayfası ya da kendi adını taşıyan boş kayıtlar ("Pham Quang Vinh", "4 NOV - GALA DINNER",
    "Recherche publications", "Asan Institute for Policy Studies, Inc."). */
-const COP_YOL = /\/(?:author|authors|autor|autores|auteur|auteurs|autori|contributor|contributors|expert|experts|experte|experten|people|person|persons|staff|team|profile|profiles|bio|biography|scholars?|fellows?|researchers?|investigador(?:es|as?)?|chercheur(?:s|es)?|ricercator[ei]|members?|speakers?|events?|evento|eventos|evenements?|événements?|veranstaltung(?:en)?|webinars?|search|recherche|busqueda|buscar|suche|ricerca|users?)(?:\/|$|\?)/i;
-const COP_BASLIK = /^(?:\d{1,2}\s*[A-Za-zÇĞİÖŞÜçğıöşüéÉ]{3,9}\.?\s*[-–—]\s|(?:search|recherche|rechercher|buscar)\s+(?:publications?|articles?|the site|site)$|(?:events?|événements?|eventos?|publications?|newsletter|home|accueil|inicio)$)/i;
+const COP_YOL = /\/(?:author|authors|autor|autores|auteur|auteurs|autori|contributor|contributors|expert|experts|experte|experten|people|person|persons|staff|team|profile|profiles|bio|biography|scholars?|fellows?|researchers?|investigador(?:es|as?)?|chercheur(?:s|es)?|ricercator[ei]|members?|speakers?|events?|evento|eventos|evenements?|événements?|veranstaltung(?:en)?|webinars?|search|recherche|busqueda|buscar|suche|ricerca|users?|tags?)(?:\/|$|\?)/i;
+const COP_BASLIK = /^(?:\d{1,2}\s*[A-Za-zÇĞİÖŞÜçğıöşüéÉ]{3,9}\.?\s*[-–—]\s|(?:search|recherche|rechercher|buscar)\s+(?:publications?|articles?|the site|site)$|(?:events?|événements?|eventos?|publications?|newsletter|home|accueil|inicio|test)$)/i;
 const normAd = x => String(x).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/ı/g, "i").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 // Ülke adları birkaç dilde, tarayıcının kendi bölge adı listesinden ("Mexico", "Meksika", "México", "Mexique"…)
 const ULKE_ADLARI = (() => {
@@ -672,6 +672,14 @@ function adlariTopla(veri) {
 }
 const LISTE_BASLIK = /^(?:all publications|todas (?:as|las) publica(?:ções|coes|ciones)|toutes les publications|alle publikationen|publications?|publicaciones|publicações|round tables?\s*\/\s*workshops|fellow'?s seminar|events?|eventos|agenda|search|registration|careers?|jobs|archives?|videos?|untitled|subscription|subscribe|methodology|reports|news|essays|podcasts?|newsletters?|donate|contact|about|home|login|media|multimedia|press|data|dashboard)$/i;
 const YEREL_KURUM = new Set(["上海国际问题研究院", "재단법인 아산정책연구원", "아산정책연구원", "eai 동아시아연구원", "동아시아연구원"]);
+// Tehran Times her akşam ertesi günün basılı nüshasını "photo" bölümüne koyar; beslemedeki başlık yalnızca sayı numarasıdır ("15477")
+function sayiBasligi(y) {
+  const b = String(y.baslik || "").trim();
+  if (!/^\d{3,6}$/.test(b)) return;
+  let u = null; try { u = new URL(y.link); } catch (e) { return; }
+  if (/(^|\.)tehrantimes\.com$/.test(u.hostname) && /\/photo\/\d+\/\d+\/?$/.test(u.pathname)) y.baslik = `Front page of the print edition, issue ${b}`;
+}
+
 function copMu(y, kaynakAd) {
   let yol = null; try { yol = new URL(y.link).pathname; } catch (e) {}
   if (yol !== null && /\/register(?:-|\/|$)/i.test(yol)) return true;                       // etkinlik kayıt sayfası
@@ -1516,7 +1524,7 @@ function ingilizceBaslik(b) {
       const birlesik = yeni.concat(eskiKayit.yazilar.filter(y =>
         !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr")) && !copMu(y, k.ad) &&
         !(k.yalnizTurkce && ingilizceBaslik(y.baslik))));
-      for (const y of birlesik) { if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
+      for (const y of birlesik) { sayiBasligi(y); if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
       birlesik.length = 0; birlesik.push(...tekil);
@@ -1528,7 +1536,7 @@ function ingilizceBaslik(b) {
       }, yol === "yedek" ? { yol: "yedek" } : {}, (dil || eskiKayit.dil) ? { dil: dil || eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}${yol === "yedek" ? " (yedek yoldan)" : ""}`);
     } catch (e) {
-      for (const y of eskiKayit.yazilar) { if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
+      for (const y of eskiKayit.yazilar) { sayiBasligi(y); if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: ortakOzetleriAyikla(profilKumesiniAyikla(eskiKayit.yazilar, k.ad).filter(y => !copMu(y, k.ad) && (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)))),

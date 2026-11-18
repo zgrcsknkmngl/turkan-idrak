@@ -642,5 +642,13 @@
  "asianreviewofbooks.com": {
   "url": "",
   "tarih": "2026-11-18"
+ },
+ "euronews.com": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "imco.org.mx": {
+  "url": "https://imco.org.mx/feed/",
+  "tarih": "2026-11-18"
  }
 }

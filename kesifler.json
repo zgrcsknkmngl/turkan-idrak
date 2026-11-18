@@ -650,5 +650,9 @@
  "imco.org.mx": {
   "url": "https://imco.org.mx/feed/",
   "tarih": "2026-11-18"
+ },
+ "sarkac.org": {
+  "url": "",
+  "tarih": "2026-11-18"
  }
 }

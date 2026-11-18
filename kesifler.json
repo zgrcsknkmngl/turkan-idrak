@@ -105,7 +105,7 @@
  },
  "gppi.net": {
   "url": "",
-  "tarih": "2026-11-08"
+  "tarih": "2026-11-18"
  },
  "sipri.org": {
   "url": "",
@@ -113,7 +113,7 @@
  },
  "fusades.org": {
   "url": "",
-  "tarih": "2026-11-08"
+  "tarih": "2026-11-18"
  },
  "fpri.org": {
   "url": "",
@@ -496,6 +496,94 @@
   "tarih": "2026-11-18"
  },
  "connecteddevelopment.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "theguardian.com": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "ethos.org.mx": {
+  "url": "https://www.ethos.org.mx/feed.xml",
+  "tarih": "2026-11-18"
+ },
+ "cedice.org.ve": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "ideaspaz.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "grade.org.pe": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "ipe.org.pe": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "spda.org.pe": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "arab-reform.net": {
+  "url": "https://www.arab-reform.net/feed/",
+  "tarih": "2026-11-18"
+ },
+ "palthink.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "al-shabaka.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "institutigap.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "ccs.in": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "takshashila.org.in": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "afripoli.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "sdpi.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "busara.global": {
+  "url": "https://busara.global/feed/",
+  "tarih": "2026-11-18"
+ },
+ "institut-concorde.org": {
+  "url": "https://www.institut-concorde.org/feed/",
+  "tarih": "2026-11-18"
+ },
+ "nsi.org.za": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "lwlies.com": {
+  "url": "https://www.lwlies.com/feed.rss",
+  "tarih": "2026-11-18"
+ },
+ "otroscines.com": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "k24kitap.org": {
+  "url": "",
+  "tarih": "2026-11-18"
+ },
+ "cahiersducinema.com": {
   "url": "",
   "tarih": "2026-11-18"
  }

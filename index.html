@@ -2617,7 +2617,9 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
    "Türkan İdrak Tefekkür · turkanidrak.com" yazısı artık videonun içinde; video tek başına paylaşılınca da görünür, sayfa üstüne ayrıca yazmaz.
    Video, kendi bulanık kopyasının önünde kırpılmadan oynar.
    Video yüklenirken de, oynatılamazsa da videonun bir karesi (acilis-kare.jpg) görünür; oynatılamazsa kısa bir an sonra uygulamaya geçilir.
-   Her taze açılışta oynar; "Atla" videonun 3. saniyesinden itibaren görünür. Okur 49 dakika içinde dönerse video oynamaz, uygulama kaldığı yerden açılır (bkz. "Kaldığı yer"). Bitince yumuşakça uygulamaya geçer. */
+   Her taze açılışta oynar; "Atla" videonun 3. saniyesinden itibaren görünür. Okur 49 dakika içinde dönerse video oynamaz, uygulama kaldığı yerden açılır (bkz. "Kaldığı yer"). Bitince yumuşakça uygulamaya geçer.
+   Ses: video sessiz oynar, sesi ayrı bir dosyadan (acilis-ses.m4a) Web Audio ile çalınır. Sesli <video> telefondan "ses odağı" ister ve
+   arka planda çalan müziği ya da YouTube'u kalıcı olarak durdurur; Web Audio ise onlarla karışarak çalar, açılış bitince de hiçbir şeyi tutmaz. */
 function acilisOynat(){
   const kok = document.documentElement, ac = document.getElementById("acilis");
   if(!ac) return;
@@ -2630,14 +2632,43 @@ function acilisOynat(){
   const HOPARLOR = '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/>';
   const SES_ACIK = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">${HOPARLOR}<path d="M15.5 8.6a4.6 4.6 0 0 1 0 6.8M18.2 6a8.3 8.3 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   const SES_KAPALI = `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">${HOPARLOR}<path d="M16 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-  const sesGoster = () => { ses.innerHTML = v.muted ? SES_KAPALI : SES_ACIK; ses.setAttribute("aria-label", t(v.muted ? "ses_ac" : "ses_kapat")); };
   let sessizTercih = false; try{ sessizTercih = localStorage.getItem("ti.introSessiz") === "1"; }catch(e){}
   let bitti = false, basladi = false, kare = 0;
+
+  /* Ses (Web Audio): tampon çözülünce ve video oynamaya başlayınca videonun o anki saniyesinden başlar */
+  let ctx = null, kazanc = null, kaynak = null, tampon = null;
+  const sesliMi = () => !!ctx && ctx.state === "running" && !!kazanc && kazanc.gain.value > 0;
+  const sesGoster = () => { const a = sesliMi(); ses.innerHTML = a ? SES_ACIK : SES_KAPALI; ses.setAttribute("aria-label", t(a ? "ses_kapat" : "ses_ac")); };
+  const sesBaslat = () => {
+    if(bitti || !ctx || !tampon || kaynak || !basladi) return;
+    try{
+      kaynak = ctx.createBufferSource(); kaynak.buffer = tampon; kaynak.connect(kazanc);
+      kaynak.start(0, Math.min(Math.max(0, v.currentTime), Math.max(0, tampon.duration - 0.05)));
+    }catch(e){ kaynak = null; }
+  };
+  const sesKapat = () => {
+    try{ if(kaynak) kaynak.stop(); }catch(e){}
+    kaynak = null;
+    try{ if(ctx) ctx.close(); }catch(e){}
+    ctx = null;
+  };
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC){
+      ctx = new AC();
+      kazanc = ctx.createGain(); kazanc.gain.value = sessizTercih ? 0 : 1; kazanc.connect(ctx.destination);
+      if(ctx.resume) ctx.resume().then(sesGoster, () => {});   // tarayıcı izin vermezse bağlam askıda kalır; hoparlöre dokunmak açar
+      fetch("acilis-ses.m4a").then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(r.status)))
+        .then(b => ctx ? new Promise((ok, red) => ctx.decodeAudioData(b, ok, red)) : Promise.reject())
+        .then(tb => { tampon = tb; sesBaslat(); }).catch(() => {});
+    }
+  }catch(e){ ctx = null; }
 
   const kapat = sure => {
     if(bitti) return; bitti = true;
     cancelAnimationFrame(kare);
     try{ v.pause(); }catch(e){}
+    sesKapat();
     const son = ac.animate ? ac.animate([{opacity:1},{opacity:0}], {duration:sure, easing:"ease-in", fill:"forwards"}).finished : Promise.resolve();
     son.then(bitir, bitir);
   };
@@ -2657,21 +2688,27 @@ function acilisOynat(){
   const kareyleBitir = () => {
     if(basladi || bitti) return;
     try{ v.pause(); v.removeAttribute("src"); v.load(); }catch(e){}
+    sesKapat();
     setTimeout(() => kapat(600), 1200);
   };
   atla.addEventListener("click", e => { e.stopPropagation(); kapat(320); });
   ses.addEventListener("click", e => {
     e.stopPropagation();
-    v.muted = !v.muted; if(!v.muted) v.volume = 1;
-    try{ v.muted ? localStorage.setItem("ti.introSessiz", "1") : localStorage.removeItem("ti.introSessiz"); }catch(_){}
+    if(!ctx || !kazanc) return;
+    const ac = !sesliMi();
+    kazanc.gain.value = ac ? 1 : 0;
+    try{ ac ? localStorage.removeItem("ti.introSessiz") : localStorage.setItem("ti.introSessiz", "1"); }catch(_){}
+    if(ac && ctx.state !== "running" && ctx.resume) ctx.resume().then(() => { sesBaslat(); sesGoster(); }, () => {});   // dokunuş izni verir
     sesGoster();
   });
   ac.addEventListener("click", () => { if(!basladi) kapat(320); });   // video başlamadan dokunan beklemeden geçer
   v.addEventListener("playing", () => {
+    if(ctx && kaynak && ctx.state === "suspended" && ctx.resume) ctx.resume().catch(() => {});   // takılma bittiyse ses de devam
     if(basladi || bitti) return; basladi = true;
     ac.classList.add("oynuyor"); zemin();
-    sesGoster(); ses.classList.add("gorunur");
+    sesBaslat(); sesGoster(); ses.classList.add("gorunur");
   });
+  v.addEventListener("waiting", () => { if(ctx && kaynak && ctx.state === "running" && ctx.suspend) ctx.suspend().catch(() => {}); });   // video takılırsa ses beklesin
   v.addEventListener("timeupdate", () => {
     if(v.currentTime >= 3) atla.classList.add("gorunur");
   });
@@ -2679,13 +2716,10 @@ function acilisOynat(){
   v.addEventListener("error", kareyleBitir);
   setTimeout(kareyleBitir, 3500);
   v.src = "acilis.mp4";
-  v.muted = sessizTercih;
+  v.muted = true;            // video hep sessiz: ses odağı istemez, arka plandaki müziği durdurmaz
+  v.setAttribute("muted", "");
   const oynat = v.play();
-  if(oynat && oynat.catch) oynat.catch(() => {             // tarayıcı sesli otomatik oynatmaya izin vermediyse sessiz başla
-    if(bitti) return;
-    v.muted = true;
-    v.play().then(() => { sesGoster(); ses.classList.add("gorunur"); }).catch(kareyleBitir);
-  });
+  if(oynat && oynat.catch) oynat.catch(kareyleBitir);
 }
 acilisOynat();
 

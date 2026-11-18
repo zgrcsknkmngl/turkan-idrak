@@ -86,7 +86,7 @@ const KAYNAKLAR = [
   { ad:"Greater Good", ulke:"ABD", tur:"dergi", kimlik:"üniversite", url:"https://greatergood.berkeley.edu/site/rss/articles", yedek:"https://news.google.com/rss/search?q=site:greatergood.berkeley.edu+when:30d&hl=en-US&gl=US&ceid=US:en" },   // yeni: psikoloji; UC Berkeley
   { ad:"Psyche", ulke:"İngiltere", tur:"dergi", kimlik:"bağımsız", url:"https://psyche.co/feed.rss", yedek:"https://news.google.com/rss/search?q=site:psyche.co+when:30d&hl=en-US&gl=US&ceid=US:en" },   // yeni: psikoloji, felsefe; Aeon'un kardeşi
   { ad:"Public Domain Review", ulke:"İngiltere", tur:"kitap", kimlik:"bağımsız", url:"https://publicdomainreview.org/rss.xml", yedek:"https://news.google.com/rss/search?q=site:publicdomainreview.org+when:30d&hl=en-US&gl=US&ceid=US:en" },   // yeni: tarih, sanat, eski metinler
-  { ad:"Hakai Magazine", ulke:"Kanada", tur:"dergi", kimlik:"vakıf", url:"https://hakaimagazine.com/feed/", yedek:"https://news.google.com/rss/search?q=site:hakaimagazine.com+when:30d&hl=en-US&gl=US&ceid=US:en" },   // yeni: denizler ve kıyı bilimi; Tula Vakfı
+  { ad:"bioGraphic", ulke:"ABD", tur:"dergi", kimlik:"bağımsız", url:"https://news.google.com/rss/search?q=site:biographic.com+when:60d&hl=en-US&gl=US&ceid=US:en", kesfet:true },   // Hakai Magazine Aralık 2024'te kapandı, ekibi Ocak 2025'te bioGraphic'le birleşti: doğa ve deniz bilimi
   { ad:"Pesquisa FAPESP", ulke:"Brezilya", tur:"dergi", kimlik:"kamu", url:"https://revistapesquisa.fapesp.br/feed/", yedek:"https://news.google.com/rss/search?q=site:revistapesquisa.fapesp.br+when:30d&hl=pt-BR&gl=BR&ceid=BR:pt-419" },   // yeni: São Paulo Araştırma Vakfı'nın bilim dergisi
   { ad:"The Wire Science", ulke:"Hindistan", tur:"dergi", kimlik:"bağımsız", url:"https://science.thewire.in/feed/", yedek:"https://news.google.com/rss/search?q=site:science.thewire.in+when:30d&hl=en-US&gl=US&ceid=US:en" },   // yeni: bilim ve bilim politikası
   { ad:"SciDev.Net", ulke:"Uluslararası", tur:"dergi", kimlik:"bağımsız", url:"https://www.scidev.net/global/feed/", yedek:"https://news.google.com/rss/search?q=site:scidev.net+when:30d&hl=en-US&gl=US&ceid=US:en" },   // yeni: Küresel Güney'de bilim ve kalkınma
@@ -219,7 +219,6 @@ const KAYNAKLAR = [
   { ad:"GCRO", ulke:"Güney Afrika", tur:"kurum", url:"https://gcro.ac.za/feed/", yedek:"https://news.google.com/rss/search?q=site:gcro.ac.za+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"IEA Kenya", ulke:"Kenya", tur:"kurum", url:"https://ieakenya.or.ke/feed/", yedek:"https://news.google.com/rss/search?q=site:ieakenya.or.ke+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"IPAR", ulke:"Senegal", tur:"kurum", url:"https://ipar.sn/feed/", yedek:"https://news.google.com/rss/search?q=site:ipar.sn+when:60d&hl=fr&gl=FR&ceid=FR:fr" },
-  { ad:"LEGS-Africa", ulke:"Senegal", tur:"kurum", url:"https://legs-africa.org/feed/", yedek:"https://news.google.com/rss/search?q=site:legs-africa.org+when:60d&hl=fr&gl=FR&ceid=FR:fr" },
   { ad:"PARI", ulke:"Güney Afrika", tur:"kurum", url:"https://pari.org.za/feed/", yedek:"https://news.google.com/rss/search?q=site:pari.org.za+when:60d&hl=en-US&gl=US&ceid=US:en" },
   { ad:"ZIPAR", ulke:"Zambiya", tur:"kurum", url:"https://zipar.org.zm/feed/", yedek:"https://news.google.com/rss/search?q=site:zipar.org.zm+when:60d&hl=en-US&gl=US&ceid=US:en" },
   // On Think Tanks, İzlenecek 100 Düşünce Kuruluşu 2025 listesinden
@@ -961,6 +960,14 @@ async function cekYedekli(k) {
   const alan = alanBul(k), kesif = alan && KESIFLER[alan] && KESIFLER[alan].url;
   if (kesif && kesif !== k.url) {   // daha önce keşfedilmiş besleme önce
     try { const y = await cek({ ...k, url: kesif, yedek: k.yedek || "kesif" }); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil }; } catch (e) { /* asıl yola dön */ }
+  }
+  // kesfet: Google Haberler'den başlatılan kaynakta sitenin kendi beslemesi ana sayfasından aranır (bulunamazsa haftada bir
+  // yeniden). Bulunur ve son üç aydan yazı verirse o kullanılır; sonraki taramalar doğrudan onu dener.
+  if (k.kesfet && alan && !kesif && gnMi(k.url)) {
+    const u = await beslemeKesfet(alan);
+    if (u && !gnMi(u)) {
+      try { const y = await tazeCek(k, u); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil }; } catch (e) { /* Google Haberler yoluna dön */ }
+    }
   }
   try {
     try {

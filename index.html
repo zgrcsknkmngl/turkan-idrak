@@ -603,14 +603,18 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   #acilis .ac-cerceve{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:min(100vw, calc(100vh * 16 / 9));aspect-ratio:16/9;box-shadow:0 0 64px 28px rgba(10,17,40,.5)}
   #acilis .ac-video{display:block;width:100%;height:100%;object-fit:cover;background:transparent}
-  /* Kapanış yazısı: ses "Türkan, İdrak, Tefekkür" derken ışık küresi dağılır, ad hilal ile İstanbul silüeti arasındaki göğe yazılır */
+  /* Kapanış yazısı: iki anka Ayasofya'nın üstünde buluşurken ses "Türkan İdrak Tefekkür" der; ad, altında site adresiyle,
+     Ayasofya'nın önüne yazılır. Alttan hafif bir karartı yazıyı okunur kılar. */
   #acilis .ac-cerceve{container-type:inline-size}
-  #acilis .ac-marka{position:absolute;left:0;right:0;top:55%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;
-    gap:1.3cqw;pointer-events:none;text-align:center}
-  #acilis .ac-marka .wordmark{font-size:clamp(19px,7cqw,66px);color:#F4EFE3;opacity:0;filter:blur(6px);transform:translateY(8px) scale(.97);
+  #acilis .ac-cerceve::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;
+    background:linear-gradient(to top,rgba(8,14,34,.82),rgba(8,14,34,.45) 55%,rgba(8,14,34,0));opacity:0;transition:opacity 1.1s ease-out}
+  #acilis.marka-acik .ac-cerceve::after{opacity:1}
+  #acilis .ac-marka{position:absolute;z-index:1;left:0;right:0;top:83%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;
+    gap:1.1cqw;pointer-events:none;text-align:center}
+  #acilis .ac-marka .wordmark{font-size:clamp(19px,6.2cqw,60px);color:#F4EFE3;opacity:0;filter:blur(6px);transform:translateY(8px) scale(.97);
     text-shadow:0 0 18px rgba(8,14,34,.85),0 2px 6px rgba(0,0,0,.45);transition:opacity 1.1s ease-out,filter 1.1s ease-out,transform 1.1s ease-out}
   #acilis .ac-marka .wordmark em{color:#8CC6FF} #acilis .ac-marka .wordmark .tef{color:#FF6166}
-  #acilis .ac-marka .ac-alan{font-family:var(--sans,system-ui);font-weight:500;font-size:clamp(12px,2.9cqw,26px);letter-spacing:.12em;color:#E6C46B;
+  #acilis .ac-marka .ac-alan{font-family:var(--sans,system-ui);font-weight:500;font-size:clamp(12px,2.6cqw,24px);letter-spacing:.12em;color:#E6C46B;
     opacity:0;transform:translateY(6px);text-shadow:0 0 12px rgba(8,14,34,.9);transition:opacity 1s ease-out .35s,transform 1s ease-out .35s}
   #acilis.marka-acik .ac-marka .wordmark{opacity:1;filter:none;transform:none}
   #acilis.marka-acik .ac-marka .ac-alan{opacity:1;transform:none}
@@ -2613,7 +2617,7 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
   arayuzuHazirla(S.dil).then(() => { arayuzuCiz(); ciz(); });
 
 /* ---------- Açılış: iki anka denizden çıkar, Ayasofya'nın üstünde buluşur, göğe yükselir (4,8 sn: Fetih suresi, 48) ---------- */
-/* ---------- Açılış: acilis.mp4 (yaklaşık 21,5 sn; 16 Kasım 2026'dan beri Tac Mahal'li yeni manzarayla açılır) ----------
+/* ---------- Açılış: acilis.mp4 (13,6 sn; 19 Kasım 2026'dan beri ankaların Ayasofya üstünde buluştuğu anda biter, havai fişek yok) ----------
    "Türkan İdrak Tefekkür · turkanidrak.com" yazısı artık videonun içinde; video tek başına paylaşılınca da görünür, sayfa üstüne ayrıca yazmaz.
    Video, kendi bulanık kopyasının önünde kırpılmadan oynar.
    Video yüklenirken de, oynatılamazsa da videonun bir karesi (acilis-kare.jpg) görünür; oynatılamazsa kısa bir an sonra uygulamaya geçilir.
@@ -2646,10 +2650,14 @@ function acilisOynat(){
     }catch(e){ kaynak = null; }
   };
   const sesDurdur = () => { try{ if(kaynak) kaynak.stop(); }catch(e){} kaynak = null; };
-  const sesKapat = () => {
-    sesDurdur();
-    try{ if(ctx) ctx.close(); }catch(e){}
-    ctx = null;
+  const sesKapat = (sure = 0) => {
+    const c = ctx, k = kaynak; ctx = null; kaynak = null;
+    if(!c) return;
+    const bitir = () => { try{ if(k) k.stop(); }catch(e){} try{ c.close(); }catch(e){} };
+    if(sure > 0 && k && kazanc && c.state === "running"){
+      try{ kazanc.gain.setTargetAtTime(0, c.currentTime, sure / 3000); }catch(e){}
+      setTimeout(bitir, sure);
+    } else bitir();
   };
   const sesAc = () => {
     if(!ctx){
@@ -2661,7 +2669,7 @@ function acilisOynat(){
     if(tampon){ sesBaslat(); return true; }
     if(!yukleniyor){
       yukleniyor = true;
-      fetch("acilis-ses.m4a").then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(r.status)))
+      fetch("acilis-ses.m4a?v=13").then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(r.status)))
         .then(b => ctx ? new Promise((ok, red) => ctx.decodeAudioData(b, ok, red)) : Promise.reject())
         .then(tb => { tampon = tb; sesBaslat(); })
         .catch(() => { sesli = false; sesGoster(); })
@@ -2674,7 +2682,7 @@ function acilisOynat(){
     if(bitti) return; bitti = true;
     cancelAnimationFrame(kare);
     try{ v.pause(); }catch(e){}
-    sesKapat();
+    sesKapat(sure);
     const son = ac.animate ? ac.animate([{opacity:1},{opacity:0}], {duration:sure, easing:"ease-in", fill:"forwards"}).finished : Promise.resolve();
     son.then(bitir, bitir);
   };
@@ -2715,11 +2723,12 @@ function acilisOynat(){
   v.addEventListener("waiting", () => { if(sesli && ctx && kaynak && ctx.state === "running" && ctx.suspend) ctx.suspend().catch(() => {}); });   // video takılırsa ses beklesin
   v.addEventListener("timeupdate", () => {
     if(v.currentTime >= 3) atla.classList.add("gorunur");
+    if(v.currentTime >= 12.15) ac.classList.add("marka-acik");   // ankalar buluşuyor: ad ve adres belirir, ses adı söyler
   });
   v.addEventListener("ended", () => kapat(750));
   v.addEventListener("error", kareyleBitir);
   setTimeout(kareyleBitir, 3500);
-  v.src = "acilis.mp4";
+  v.src = "acilis.mp4?v=13";   // 13 saniyelik sürüm; ?v= eski önbellek kopyasının gelmesini önler
   v.muted = true;            // video hep sessiz: ses odağı istemez, arka plandaki müziği durdurmaz
   try{ localStorage.removeItem("ti.introSessiz"); }catch(e){}   // eski tercih anahtarı artık kullanılmıyor
   v.setAttribute("muted", "");

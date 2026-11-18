@@ -2669,7 +2669,7 @@ function acilisOynat(){
     if(tampon){ sesBaslat(); return true; }
     if(!yukleniyor){
       yukleniyor = true;
-      fetch("acilis-ses.m4a?v=13").then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(r.status)))
+      fetch("acilis-ses.m4a?v=14").then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(r.status)))
         .then(b => ctx ? new Promise((ok, red) => ctx.decodeAudioData(b, ok, red)) : Promise.reject())
         .then(tb => { tampon = tb; sesBaslat(); })
         .catch(() => { sesli = false; sesGoster(); })
@@ -2723,7 +2723,7 @@ function acilisOynat(){
   v.addEventListener("waiting", () => { if(sesli && ctx && kaynak && ctx.state === "running" && ctx.suspend) ctx.suspend().catch(() => {}); });   // video takılırsa ses beklesin
   v.addEventListener("timeupdate", () => {
     if(v.currentTime >= 3) atla.classList.add("gorunur");
-    if(v.currentTime >= 12.15) ac.classList.add("marka-acik");   // ankalar buluşuyor: ad ve adres belirir, ses adı söyler
+    if(v.currentTime >= 11.45) ac.classList.add("marka-acik");   // ankalar buluşuyor: ad ve adres belirir, ses adı söyler
   });
   v.addEventListener("ended", () => kapat(750));
   v.addEventListener("error", kareyleBitir);

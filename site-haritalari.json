@@ -1,0 +1,203 @@
+{
+ "euronews.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.euronews.com/news.xml",
+   "https://www.euronews.com/sitemap/articles.xml",
+   "https://www.euronews.com/sitemap/ai-translated.xml"
+  ]
+ },
+ "reuters.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.reuters.com/arc/outboundfeeds/news-sitemap-index/?outputType=xml"
+  ]
+ },
+ "gazeteoksijen.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "bloomberg.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.bloomberg.com/sitemaps/news/index.xml",
+   "https://www.bloomberg.com/sitemaps/news/latest.xml"
+  ]
+ },
+ "ahram.org.eg": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "ft.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.ft.com/sitemaps/news.xml"
+  ]
+ },
+ "kommersant.ru": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.kommersant.ru/sitemaps/news.xml"
+  ]
+ },
+ "politico.eu": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.politico.eu/news-sitemap.xml"
+  ]
+ },
+ "dawn.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.dawn.com/feeds/sitemap"
+  ]
+ },
+ "aei.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "thehindu.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.thehindu.com/sitemap/googlenews/all/all.xml"
+  ]
+ },
+ "economist.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.economist.com/googlenews.xml"
+  ]
+ },
+ "cato.org": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.cato.org/google-news-sitemap.xml"
+  ]
+ },
+ "mexiconewsdaily.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://mexiconewsdaily.com/sitemap_index.xml"
+  ]
+ },
+ "thebookseller.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.thebookseller.com/TheBooksellerNewsSitemap.xml"
+  ]
+ },
+ "haaretz.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.haaretz.com/news-sitemap-content.xml",
+   "https://www.haaretz.com/news-sitemap-latest.xml"
+  ]
+ },
+ "undp.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "perlentaucher.de": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "http://www.perlentaucher.de/cdata/sitemap/news.xml"
+  ]
+ },
+ "politico.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "premiumtimesng.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.premiumtimesng.com/news-sitemap.xml"
+  ]
+ },
+ "brookings.edu": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.brookings.edu/news-sitemap.xml"
+  ]
+ },
+ "kirkusreviews.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "lareviewofbooks.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "hrw.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "nationalinterest.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "oecd.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "otroscines.com": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "kapsarc.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "cgdev.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "nippon.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.nippon.com/ja/googleNews.xml"
+  ]
+ },
+ "consejomexicano.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "orfonline.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "theeastafrican.co.ke": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "ohchr.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "thejakartapost.com": {
+  "denendi": "2026-11-18",
+  "haritalar": [
+   "https://www.thejakartapost.com/sitemap_news.xml",
+   "https://www.thejakartapost.com/sitemap_web_news.xml"
+  ]
+ },
+ "rusi.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "weforum.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "imf.org": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "sol.org.tr": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ },
+ "portal.fgv.br": {
+  "denendi": "2026-11-18",
+  "haritalar": []
+ }
+}

@@ -682,5 +682,9 @@
  "thehindu.com": {
   "url": "https://www.thehindu.com/feeder/default.rss",
   "tarih": "2026-11-19"
+ },
+ "quincyinst.org": {
+  "url": "",
+  "tarih": "2026-11-19"
  }
 }

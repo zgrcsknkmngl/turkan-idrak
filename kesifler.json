@@ -97,7 +97,7 @@
  },
  "vera.org": {
   "url": "",
-  "tarih": "2026-11-08"
+  "tarih": "2026-11-19"
  },
  "smeru.or.id": {
   "url": "",
@@ -109,7 +109,7 @@
  },
  "sipri.org": {
   "url": "",
-  "tarih": "2026-11-08"
+  "tarih": "2026-11-19"
  },
  "fusades.org": {
   "url": "",
@@ -697,6 +697,98 @@
  },
  "telesurenglish.net": {
   "url": "https://www.telesurenglish.net/feed/",
+  "tarih": "2026-11-19"
+ },
+ "revistapesquisa.fapesp.br": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "theindiaforum.in": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "gazeteoksijen.com": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "ahram.org.eg": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "heritage.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "sol.org.tr": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "iai.it": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "jiia.or.jp": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "spf.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "eai.or.kr": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "tokyofoundation.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "ciis.org.cn": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "ccg.org.cn": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "cebri.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "cgdev.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "odi.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "ecdpm.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "gcsp.ch": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "grattan.edu.au": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "tdri.or.th": {
+  "url": "https://tdri.or.th/feed/",
+  "tarih": "2026-11-19"
+ },
+ "cidob.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "epc.eu": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "u4.no": {
+  "url": "",
   "tarih": "2026-11-19"
  }
 }

@@ -45,15 +45,15 @@
  },
  "cips-cepi.ca": {
   "url": "",
-  "tarih": "2026-11-12"
+  "tarih": "2026-11-19"
  },
  "fpc.org.uk": {
   "url": "",
-  "tarih": "2026-11-12"
+  "tarih": "2026-11-19"
  },
  "ipsnews.net": {
   "url": "",
-  "tarih": "2026-11-12"
+  "tarih": "2026-11-19"
  },
  "youtube.com": {
   "url": "",
@@ -673,6 +673,14 @@
  },
  "institutomillenium.org.br": {
   "url": "",
+  "tarih": "2026-11-19"
+ },
+ "stimson.org": {
+  "url": "",
+  "tarih": "2026-11-19"
+ },
+ "thehindu.com": {
+  "url": "https://www.thehindu.com/feeder/default.rss",
   "tarih": "2026-11-19"
  }
 }

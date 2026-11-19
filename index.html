@@ -1381,6 +1381,14 @@ function ceviriDuzelt(metin, kaynak, hedef){
     (t, on, ara, s, ek) => on + ara + (s === "S" ? "Seçim" : "seçim") + uyum(ek));
   if (/swing[\s-]+states?/i.test(k)) metin = metin.replace(/([Ss])alıncak\s+(eyalet\p{L}*|devlet\p{L}*)/gu,
     (t, s, e) => (s === "S" ? "Kararsız " : "kararsız ") + (e.startsWith("devlet") ? "eyalet" + e.slice(6) : e));
+  // Borsa haberlerinde "blockbuster" gişe değil rekor, "debut" ilk film değil borsadaki ilk gün
+  const borsa = /\b(IPO|listing|shares?|stocks?|Nasdaq|NYSE|Wall Street|market|trading|offering|valuation|investors?)\b/i.test(k)
+    && !/\b(film|movie|box[\s-]office|cinema|Hollywood|sequel|studio)\b/i.test(k);
+  if (borsa && /blockbuster/i.test(k)) metin = metin.replace(/([Gg])işe rekor(?:ları|u) kıran/g, (t, g) => (g === "G" ? "Rekor" : "rekor") + " kıran");
+  if (borsa && /\bdebut/i.test(k)) metin = metin.replace(/([İi])lk film(\p{L}*)/gu, (t, i, ek) => (i === "İ" ? "Borsa" : "borsa") + " ilk gün" + ek.replace(/i/g, "ü"));
+  if (/\bmajor (?:stock )?ind(?:exes|ices)\b/i.test(k)) metin = metin.replace(/([Mm])ajör endeks/g, (t, m) => (m === "M" ? "Başlıca" : "başlıca") + " endeks");
+  // Marka adları çevrilmez: makine "Anthropic"i "Antropik" yapabiliyor
+  if (/Anthropic/.test(k)) metin = metin.replace(/Antropik/g, "Anthropic");
   return metin;
 }
 async function cevir(m){

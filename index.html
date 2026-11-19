@@ -1688,7 +1688,7 @@ function tefOkuDugmeleri(y){
   return `<button class="act ${k?"on":""}" data-kay="${y.id}">${k?I.yerD:I.yer}<span>${t(k?"kayitli":"kaydet")}</span></button>`
     + cev + `<button class="act" data-pay="${y.id}">${I.pay}<span>${t("paylas")}</span></button>`;
 }
-/* Yazının tamamını okurun diline çevir: başlık, paragraflar, mısralar satır satır; imzadaki ad olduğu gibi kalır */
+/* Yazının tamamını okurun diline çevir: başlık, ara başlıklar, paragraflar, maddeler, mısralar satır satır; imzadaki ad olduğu gibi kalır */
 async function tefYaziyiCevir(yol){
   if(S.tefCeviriAcik){ S.tefCeviriAcik = false; cizTefekkur(); return; }
   const anahtar = yol + "|" + S.ceviriDili;
@@ -1697,7 +1697,7 @@ async function tefYaziyiCevir(yol){
     try{
       const kap = document.createElement("div"); kap.innerHTML = S.tefMetin[yol] || "";
       const isler = [];
-      kap.querySelectorAll("h1, p").forEach(el => {
+      kap.querySelectorAll("h1, h2, h3, p, li").forEach(el => {
         if(el.classList.contains("yazar-satir") || el.classList.contains("tarih")) return;
         if(el.classList.contains("imza")){ el.querySelectorAll("em").forEach(em => isler.push([em, em.textContent])); return; }
         if(el.classList.contains("misra")){

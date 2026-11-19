@@ -646,7 +646,7 @@ function ayikla(xml, kaynakAd) {
 /* Yazı olmayan sayfalar akışa girmesin: yazar ve uzman profilleri, etkinlik duyuruları, arama sayfaları,
    kurumun ana sayfası ya da kendi adını taşıyan boş kayıtlar ("Pham Quang Vinh", "4 NOV - GALA DINNER",
    "Recherche publications", "Asan Institute for Policy Studies, Inc."). */
-const COP_YOL = /\/(?:author|authors|autor|autores|auteur|auteurs|autori|contributor|contributors|expert|experts|experte|experten|people|person|persons|staff|team|profile|profiles|bio|biography|scholars?|fellows?|researchers?|investigador(?:es|as?)?|chercheur(?:s|es)?|ricercator[ei]|members?|speakers?|events?|evento|eventos|evenements?|événements?|veranstaltung(?:en)?|webinars?|search|recherche|busqueda|buscar|suche|ricerca|users?|tags?)(?:\/|$|\?)/i;
+const COP_YOL = /\/(?:author|authors|autor|autores|auteur|auteurs|autori|contributor|contributors|expert|experts|experte|experten|people|person|persons|staff|team|profile|profiles|bio|biography|scholars?|fellows?|researchers?|investigador(?:es|as?)?|chercheur(?:s|es)?|ricercator[ei]|members?|speakers?|events?|evento|eventos|evenements?|événements?|veranstaltung(?:en)?|webinars?|search|recherche|busqueda|buscar|suche|ricerca|users?|tags?|categor(?:y|ies))(?:\/|$|\?)/i;
 const COP_BASLIK = /^(?:\d{1,2}\s*[A-Za-zÇĞİÖŞÜçğıöşüéÉ]{3,9}\.?\s*[-–—]\s|(?:search|recherche|rechercher|buscar)\s+(?:publications?|articles?|the site|site)$|(?:events?|événements?|eventos?|publications?|newsletter|home|accueil|inicio|test)$)/i;
 const normAd = x => String(x).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/ı/g, "i").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 // Ülke adları birkaç dilde, tarayıcının kendi bölge adı listesinden ("Mexico", "Meksika", "México", "Mexique"…)
@@ -678,6 +678,18 @@ function sayiBasligi(y) {
   if (!/^\d{3,6}$/.test(b)) return;
   let u = null; try { u = new URL(y.link); } catch (e) { return; }
   if (/(^|\.)tehrantimes\.com$/.test(u.hostname) && /\/photo\/\d+\/\d+\/?$/.test(u.pathname)) y.baslik = `Front page of the print edition, issue ${b}`;
+}
+
+// Ahram Online başlıkların sonuna bölüm adlarını ekler ("… - International - World", "… - World - Sports"); bunları atar
+const AHRAM_UST = /^(?:World|Egypt|Sports|Business|Opinion|Arts & Culture|Life & Style|Heritage|Multimedia|Al-Ahram Weekly|African Media Digest)$/;
+function ahramKuyrugu(y, kaynakAd) {
+  let u = null; try { u = new URL(y.link); } catch (e) { return; }
+  if (kaynakAd !== "Ahram Online" && !/(^|\.)ahram\.org\.eg$/.test(u.hostname)) return;   // Google News bağlantısı henüz çözülmemiş olabilir
+  const p = String(y.baslik || "").split(" - ");
+  if (p.length < 2 || !AHRAM_UST.test(p[p.length - 1].trim())) return;
+  p.pop();
+  if (p.length >= 2 && p[p.length - 1].trim().split(/\s+/).length <= 4) p.pop();
+  y.baslik = p.join(" - ").trim();
 }
 
 function copMu(y, kaynakAd) {
@@ -1524,7 +1536,7 @@ function ingilizceBaslik(b) {
       const birlesik = yeni.concat(eskiKayit.yazilar.filter(y =>
         !gelenler.has(y.id) && !basliklar.has(String(y.baslik).toLocaleLowerCase("tr")) && !copMu(y, k.ad) &&
         !(k.yalnizTurkce && ingilizceBaslik(y.baslik))));
-      for (const y of birlesik) { sayiBasligi(y); if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
+      for (const y of birlesik) { sayiBasligi(y); ahramKuyrugu(y, k.ad); if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       const tekil = birlesik.filter(y => (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)));
       birlesik.length = 0; birlesik.push(...tekil);
@@ -1536,7 +1548,7 @@ function ingilizceBaslik(b) {
       }, yol === "yedek" ? { yol: "yedek" } : {}, (dil || eskiKayit.dil) ? { dil: dil || eskiKayit.dil } : {}, kimlikBilgisi);
       console.log(`✓ ${k.ad} — ${yeni.length} yeni, toplam ${birlesik.length}${yol === "yedek" ? " (yedek yoldan)" : ""}`);
     } catch (e) {
-      for (const y of eskiKayit.yazilar) { sayiBasligi(y); if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
+      for (const y of eskiKayit.yazilar) { sayiBasligi(y); ahramKuyrugu(y, k.ad); if (!y.pay) y.pay = payKodu(y); if (!y.yazar) { const a = onEkYazar(y.ozet); if (a) y.yazar = a; } y.ozet = ozetDuzelt(y.ozet, y.baslik, y.yazar); }
       const gorulen = new Set();
       sonuc.kaynaklar[k.ad] = Object.assign({
         yazilar: ortakOzetleriAyikla(profilKumesiniAyikla(eskiKayit.yazilar, k.ad).filter(y => !copMu(y, k.ad) && (gorulen.has(y.pay) ? false : (gorulen.add(y.pay), true)))),

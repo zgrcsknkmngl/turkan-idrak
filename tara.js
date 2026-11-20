@@ -979,7 +979,10 @@ async function tazeCek(k, url) {
 
 async function cekYedekli(k) {
   const alan = alanBul(k), kesif = alan && KESIFLER[alan] && KESIFLER[alan].url;
-  if (kesif && kesif !== k.url) {   // daha önce keşfedilmiş besleme önce
+  // Daha önce keşfedilmiş besleme yalnızca Google Haberler'in yerine geçer. Kaynağın elle seçilmiş kendi beslemesi varsa
+  // (ör. The Hindu'nun yalnız dünya haberleri) önce o denenir; keşif ancak o açılmazsa devreye girer. 19 Kasım'da bir
+  // aksaklıkta bulunan ana sayfa beslemesi, The Hindu'nun seçilmiş beslemesinin yerine kalıcı olarak geçmişti.
+  if (kesif && kesif !== k.url && gnMi(k.url)) {
     try { const y = await cek({ ...k, url: kesif, yedek: k.yedek || "kesif" }); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil }; } catch (e) { /* asıl yola dön */ }
   }
   // kesfet: Google Haberler'den başlatılan kaynakta sitenin kendi beslemesi ana sayfasından aranır (bulunamazsa haftada bir
@@ -1000,8 +1003,8 @@ async function cekYedekli(k) {
       if (!k.yedek) throw e;
       // Asıl besleme açılmadı: adresi değişmiş olabilir. Yedeğe (çoğu zaman Google Haberler) düşmeden önce sitenin
       // ana sayfasında ilan ettiği besleme aranır; bulunursa kesifler.json'a yazılır, sonraki taramalar doğrudan onu dener.
-      if (alan && !kesif && !gnMi(k.url)) {
-        const u = await beslemeKesfet(alan);
+      if (alan && !gnMi(k.url)) {
+        const u = (kesif && kesif !== k.url) ? kesif : await beslemeKesfet(alan);   // önce kayıtlı keşif, yoksa ana sayfada ara
         if (u && u !== k.url && !gnMi(u)) {
           try { const y = await tazeCek(k, u); if (y.length) return { yazilar: y, yol: "keşif", dil: y.dil, asilHata: e.message }; } catch (e3) { /* yedeğe geç */ }
         }

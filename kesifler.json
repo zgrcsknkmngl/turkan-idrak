@@ -65,7 +65,7 @@
  },
  "colombiareports.com": {
   "url": "",
-  "tarih": "2026-11-06"
+  "tarih": "2026-11-21"
  },
  "pssi.cz": {
   "url": "",
@@ -897,6 +897,14 @@
  },
  "ipar.sn": {
   "url": "https://ipar.sn/feed/",
+  "tarih": "2026-11-21"
+ },
+ "ciudadaniaydesarrollo.org": {
+  "url": "",
+  "tarih": "2026-11-21"
+ },
+ "plataformacipo.org": {
+  "url": "",
   "tarih": "2026-11-21"
  }
 }

@@ -918,5 +918,9 @@
  "foreignaffairs.com": {
   "url": "https://www.foreignaffairs.com/rss.xml",
   "tarih": "2026-11-23"
+ },
+ "researchcentre.trtworld.com": {
+  "url": "",
+  "tarih": "2026-11-23"
  }
 }

@@ -117,7 +117,7 @@
  },
  "fpri.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "brookings.edu": {
   "url": "https://www.brookings.edu/feed/",
@@ -125,11 +125,11 @@
  },
  "carnegieendowment.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "aei.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "ecfr.eu": {
   "url": "https://ecfr.eu/feed/",
@@ -141,23 +141,23 @@
  },
  "bruegel.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "ip-quarterly.com": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "swp-berlin.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "setav.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "orsam.org.tr": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "realinstitutoelcano.org": {
   "url": "https://www.realinstitutoelcano.org/feed/",
@@ -165,27 +165,27 @@
  },
  "russiancouncil.ru": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "valdaiclub.com": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "orfonline.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "eastasiaforum.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "issafrica.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "weforum.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "americasquarterly.org": {
   "url": "https://americasquarterly.org/feed/",
@@ -193,11 +193,11 @@
  },
  "972mag.com": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "insightturkey.com": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "perspektif.online": {
   "url": "https://perspektif.online/feed/",
@@ -205,11 +205,11 @@
  },
  "majalla.com": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "chinausfocus.com": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "sixthtone.com": {
   "url": "http://www.sixthtone.com/rss/index.xml",
@@ -257,11 +257,11 @@
  },
  "nuso.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "globalasia.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "martinchautari.org.np": {
   "url": "",
@@ -285,7 +285,7 @@
  },
  "rusi.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "gorky.media": {
   "url": "",
@@ -297,7 +297,7 @@
  },
  "ifri.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "cpdi-pakistan.org": {
   "url": "",
@@ -305,11 +305,11 @@
  },
  "cigionline.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "iiss.org": {
   "url": "",
-  "tarih": "2026-11-16"
+  "tarih": "2026-11-23"
  },
  "nybooks.com": {
   "url": "http://feeds.feedburner.com/nybooks",
@@ -925,6 +925,10 @@
  },
  "datalat.org": {
   "url": "https://datalat.org/feed/",
+  "tarih": "2026-11-23"
+ },
+ "premiumtimesng.com": {
+  "url": "https://www.premiumtimesng.com/feed",
   "tarih": "2026-11-23"
  }
 }

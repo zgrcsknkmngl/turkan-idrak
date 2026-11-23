@@ -922,5 +922,9 @@
  "researchcentre.trtworld.com": {
   "url": "",
   "tarih": "2026-11-23"
+ },
+ "datalat.org": {
+  "url": "https://datalat.org/feed/",
+  "tarih": "2026-11-23"
  }
 }

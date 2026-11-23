@@ -914,5 +914,9 @@
  "lithub.com": {
   "url": "",
   "tarih": "2026-11-22"
+ },
+ "foreignaffairs.com": {
+  "url": "https://www.foreignaffairs.com/rss.xml",
+  "tarih": "2026-11-23"
  }
 }

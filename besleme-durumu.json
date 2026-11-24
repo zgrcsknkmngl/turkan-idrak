@@ -1,29 +1,9 @@
 {
- "tarih": "2026-11-24T17:06:46.012Z",
+ "tarih": "2026-11-24T17:36:29.408Z",
  "kaynaklar": {
   "RAND": {
    "yol": "asıl",
    "asil": "https://www.rand.org/pubs/new.xml",
-   "hata": ""
-  },
-  "Cipher Brief": {
-   "yol": "asıl",
-   "asil": "https://www.thecipherbrief.com/feeds/feed.rss",
-   "hata": ""
-  },
-  "War on the Rocks": {
-   "yol": "asıl",
-   "asil": "https://warontherocks.com/feed/",
-   "hata": ""
-  },
-  "Long War Journal": {
-   "yol": "asıl",
-   "asil": "https://www.longwarjournal.org/feed",
-   "hata": ""
-  },
-  "FPRI": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:fpri.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Foreign Policy In Focus": {
@@ -31,9 +11,19 @@
    "asil": "https://fpif.org/feed/",
    "hata": ""
   },
-  "Crisis Group": {
+  "Long War Journal": {
    "yol": "asıl",
-   "asil": "https://www.crisisgroup.org/rss",
+   "asil": "https://www.longwarjournal.org/feed",
+   "hata": ""
+  },
+  "Cipher Brief": {
+   "yol": "asıl",
+   "asil": "https://www.thecipherbrief.com/feeds/feed.rss",
+   "hata": ""
+  },
+  "FPRI": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:fpri.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Chatham House": {
@@ -49,6 +39,16 @@
   "ECFR": {
    "yol": "keşif",
    "asil": "https://news.google.com/rss/search?q=site:ecfr.eu+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
+  "Crisis Group": {
+   "yol": "asıl",
+   "asil": "https://www.crisisgroup.org/rss",
+   "hata": ""
+  },
+  "War on the Rocks": {
+   "yol": "asıl",
+   "asil": "https://warontherocks.com/feed/",
    "hata": ""
   },
   "Foreign Policy Centre": {
@@ -76,6 +76,11 @@
    "asil": "https://researchcentre.trtworld.com/feed/",
    "hata": ""
   },
+  "Brookings": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:brookings.edu+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
   "IPQ Berlin": {
    "yol": "asıl",
    "asil": "https://news.google.com/rss/search?q=site:ip-quarterly.com+when:120d&hl=en-US&gl=US&ceid=US:en",
@@ -86,14 +91,9 @@
    "asil": "https://news.google.com/rss/search?q=site:bruegel.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
-  "Brookings": {
+  "SWP Berlin": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:brookings.edu+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "SETA": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:setav.org+when:120d&hl=tr&gl=TR&ceid=TR:tr",
+   "asil": "https://news.google.com/rss/search?q=site:swp-berlin.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "El Cezire Etüd": {
@@ -101,19 +101,19 @@
    "asil": "https://studies.aljazeera.net/en/rss.xml",
    "hata": ""
   },
-  "SAIIA Güney Afrika": {
+  "SETA": {
    "yol": "asıl",
-   "asil": "https://saiia.org.za/thematic-area/foreign-policy/feed/",
+   "asil": "https://news.google.com/rss/search?q=site:setav.org+when:120d&hl=tr&gl=TR&ceid=TR:tr",
    "hata": ""
   },
-  "Valdai": {
+  "ORSAM": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:valdaiclub.com+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:orsam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr",
    "hata": ""
   },
-  "ORF Hindistan": {
+  "RIAC": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:orfonline.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:russiancouncil.ru+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Der Spiegel": {
@@ -121,9 +121,9 @@
    "asil": "https://www.spiegel.de/international/index.rss",
    "hata": ""
   },
-  "SWP Berlin": {
+  "The Nation": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:swp-berlin.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://www.thenation.com/subject/foreign-policy/feed/",
    "hata": ""
   },
   "Rest of World": {
@@ -131,14 +131,14 @@
    "asil": "https://restofworld.org/feed/latest/",
    "hata": ""
   },
-  "The Nation": {
-   "yol": "asıl",
-   "asil": "https://www.thenation.com/subject/foreign-policy/feed/",
-   "hata": ""
-  },
   "Yale E360": {
    "yol": "asıl",
    "asil": "https://e360.yale.edu/feed.xml",
+   "hata": ""
+  },
+  "Valdai": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:valdaiclub.com+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Asia Times": {
@@ -151,9 +151,9 @@
    "asil": "https://jacobin.com/feed",
    "hata": ""
   },
-  "Dünya Ekonomik Forumu": {
+  "ORF Hindistan": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:weforum.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:orfonline.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Aeon": {
@@ -186,6 +186,11 @@
    "asil": "https://undark.org/feed/",
    "hata": ""
   },
+  "East Asia Forum": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:eastasiaforum.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
   "JSTOR Daily": {
    "yol": "asıl",
    "asil": "https://daily.jstor.org/feed/",
@@ -196,14 +201,14 @@
    "asil": "https://www.smithsonianmag.com/rss/latest_articles/",
    "hata": ""
   },
-  "Elcano": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:realinstitutoelcano.org+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
   "Psyche": {
    "yol": "asıl",
    "asil": "https://psyche.co/feed.rss",
+   "hata": ""
+  },
+  "SAIIA Güney Afrika": {
+   "yol": "asıl",
+   "asil": "https://saiia.org.za/thematic-area/foreign-policy/feed/",
    "hata": ""
   },
   "Public Domain Review": {
@@ -216,19 +221,14 @@
    "asil": "https://greatergood.berkeley.edu/site/rss/articles",
    "hata": ""
   },
+  "ISS Afrika": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:issafrica.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
   "Pesquisa FAPESP": {
    "yol": "asıl",
    "asil": "https://revistapesquisa.fapesp.br/feed/",
-   "hata": ""
-  },
-  "RIAC": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:russiancouncil.ru+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "Americas Quarterly": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:americasquarterly.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Sarkaç": {
@@ -246,9 +246,9 @@
    "asil": "https://www.ips-journal.eu/articles.rss",
    "hata": ""
   },
-  "+972 Magazine": {
+  "Americas Quarterly": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:972mag.com+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:americasquarterly.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Decode39": {
@@ -261,14 +261,14 @@
    "asil": "https://www.socialeurope.eu/feed",
    "hata": ""
   },
-  "East Asia Forum": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:eastasiaforum.org+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
   "Russia in Global Affairs": {
    "yol": "asıl",
    "asil": "https://eng.globalaffairs.ru/feed/",
+   "hata": ""
+  },
+  "Elcano": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:realinstitutoelcano.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Perspektif": {
@@ -281,9 +281,9 @@
    "asil": "https://daktilo1984.com/feed/",
    "hata": ""
   },
-  "bioGraphic": {
+  "+972 Magazine": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:biographic.com+when:60d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:972mag.com+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Sixth Tone": {
@@ -296,25 +296,25 @@
    "asil": "https://www.nippon.com/en/rss-all/",
    "hata": ""
   },
-  "The Wire Science": {
-   "yol": "yedek",
-   "asil": "https://science.thewire.in/feed/",
-   "hata": "beslemede son 90 günden yazı yok"
-  },
-  "ISS Afrika": {
+  "bioGraphic": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:issafrica.org+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "The Conversation Endonezya": {
-   "yol": "asıl",
-   "asil": "https://theconversation.com/id/articles.atom",
+   "asil": "https://news.google.com/rss/search?q=site:biographic.com+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "SciDev.Net": {
    "yol": "yedek",
    "asil": "https://www.scidev.net/global/feed/",
    "hata": "beslemede yazı yok"
+  },
+  "The Conversation Endonezya": {
+   "yol": "asıl",
+   "asil": "https://theconversation.com/id/articles.atom",
+   "hata": ""
+  },
+  "The Wire Science": {
+   "yol": "yedek",
+   "asil": "https://science.thewire.in/feed/",
+   "hata": "beslemede son 90 günden yazı yok"
   },
   "Policy Options": {
    "yol": "asıl",
@@ -376,9 +376,9 @@
    "asil": "https://www.france24.com/en/rss",
    "hata": ""
   },
-  "Euronews": {
+  "Inside Story": {
    "yol": "asıl",
-   "asil": "https://www.euronews.com/rss",
+   "asil": "https://insidestory.org.au/feed/",
    "hata": ""
   },
   "The Guardian": {
@@ -386,9 +386,9 @@
    "asil": "https://www.theguardian.com/world/rss",
    "hata": "HTTP 403"
   },
-  "Inside Story": {
+  "Global Asia": {
    "yol": "asıl",
-   "asil": "https://insidestory.org.au/feed/",
+   "asil": "https://news.google.com/rss/search?q=site:globalasia.org+when:90d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Telesur": {
@@ -396,19 +396,24 @@
    "asil": "https://www.telesurenglish.net/feed/",
    "hata": ""
   },
-  "Global Asia": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:globalasia.org+when:90d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
   "MercoPress": {
    "yol": "asıl",
    "asil": "https://en.mercopress.com/rss/",
    "hata": ""
   },
+  "IPS Küresel Güney": {
+   "yol": "asıl",
+   "asil": "https://www.ipsnews.net/news/regional-categories/global/feed/",
+   "hata": ""
+  },
   "Colombia Reports": {
    "yol": "asıl",
    "asil": "https://colombiareports.com/feed/",
+   "hata": ""
+  },
+  "The India Forum": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:theindiaforum.in+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Daily Maverick": {
@@ -426,29 +431,19 @@
    "asil": "https://theprint.in/category/world/feed/",
    "hata": ""
   },
+  "Euractiv": {
+   "yol": "asıl",
+   "asil": "https://www.euractiv.com/?feed=mcfeed",
+   "hata": ""
+  },
   "Balkan Insight": {
    "yol": "asıl",
    "asil": "https://balkaninsight.com/feed/",
    "hata": ""
   },
-  "IPS Küresel Güney": {
-   "yol": "asıl",
-   "asil": "https://www.ipsnews.net/news/regional-categories/global/feed/",
-   "hata": ""
-  },
-  "The India Forum": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:theindiaforum.in+when:60d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
   "ProPublica": {
    "yol": "asıl",
    "asil": "https://www.propublica.org/feeds/propublica/main",
-   "hata": ""
-  },
-  "Euractiv": {
-   "yol": "asıl",
-   "asil": "https://www.euractiv.com/?feed=mcfeed",
    "hata": ""
   },
   "Mongabay": {
@@ -465,6 +460,11 @@
    "yol": "yedek",
    "asil": "https://thewalrus.ca/feed/",
    "hata": "HTTP 403"
+  },
+  "Insight Turkey": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:insightturkey.com+when:90d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
   },
   "Politico": {
    "yol": "asıl",
@@ -496,34 +496,29 @@
    "asil": "https://mexiconewsdaily.com/feed/",
    "hata": ""
   },
-  "Prensa Latina": {
-   "yol": "keşif",
-   "asil": "https://news.google.com/rss/search?q=site:plenglish.com+when:7d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
   "Premium Times": {
    "yol": "asıl",
    "asil": "https://www.premiumtimesng.com/feed",
    "hata": ""
+  },
+  "Euronews": {
+   "yol": "yedek",
+   "asil": "https://www.euronews.com/rss",
+   "hata": "HTTP 406"
   },
   "Dawn": {
    "yol": "asıl",
    "asil": "https://www.dawn.com/feeds/home",
    "hata": ""
   },
-  "Insight Turkey": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:insightturkey.com+when:90d&hl=en-US&gl=US&ceid=US:en",
+  "Prensa Latina": {
+   "yol": "keşif",
+   "asil": "https://news.google.com/rss/search?q=site:plenglish.com+when:7d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Kyiv Independent": {
    "yol": "asıl",
    "asil": "https://kyivindependent.com/news-archive/rss/",
-   "hata": ""
-  },
-  "Yonhap": {
-   "yol": "asıl",
-   "asil": "https://en.yna.co.kr/RSS/news.xml",
    "hata": ""
   },
   "The Young Turks": {
@@ -536,29 +531,14 @@
    "asil": "https://www.politico.eu/feed/",
    "hata": ""
   },
+  "Yonhap": {
+   "yol": "asıl",
+   "asil": "https://en.yna.co.kr/RSS/news.xml",
+   "hata": ""
+  },
   "BirGün": {
    "yol": "asıl",
    "asil": "https://www.birgun.net/rss/home",
-   "hata": ""
-  },
-  "ORSAM": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:orsam.org.tr+when:120d&hl=tr&gl=TR&ceid=TR:tr",
-   "hata": ""
-  },
-  "AA Analiz": {
-   "yol": "asıl",
-   "asil": "https://www.aa.com.tr/tr/rss/default?cat=analiz",
-   "hata": ""
-  },
-  "Morocco World News": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:moroccoworldnews.com+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "IRIS": {
-   "yol": "asıl",
-   "asil": "https://www.iris-france.org/feed/",
    "hata": ""
   },
   "Gazete Oksijen": {
@@ -566,15 +546,30 @@
    "asil": "https://news.google.com/rss/search?q=site:gazeteoksijen.com+when:120d&hl=tr&gl=TR&ceid=TR:tr",
    "hata": ""
   },
-  "Institut Montaigne": {
-   "yol": "keşif",
-   "asil": "https://news.google.com/rss/search?q=site:institutmontaigne.org+when:30d&hl=fr&gl=FR&ceid=FR:fr",
+  "AA Analiz": {
+   "yol": "asıl",
+   "asil": "https://www.aa.com.tr/tr/rss/default?cat=analiz",
+   "hata": ""
+  },
+  "Dünya Ekonomik Forumu": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:weforum.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
+  "IRIS": {
+   "yol": "asıl",
+   "asil": "https://www.iris-france.org/feed/",
    "hata": ""
   },
   "EDAM": {
    "yol": "yedek",
    "asil": "https://edam.org.tr/feed/",
    "hata": "HTTP 403"
+  },
+  "Institut Montaigne": {
+   "yol": "keşif",
+   "asil": "https://news.google.com/rss/search?q=site:institutmontaigne.org+when:30d&hl=fr&gl=FR&ceid=FR:fr",
+   "hata": ""
   },
   "Mavi Vatan Geopolitics": {
    "yol": "yedek",
@@ -616,19 +611,24 @@
    "asil": "https://news.google.com/rss/search?q=site:spf.org+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
+  "Morocco World News": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:moroccoworldnews.com+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
   "Instituto Igarapé": {
    "yol": "asıl",
    "asil": "https://igarape.org.br/en/feed/",
    "hata": ""
   },
-  "CIPPEC": {
-   "yol": "asıl",
-   "asil": "https://www.cippec.org/feed/",
-   "hata": ""
-  },
   "Tokyo Foundation": {
    "yol": "asıl",
    "asil": "https://news.google.com/rss/search?q=site:tokyofoundation.org+when:90d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
+  "CIPPEC": {
+   "yol": "asıl",
+   "asil": "https://www.cippec.org/feed/",
    "hata": ""
   },
   "Dejusticia": {
@@ -656,14 +656,14 @@
    "asil": "https://wcpp.org.uk/feed/",
    "hata": ""
   },
-  "CSIS Endonezya": {
-   "yol": "yedek",
-   "asil": "https://www.csis.or.id/feed/",
-   "hata": "HTTP 404"
-  },
   "CIPS Indonesia": {
    "yol": "keşif",
    "asil": "https://cips-indonesia.org/feed/",
+   "hata": "HTTP 404"
+  },
+  "CSIS Endonezya": {
+   "yol": "yedek",
+   "asil": "https://www.csis.or.id/feed/",
    "hata": "HTTP 404"
   },
   "CEBRI": {
@@ -691,14 +691,19 @@
    "asil": "https://news.google.com/rss/search?q=site:odi.org+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
+  "East Asia Institute": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:eai.or.kr+when:90d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
   "oiip": {
    "yol": "asıl",
    "asil": "https://oiip.ac.at/feed/",
    "hata": ""
   },
-  "East Asia Institute": {
+  "CCG": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:eai.or.kr+when:90d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:ccg.org.cn+when:90d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Polis180": {
@@ -711,19 +716,14 @@
    "asil": "https://juandemariana.org/feed/",
    "hata": ""
   },
-  "CCG": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:ccg.org.cn+when:90d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "PSSI": {
-   "yol": "asıl",
-   "asil": "https://pssi.cz/feed/",
-   "hata": ""
-  },
   "FCD Ecuador": {
    "yol": "asıl",
    "asil": "https://ciudadaniaydesarrollo.org/feed/",
+   "hata": ""
+  },
+  "Datalat": {
+   "yol": "asıl",
+   "asil": "https://datalat.org/feed/",
    "hata": ""
   },
   "CISDI": {
@@ -731,9 +731,9 @@
    "asil": "https://cisdi.org/feed/",
    "hata": "HTTP 404"
   },
-  "Datalat": {
+  "PSSI": {
    "yol": "asıl",
-   "asil": "https://datalat.org/feed/",
+   "asil": "https://pssi.cz/feed/",
    "hata": ""
   },
   "Instituto Millenium": {
@@ -756,6 +756,11 @@
    "asil": "https://news.google.com/rss/search?q=site:gcsp.ch+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
+  "Aapti": {
+   "yol": "asıl",
+   "asil": "https://aapti.in/feed/",
+   "hata": ""
+  },
   "CEP Chile": {
    "yol": "yedek",
    "asil": "https://cepchile.cl/feed/",
@@ -771,20 +776,15 @@
    "asil": "https://iep.org.pe/feed/",
    "hata": "beslemede son 90 günden yazı yok"
   },
-  "Kaleka": {
-   "yol": "yedek",
-   "asil": "https://kaleka.id/feed/",
-   "hata": "HTTP 404"
-  },
   "Libertank": {
    "yol": "yedek",
    "asil": "https://libertank.co/feed/",
    "hata": "HTTP 404"
   },
-  "GLPS": {
+  "Kaleka": {
    "yol": "yedek",
-   "asil": "https://legalpoliticalstudies.org/feed/",
-   "hata": "HTTP 403"
+   "asil": "https://kaleka.id/feed/",
+   "hata": "HTTP 404"
   },
   "Afrobarometer": {
    "yol": "asıl",
@@ -796,6 +796,11 @@
    "asil": "https://mecouncil.org/feed/",
    "hata": "beslemede yazı yok"
   },
+  "GLPS": {
+   "yol": "yedek",
+   "asil": "https://legalpoliticalstudies.org/feed/",
+   "hata": "HTTP 403"
+  },
   "Martin Chautari": {
    "yol": "yedek",
    "asil": "https://martinchautari.org.np/feed/",
@@ -805,11 +810,6 @@
    "yol": "yedek",
    "asil": "https://primeinstitute.org/feed/",
    "hata": "beslemede son 90 günden yazı yok"
-  },
-  "ACET": {
-   "yol": "yedek",
-   "asil": "https://acetforafrica.org/feed/",
-   "hata": "HTTP 403"
   },
   "CSEA": {
    "yol": "asıl",
@@ -821,9 +821,9 @@
    "asil": "https://sustainablefutures.org/feed/",
    "hata": "beslemede yazı yok"
   },
-  "APHRC": {
+  "ACET": {
    "yol": "yedek",
-   "asil": "https://aphrc.org/feed/",
+   "asil": "https://acetforafrica.org/feed/",
    "hata": "HTTP 403"
   },
   "IPAR": {
@@ -836,19 +836,19 @@
    "asil": "https://pari.org.za/feed/",
    "hata": ""
   },
-  "CPDI": {
+  "APHRC": {
    "yol": "yedek",
-   "asil": "https://cpdi-pakistan.org/feed/",
-   "hata": "HTTP 404"
-  },
-  "Aapti": {
-   "yol": "yedek",
-   "asil": "https://aapti.in/feed/",
-   "hata": "The operation was aborted due to timeout"
+   "asil": "https://aphrc.org/feed/",
+   "hata": "HTTP 403"
   },
   "CDD West Africa": {
    "yol": "yedek",
    "asil": "https://cddwestafrica.org/feed/",
+   "hata": "HTTP 404"
+  },
+  "CPDI": {
+   "yol": "yedek",
+   "asil": "https://cpdi-pakistan.org/feed/",
    "hata": "HTTP 404"
   },
   "E3G": {
@@ -896,6 +896,11 @@
    "asil": "https://newapproach.org.au/feed/",
    "hata": "beslemede yazı yok"
   },
+  "Bajeti Hub": {
+   "yol": "yedek",
+   "asil": "https://bajetihub.org/feed/",
+   "hata": "beslemede yazı yok"
+  },
   "ZIPAR": {
    "yol": "yedek",
    "asil": "https://zipar.org.zm/feed/",
@@ -906,9 +911,9 @@
    "asil": "https://news.google.com/rss/search?q=site:grattan.edu.au+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
-  "IFS": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:ifs.org.uk+when:60d&hl=en-US&gl=US&ceid=US:en",
+  "TDRI": {
+   "yol": "keşif",
+   "asil": "https://news.google.com/rss/search?q=site:tdri.or.th+when:60d&hl=th&gl=TH&ceid=TH:th",
    "hata": ""
   },
   "Centre for Future Generations": {
@@ -916,9 +921,14 @@
    "asil": "https://cfg.eu/feed/",
    "hata": ""
   },
-  "TDRI": {
-   "yol": "keşif",
-   "asil": "https://news.google.com/rss/search?q=site:tdri.or.th+when:60d&hl=th&gl=TH&ceid=TH:th",
+  "CODE": {
+   "yol": "yedek",
+   "asil": "https://connecteddevelopment.org/feed/",
+   "hata": "The operation was aborted due to timeout"
+  },
+  "IFS": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:ifs.org.uk+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Vera Institute": {
@@ -926,29 +936,19 @@
    "asil": "https://news.google.com/rss/search?q=site:vera.org+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
-  "CODE": {
+  "IDEAS Malaysia": {
    "yol": "yedek",
-   "asil": "https://connecteddevelopment.org/feed/",
-   "hata": "The operation was aborted due to timeout"
-  },
-  "Bajeti Hub": {
-   "yol": "yedek",
-   "asil": "https://bajetihub.org/feed/",
-   "hata": "fetch failed"
-  },
-  "Khazanah Research Institute": {
-   "yol": "yedek",
-   "asil": "https://krinstitute.org/feed/",
-   "hata": "HTTP 404"
+   "asil": "https://ideas.org.my/feed/",
+   "hata": "beslemede yazı yok"
   },
   "ELIAMEP": {
    "yol": "asıl",
    "asil": "https://eliamep.gr/feed/",
    "hata": ""
   },
-  "SMERU": {
+  "Khazanah Research Institute": {
    "yol": "yedek",
-   "asil": "https://smeru.or.id/feed/",
+   "asil": "https://krinstitute.org/feed/",
    "hata": "HTTP 404"
   },
   "Kultura Liberalna": {
@@ -961,10 +961,10 @@
    "asil": "https://stearthinktank.com/feed/",
    "hata": "HTTP 404"
   },
-  "IDEAS Malaysia": {
+  "SMERU": {
    "yol": "yedek",
-   "asil": "https://ideas.org.my/feed/",
-   "hata": "beslemede yazı yok"
+   "asil": "https://smeru.or.id/feed/",
+   "hata": "HTTP 404"
   },
   "CIDOB": {
    "yol": "asıl",
@@ -1081,24 +1081,24 @@
    "asil": "https://bezbednost.org/feed/",
    "hata": ""
   },
-  "REDES Perú": {
+  "Grupo FARO": {
    "yol": "yedek",
-   "asil": "https://redesarrollo.pe/feed/",
+   "asil": "https://grupofaro.org/feed/",
    "hata": "beslemede son 90 günden yazı yok"
-  },
-  "APRI Armenia": {
-   "yol": "asıl",
-   "asil": "https://apri.institute/feed/",
-   "hata": ""
   },
   "EPI Skopje": {
    "yol": "asıl",
    "asil": "https://epi.org.mk/feed/",
    "hata": ""
   },
-  "Grupo FARO": {
+  "APRI Armenia": {
+   "yol": "asıl",
+   "asil": "https://apri.institute/feed/",
+   "hata": ""
+  },
+  "REDES Perú": {
    "yol": "yedek",
-   "asil": "https://grupofaro.org/feed/",
+   "asil": "https://redesarrollo.pe/feed/",
    "hata": "beslemede son 90 günden yazı yok"
   },
   "Accountability Lab": {
@@ -1176,24 +1176,24 @@
    "asil": "https://news.google.com/rss/search?q=site:kippra.or.ke+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
-  "SDPI": {
-   "yol": "yedek",
-   "asil": "https://sdpi.org/feed/",
-   "hata": "beslemede yazı yok"
+  "Nkafu Policy Institute": {
+   "yol": "asıl",
+   "asil": "https://nkafu.org/feed/",
+   "hata": ""
   },
   "ZeniZeni": {
    "yol": "keşif",
    "asil": "https://zenizeni.com/feed/",
    "hata": "HTTP 404"
   },
+  "SDPI": {
+   "yol": "yedek",
+   "asil": "https://sdpi.org/feed/",
+   "hata": "beslemede yazı yok"
+  },
   "COMEXI": {
    "yol": "keşif",
    "asil": "https://news.google.com/rss/search?q=site:consejomexicano.org+when:90d&hl=es-419&gl=MX&ceid=MX:es-419",
-   "hata": ""
-  },
-  "Nkafu Policy Institute": {
-   "yol": "asıl",
-   "asil": "https://nkafu.org/feed/",
    "hata": ""
   },
   "Lowy Institute": {
@@ -1206,15 +1206,15 @@
    "asil": "https://imco.org.mx/feed/",
    "hata": ""
   },
-  "Africa Policy Research Institute": {
-   "yol": "yedek",
-   "asil": "https://afripoli.org/feed/",
-   "hata": "HTTP 404"
-  },
   "ASPI": {
    "yol": "asıl",
    "asil": "https://www.aspistrategist.org.au/feed/",
    "hata": ""
+  },
+  "Africa Policy Research Institute": {
+   "yol": "yedek",
+   "asil": "https://afripoli.org/feed/",
+   "hata": "HTTP 404"
   },
   "WATHI": {
    "yol": "asıl",
@@ -1252,19 +1252,19 @@
    "hata": ""
   },
   "RUSI": {
-   "yol": "asıl",
+   "yol": "yok",
    "asil": "https://news.google.com/rss/search?q=site:rusi.org+when:30d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "Institut Concorde": {
-   "yol": "yedek",
-   "asil": "https://institut-concorde.org/feed/",
    "hata": "beslemede yazı yok"
   },
   "MP-IDSA": {
    "yol": "asıl",
    "asil": "https://news.google.com/rss/search?q=site:idsa.in+when:60d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
+  },
+  "Institut Concorde": {
+   "yol": "yedek",
+   "asil": "https://institut-concorde.org/feed/",
+   "hata": "beslemede yazı yok"
   },
   "IISS": {
    "yol": "asıl",
@@ -1386,6 +1386,11 @@
    "asil": "https://www.rogerebert.com/feed",
    "hata": ""
   },
+  "Los Angeles Review of Books": {
+   "yol": "yedek",
+   "asil": "https://lareviewofbooks.org/feed/",
+   "hata": "HTTP 404"
+  },
   "Kirkus Reviews": {
    "yol": "asıl",
    "asil": "https://news.google.com/rss/search?q=site:kirkusreviews.com+when:30d&hl=en-US&gl=US&ceid=US:en",
@@ -1396,15 +1401,15 @@
    "asil": "https://www.asymptotejournal.com/blog/feed/",
    "hata": "HTTP 403"
   },
-  "Gorky": {
-   "yol": "yedek",
-   "asil": "https://gorky.media/feed/",
-   "hata": "HTTP 404"
-  },
   "BM Haber": {
    "yol": "asıl",
    "asil": "https://news.un.org/feed/subscribe/en/news/all/rss.xml",
    "hata": ""
+  },
+  "Gorky": {
+   "yol": "yedek",
+   "asil": "https://gorky.media/feed/",
+   "hata": "HTTP 404"
   },
   "K24": {
    "yol": "yedek",
@@ -1431,11 +1436,6 @@
    "asil": "https://lwlies.com/feed/",
    "hata": "fetch failed"
   },
-  "Otros Cines": {
-   "yol": "yedek",
-   "asil": "https://www.otroscines.com/feed/",
-   "hata": "beslemede yazı yok"
-  },
   "The New York Times": {
    "yol": "asıl",
    "asil": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
@@ -1451,10 +1451,10 @@
    "asil": "https://www.ft.com/world?format=rss",
    "hata": ""
   },
-  "BM İnsan Hakları": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:ohchr.org+when:120d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
+  "Otros Cines": {
+   "yol": "yedek",
+   "asil": "https://www.otroscines.com/feed/",
+   "hata": "beslemede yazı yok"
   },
   "Le Monde": {
    "yol": "asıl",
@@ -1486,15 +1486,15 @@
    "asil": "https://rss.beehiiv.com/feeds/EPWB5hzRfW.xml",
    "hata": ""
   },
+  "BM İnsan Hakları": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:ohchr.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
   "UNDP": {
    "yol": "asıl",
    "asil": "https://news.google.com/rss/search?q=site:undp.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
-  },
-  "Los Angeles Review of Books": {
-   "yol": "yedek",
-   "asil": "https://lareviewofbooks.org/feed/",
-   "hata": "HTTP 404"
   },
   "Foreign Affairs": {
    "yol": "asıl",
@@ -1531,9 +1531,9 @@
    "asil": "https://news.google.com/rss/search?q=site:mondediplo.com+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
-  "Dünya Bankası": {
+  "IMF": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:worldbank.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:imf.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Nikkei Asia": {
@@ -1556,9 +1556,9 @@
    "asil": "https://www.lrb.co.uk/feeds/rss",
    "hata": ""
   },
-  "IMF": {
+  "OECD": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:imf.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:oecd.org+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "New York Review of Books": {
@@ -1566,9 +1566,9 @@
    "asil": "https://www.nybooks.com/feed/",
    "hata": "beslemede yazı yok"
   },
-  "OECD": {
+  "McKinsey Global Institute": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:oecd.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:mckinsey.com+%22McKinsey+Global+Institute%22+when:120d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Le Monde des Livres": {
@@ -1581,9 +1581,9 @@
    "asil": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/babelia/portada",
    "hata": ""
   },
-  "McKinsey Global Institute": {
+  "Reuters": {
    "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:mckinsey.com+%22McKinsey+Global+Institute%22+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "asil": "https://news.google.com/rss/search?q=site:reuters.com+when:7d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "Time": {
@@ -1599,16 +1599,6 @@
   "Fayn": {
    "yol": "asıl",
    "asil": "https://www.fayn.press/rss/",
-   "hata": ""
-  },
-  "Reuters": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:reuters.com+when:7d&hl=en-US&gl=US&ceid=US:en",
-   "hata": ""
-  },
-  "The East African": {
-   "yol": "asıl",
-   "asil": "https://news.google.com/rss/search?q=site:theeastafrican.co.ke+when:7d&hl=en-US&gl=US&ceid=US:en",
    "hata": ""
   },
   "The Jakarta Post": {
@@ -1635,6 +1625,16 @@
    "yol": "yedek",
    "asil": "https://www.cahiersducinema.com/feed/",
    "hata": "HTTP 404"
+  },
+  "Dünya Bankası": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:worldbank.org+when:120d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
+  },
+  "The East African": {
+   "yol": "asıl",
+   "asil": "https://news.google.com/rss/search?q=site:theeastafrican.co.ke+when:7d&hl=en-US&gl=US&ceid=US:en",
+   "hata": ""
   }
  }
 }

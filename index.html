@@ -464,6 +464,12 @@ document.documentElement.classList.add("acilis-var");}catch(e){}})();
   .tef-oku .tef-metin > .tef-acts:last-child{margin-top:26px}
   .tef-geri{background:none;border:0;padding:6px 0;margin:0 0 6px;color:var(--dim);font:500 14px var(--sans);cursor:pointer}
   .tef-oku .tarih{font:12.5px var(--serif);color:var(--dim);margin:6px 0 10px}
+  /* Tefekkür kapak görseli: yazının en üstünde, altında küçük not */
+  .tef-oku .tef-kapak{margin:0 0 14px}
+  .tef-oku .tef-kapak img{display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover;border-radius:12px;background:var(--rule)}
+  .tef-oku .tef-kapak figcaption{font:11.5px/1.4 var(--sans);color:var(--dim);margin:6px 2px 0;text-align:end}
+  .tef-entry .kapak-alan{cursor:pointer}
+  #tefekkur .tef-entry .kapak-alan{aspect-ratio:1200/630}   /* Tefekkür listesinde tablo kırpılmadan, bütünüyle görünsün */
   .tef-oku h1{font-family:var(--serif);font-weight:500;font-size:clamp(26px,7vw,34px);line-height:1.2;margin:0 0 10px;color:var(--vellum)}
   .tef-oku .yazar-satir{font:14px/1.5 var(--sans);color:var(--dim);margin:0 0 22px}
   .tef-oku .yazar-satir strong{font-weight:600;color:var(--ember)}
@@ -1667,7 +1673,7 @@ S.tefAcik = null; S.tefMetin = {}; S.tefCeviri = {}; S.tefCeviriAcik = false;
 function tefOge(x){
   const slug = String(x.yol||"").replace(/\.html$/, "");
   return {id:"tef:"+slug, kaynak:"Tefekkür", baslik:x.baslik||"", ozet:x.ozet||"", yazar:x.yazar||"",
-          gorsel:"", link:x.yol||"", tarih:x.tarih||"", tef:x.yol||""};
+          gorsel:x.gorsel||"", link:x.yol||"", tarih:x.tarih||"", tef:x.yol||""};
 }
 const tefOgeleri = () => (S.tefekkur||[]).map(tefOge);
 const tefCevrilebilir = () => S.ceviriDili !== "tr";
@@ -1682,7 +1688,9 @@ function tefKart(y, listede){
   const ust = listede
     ? `<span class="src">${kac(y.yazar)}</span><span class="when">${kac(tarihYaz(y.tarih))}</span>`
     : `<span class="src">${kac(t("nav_tefekkur"))}</span><span class="yazar">${kac(y.yazar)}</span><span class="when">${kac(tarihYaz(y.tarih))}</span>`;
-  return `<article class="entry tef-entry"><div class="meta">${ust}</div>
+  // Kapak görseli varsa İdrak kartlarındaki gibi en üstte durur; dokununca yazı açılır
+  const kapak = y.gorsel ? kapakAlani(y, t("nav_tefekkur"), "").replace('<div class="kapak-alan', `<div data-tefac="${kac(y.tef)}" role="link" class="kapak-alan`) : "";
+  return `<article class="entry tef-entry${y.gorsel ? " tef-gorselli" : ""}">${kapak}<div class="meta">${ust}</div>
     <div class="govde"><div class="yazi" data-tefac="${kac(y.tef)}" role="link" tabindex="0">
       <h2>${kac(c ? c.baslik : y.baslik)}</h2>${c ? `<p class="orig">${kac(y.baslik)}</p>` : ""}
       ${tamOzet(c ? c.ozet : y.ozet) ? `<p class="sum">${kac(tamOzet(c ? c.ozet : y.ozet))}</p>` : ""}
@@ -1705,7 +1713,7 @@ async function tefYaziyiCevir(yol){
     try{
       const kap = document.createElement("div"); kap.innerHTML = S.tefMetin[yol] || "";
       const isler = [];
-      kap.querySelectorAll("h1, h2, h3, p, li").forEach(el => {
+      kap.querySelectorAll("h1, h2, h3, p, li, figcaption").forEach(el => {
         if(el.classList.contains("yazar-satir") || el.classList.contains("tarih")) return;
         if(el.classList.contains("imza")){ el.querySelectorAll("em").forEach(em => isler.push([em, em.textContent])); return; }
         if(el.classList.contains("misra")){

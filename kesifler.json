@@ -593,7 +593,7 @@
  },
  "dawn.com": {
   "url": "",
-  "tarih": "2026-11-18"
+  "tarih": "2026-11-25"
  },
  "revistaanfibia.com": {
   "url": "https://www.revistaanfibia.com/feed/",
@@ -956,6 +956,10 @@
   "tarih": "2026-11-25"
  },
  "filmcomment.com": {
+  "url": "",
+  "tarih": "2026-11-25"
+ },
+ "gatewayhouse.in": {
   "url": "",
   "tarih": "2026-11-25"
  }

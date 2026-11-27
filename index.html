@@ -35,7 +35,7 @@
 (function(){var t="koyu";try{t=localStorage.getItem("ti.tema")||"koyu"}catch(e){}
 document.documentElement.setAttribute("data-tema",t);
 if(t==="acik"){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#F0F5FA";}
-var devam=false;try{var k=JSON.parse(localStorage.getItem("ti.kaldigi")||"null");devam=!!(k&&Date.now()-k.t<294e4);}catch(e){}
+var devam=false;try{var k=JSON.parse(localStorage.getItem("ti.kaldigi")||"null");devam=!!(k&&Date.now()-k.t<11889e3);}catch(e){}
 if(devam)document.documentElement.classList.add("devam");
 try{if(!devam&&!/[?&](y|ekran)=/.test(location.search)&&!(navigator.connection&&navigator.connection.saveData)&&!matchMedia("(prefers-reduced-motion: reduce)").matches)
 document.documentElement.classList.add("acilis-var");}catch(e){}})();
@@ -2712,7 +2712,7 @@ if(!SOZLUK[S.dil] && !Object.keys(S.arayuzMT).length)
    "Türkan İdrak Tefekkür · turkanidrak.com" yazısı artık videonun içinde; video tek başına paylaşılınca da görünür, sayfa üstüne ayrıca yazmaz.
    Video, kendi bulanık kopyasının önünde kırpılmadan oynar.
    Video yüklenirken de, oynatılamazsa da videonun bir karesi (acilis-kare.jpg) görünür; oynatılamazsa kısa bir an sonra uygulamaya geçilir.
-   Her taze açılışta oynar; "Atla" videonun 3. saniyesinden itibaren görünür. Okur 49 dakika içinde dönerse video oynamaz, uygulama kaldığı yerden açılır (bkz. "Kaldığı yer"). Bitince yumuşakça uygulamaya geçer.
+   Her taze açılışta oynar; "Atla" videonun 1. saniyesinden itibaren görünür. Okur 198 dakika 9 saniye içinde dönerse video oynamaz, uygulama kaldığı yerden açılır (bkz. "Kaldığı yer"). Bitince yumuşakça uygulamaya geçer.
    Ses: açılış sessiz başlar; okur hoparlöre dokunursa ses ayrı bir dosyadan (acilis-ses.m4a) Web Audio ile çalınır.
    Dosya ancak o dokunuşta indirilir; dokunmayanın verisi harcanmaz. Sesli <video> telefondan "ses odağı" ister ve
    arka planda çalan müziği ya da YouTube'u kalıcı olarak durdurur; Web Audio ise onlarla karışarak çalar, açılış bitince de hiçbir şeyi tutmaz. */
@@ -2813,7 +2813,7 @@ function acilisOynat(){
   });
   v.addEventListener("waiting", () => { if(sesli && ctx && kaynak && ctx.state === "running" && ctx.suspend) ctx.suspend().catch(() => {}); });   // video takılırsa ses beklesin
   v.addEventListener("timeupdate", () => {
-    if(v.currentTime >= 3) atla.classList.add("gorunur");
+    if(v.currentTime >= 1) atla.classList.add("gorunur");
     if(v.currentTime >= 11.45) ac.classList.add("marka-acik");   // ankalar buluşuyor: ad ve adres belirir, ses adı söyler
   });
   v.addEventListener("ended", () => kapat(750));
@@ -2841,7 +2841,7 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(basligiSigd
 addEventListener("resize", basligiSigdir);
 if(ACILIS){ const y = paylasilaniBul(ACILIS); if(y){ S.acilan = y; S.ekran = "feed"; } }
 /* Kaldığı yer (Bluesky gibi): okur uygulamadan çıkınca (geri tuşu, ana ekran, başka uygulama) hangi ekranda, hangi yazıda kaldığı
-   yalnız bu cihazda saklanır, hiçbir yere gönderilmez. 49 dakika içinde dönerse açılış videosu oynamaz, akış kaldığı yazıdan açılır;
+   yalnız bu cihazda saklanır, hiçbir yere gönderilmez. 198 dakika 9 saniye içinde dönerse açılış videosu oynamaz, akış kaldığı yazıdan açılır;
    yeni gelen yazılar üstte bekler, yukarı kaydıran görür. Daha geç dönerse açılış videosu ve akışın başı.
    Tarayıcıda bir yazıdan geri dönen okur için eski "ti.donus" yolu da aynen çalışır. */
 function capaBul(){

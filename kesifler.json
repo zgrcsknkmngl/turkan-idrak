@@ -998,5 +998,9 @@
  "kommersant.ru": {
   "url": "",
   "tarih": "2026-11-27"
+ },
+ "longwarjournal.org": {
+  "url": "https://www.longwarjournal.org/feed",
+  "tarih": "2026-11-28"
  }
 }

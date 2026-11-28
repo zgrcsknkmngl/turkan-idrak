@@ -21,12 +21,12 @@
    "https://www.euronews.com/sitemap/lettered-pages/countries.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 2324,
-   "gorselli": 2204,
-   "saatli": 113,
-   "eslesen": 27,
-   "hata": ""
+   "tarih": "2026-11-28T16:19",
+   "girdi": 448,
+   "gorselli": 331,
+   "saatli": 114,
+   "eslesen": 26,
+   "hata": "HTTP 406"
   }
  },
  "reuters.com": {
@@ -49,7 +49,7 @@
    "https://www.reuters.com/arc/outboundfeeds/topic-sitemap/?outputType=xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -85,11 +85,11 @@
    "https://www.bloomberg.com/billionaires/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 6512,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 6510,
    "gorselli": 0,
-   "saatli": 258,
-   "eslesen": 109,
+   "saatli": 256,
+   "eslesen": 108,
    "hata": ""
   }
  },
@@ -111,11 +111,11 @@
    "https://www.ft.com/sitemaps/index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 193,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 189,
    "gorselli": 0,
-   "saatli": 193,
-   "eslesen": 94,
+   "saatli": 189,
+   "eslesen": 93,
    "hata": ""
   }
  },
@@ -134,10 +134,10 @@
    "https://www.kommersant.ru/sitemaps/themes.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 47,
-   "gorselli": 43,
-   "saatli": 47,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 45,
+   "gorselli": 41,
+   "saatli": 45,
    "eslesen": 4,
    "hata": ""
   }
@@ -154,7 +154,7 @@
    "https://www.politico.eu/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 34,
    "gorselli": 0,
    "saatli": 34,
@@ -173,12 +173,12 @@
    "https://www.dawn.com/feeds/sitemap"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 146,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 0,
    "gorselli": 0,
-   "saatli": 100,
-   "eslesen": 35,
-   "hata": ""
+   "saatli": 0,
+   "eslesen": 0,
+   "hata": "HTTP 403"
   }
  },
  "aei.org": {
@@ -207,10 +207,10 @@
    "https://www.thehindu.com/business/feeder/default.rss"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 587,
-   "gorselli": 420,
-   "saatli": 587,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 576,
+   "gorselli": 413,
+   "saatli": 576,
    "eslesen": 0,
    "hata": ""
   }
@@ -227,7 +227,7 @@
    "https://www.economist.com/googlenews.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -248,7 +248,7 @@
    "https://www.cato.org/google-news-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 1,
    "gorselli": 0,
    "saatli": 1,
@@ -267,7 +267,7 @@
    "https://mexiconewsdaily.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 1000,
    "gorselli": 997,
    "saatli": 0,
@@ -287,10 +287,10 @@
    "https://www.thebookseller.com/TheBooksellerNewsSitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 13,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 10,
    "gorselli": 0,
-   "saatli": 13,
+   "saatli": 10,
    "eslesen": 0,
    "hata": ""
   }
@@ -361,7 +361,7 @@
    "https://www.premiumtimesng.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 134,
    "gorselli": 0,
    "saatli": 134,
@@ -542,7 +542,7 @@
    "https://www.thejakartapost.com/sitemap_web_adv_longform.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 240,
    "gorselli": 0,
    "saatli": 40,
@@ -647,7 +647,7 @@
    "https://ecfr.eu/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 13,
    "gorselli": 0,
    "saatli": 0,
@@ -711,7 +711,7 @@
    "https://www.ips-journal.eu/news-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 1,
    "gorselli": 1,
    "saatli": 1,
@@ -740,7 +740,7 @@
    "https://www.worldbank.org/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 8536,
    "gorselli": 0,
    "saatli": 0,
@@ -780,7 +780,7 @@
    "https://www.moroccoworldnews.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -936,7 +936,7 @@
    "https://www.idsa.in/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 1035,
    "gorselli": 1034,
    "saatli": 0,
@@ -1022,7 +1022,7 @@
    "https://www.vera.org/sitemaps-1-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 2,
    "gorselli": 1,
    "saatli": 0,
@@ -1121,10 +1121,10 @@
    "https://www.nytimes.com/sitemaps/new/weather.xml.gz"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 512,
-   "gorselli": 476,
-   "saatli": 512,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 510,
+   "gorselli": 477,
+   "saatli": 510,
    "eslesen": 1,
    "hata": ""
   }
@@ -1236,7 +1236,7 @@
    "https://www.france24.com/sitemaps/ar/news.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 0,
    "gorselli": 0,
    "saatli": 0,
@@ -1268,7 +1268,7 @@
    "https://www.birgun.net/sitemap/haberler"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 15,
    "gorselli": 0,
    "saatli": 15,
@@ -1303,10 +1303,10 @@
    "https://www.tehrantimes.com/sitemap/2019/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 30,
    "gorselli": 30,
-   "saatli": 30,
+   "saatli": 29,
    "eslesen": 0,
    "hata": ""
   }
@@ -1432,10 +1432,10 @@
    "https://www.aljazeera.com/sitemaps/video-new.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 232,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 235,
    "gorselli": 0,
-   "saatli": 232,
+   "saatli": 235,
    "eslesen": 1,
    "hata": ""
   }
@@ -1453,7 +1453,7 @@
    "https://cahiersducinema.com/api/articles-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 1850,
    "gorselli": 1820,
    "saatli": 1849,
@@ -1707,7 +1707,7 @@
    "https://www.transparency.org/it/sitemaps-1-sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 492,
    "gorselli": 360,
    "saatli": 0,
@@ -1726,11 +1726,11 @@
    "https://www.caixinglobal.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 70,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 68,
    "gorselli": 0,
-   "saatli": 70,
-   "eslesen": 3,
+   "saatli": 68,
+   "eslesen": 6,
    "hata": ""
   }
  },
@@ -1777,7 +1777,7 @@
    "https://asianreviewofbooks.com/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 3,
    "gorselli": 0,
    "saatli": 3,
@@ -1935,12 +1935,12 @@
    "https://www.smithsonianmag.com/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
-   "girdi": 2213,
+   "tarih": "2026-11-28T16:19",
+   "girdi": 0,
    "gorselli": 0,
-   "saatli": 8,
-   "eslesen": 1,
-   "hata": ""
+   "saatli": 0,
+   "eslesen": 0,
+   "hata": "HTTP 403; HTTP 403"
   }
  },
  "martinchautari.org.np": {
@@ -2145,7 +2145,7 @@
    "https://www.swp-berlin.org/sitemap.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 19,
    "gorselli": 0,
    "saatli": 0,
@@ -2321,7 +2321,7 @@
    "http://cstep.in/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 415,
    "gorselli": 0,
    "saatli": 0,
@@ -2370,7 +2370,7 @@
    "https://budgit.org/sitemap_index.xml"
   ],
   "son": {
-   "tarih": "2026-11-28T15:36",
+   "tarih": "2026-11-28T16:19",
    "girdi": 24,
    "gorselli": 0,
    "saatli": 0,
